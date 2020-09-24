@@ -12,7 +12,7 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         $classes = [
-            AdminSeeder::class;
+            AdminSeeder::class,
             ItemSeeder::class,
             UserHobbiesSeeder::class,
             UserImageSeeder::class,

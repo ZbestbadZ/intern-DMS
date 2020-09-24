@@ -14,27 +14,27 @@ class UserLikeSeeder extends Seeder
     {
         DB::table('user_likes')->insert([
             'user_id'=> '1',
-            'targer_id'=> '2',
+            'target_id'=> '2',
         ]);
 
         DB::table('user_likes')->insert([
             'user_id'=> '2',
-            'targer_id'=> '3',
+            'target_id'=> '3',
         ]);
 
         DB::table('user_likes')->insert([
             'user_id'=> '3',
-            'targer_id'=> '4',
+            'target_id'=> '4',
         ]);
 
         DB::table('user_likes')->insert([
             'user_id'=> '4',
-            'targer_id'=> '5',
+            'target_id'=> '5',
         ]);
 
         DB::table('user_likes')->insert([
             'user_id'=> '5',
-            'targer_id'=> '6',
+            'target_id'=> '6',
         ]);
     }
 }
