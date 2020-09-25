@@ -1,9 +1,9 @@
 <?php
 
-use App\User;
 use Illuminate\Database\Seeder;
-use Faker\Generator as Faker;
-class UserSeeder extends Seeder
+use Illuminate\Support\Facades\DB;
+
+class UserReportSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -12,7 +12,8 @@ class UserSeeder extends Seeder
      */
     public function run()
     {
-        factory(App\User::class,150)->create();
+        $faker = Faker\Factory::create();
+        
 
     }
 }

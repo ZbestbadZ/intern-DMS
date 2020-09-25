@@ -28,6 +28,6 @@ class CreateUserLikesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('use_likes');
+        Schema::dropIfExists('user_likes');
     }
 }

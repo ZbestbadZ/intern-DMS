@@ -13,7 +13,7 @@ class CreateUserReportsTable extends Migration
      */
     public function up()
     {
-        Schema::create('use_reports', function (Blueprint $table) {
+        Schema::create('user_reports', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('target_id');
@@ -29,6 +29,6 @@ class CreateUserReportsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('use_reports');
+        Schema::dropIfExists('user_reports');
     }
 }

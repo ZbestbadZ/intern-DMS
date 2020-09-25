@@ -14,31 +14,31 @@ class UserImageSeeder extends Seeder
     {
         DB::table('user_images')->insert([
             'user_id'=> '1',
-            'type'=> 'avatar',
+            'type'=> '1',
             'path' => 'img/avatar.png'
         ]);
 
         DB::table('user_images')->insert([
             'user_id'=> '2',
-            'type'=> 'cover',
+            'type'=> '2',
             'path' => 'img/cover.png'
         ]);
 
         DB::table('user_images')->insert([
             'user_id'=> '3',
-            'type'=> 'checkin1',
+            'type'=> '2',
             'path' => 'img/checkin1.png'
         ]);
 
         DB::table('user_images')->insert([
             'user_id'=> '4',
-            'type'=> 'checkin2',
+            'type'=> '2',
             'path' => 'img/checkin2.png'
         ]);
 
         DB::table('user_images')->insert([
             'user_id'=> '5',
-            'type'=> 'checkin3',
+            'type'=> '2',
             'path' => 'img/checkin3.png'
         ]);
     }
