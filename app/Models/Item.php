@@ -6,7 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Item extends Model
 {
-    protected $hidden = [
-        'name', 'pice','image_path'
+    protected $table = 'items';
+    protected $fillable = [
+        'name', 'item_price','image_path'
     ];
 }
