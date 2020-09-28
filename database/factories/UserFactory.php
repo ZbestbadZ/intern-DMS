@@ -20,9 +20,23 @@ use Illuminate\Support\Str;
 $factory->define(User::class, function (Faker $faker) {
     return [
         'name' => $faker->name,
+        'username'=>$faker->name,
+        'phone' => $faker->e164PhoneNumber,
+        'sex' => rand(0,1),
+        'birthday' => $faker->dateTimeBetween($startDate = '-20 years', $endDate = 'now', $timezone = null),
+        'job' =>rand(1,47),
+        'height' =>rand(130,200),
+        'figure' =>rand(1,7),
+        'anual_income'=>rand(1,8),
+        'matching_expect'=>rand(1,5),
+        'holiday'=>rand(1,5),
+        'aca_background'=>rand(1,6),
+        'housemate' => rand(1,6),
+        'birthplace' =>rand(1,47),
         'email' => $faker->unique()->safeEmail,
         'email_verified_at' => now(),
-        'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
+        'password' => bcrypt('123'),
+
         'remember_token' => Str::random(10),
     ];
 });
