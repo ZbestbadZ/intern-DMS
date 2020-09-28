@@ -6,7 +6,9 @@
         <div class="col-md-8">
             <div class="card border-0" style="border: 0px; background-color: transparent ">
                 
-
+                <div style="background-color: transparent; border: none;"  class="card-header d-flex justify-content-center">
+                    <span>Login here</span>
+                </div>
                 <div class="card-body">
                     <form method="POST" action="{{ route('login') }}">
                         @csrf
@@ -19,7 +21,7 @@
                                     <div class="input-group-prepend">
                                       <span class="input-group-text" id="basic-addon1"><i  class="fas fa-envelope"></i></span>
                                     </div>
-                                    <input id="username" placeholder="username" type="text" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email" autofocus aria-describedby="basic-addon1">
+                                    <input id="username" placeholder="username" type="text" class="form-control @error('email') is-invalid @enderror" name="usernameb" value="{{ old('email') }}" required autocomplete="email" autofocus aria-describedby="basic-addon1">
                                 </div>
                                 @error('username')
                                     <span class="invalid-feedback" role="alert">
@@ -59,8 +61,8 @@
 
                         <div class="form-group row mb-0 d-flex justify-content-center">
                             <div class="col-md-8 d-flex justify-content-center">
-                                <button type="submit" class="btn btn-primary">
-                                    {{ __('Login') }}
+                                <button type="submit" style="background-color: transparent; color: red; border: solid 5px white" class="rounded btn btn-primary">
+                                    SA
                                 </button>
 
                                
