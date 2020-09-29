@@ -12,7 +12,11 @@
                 <div class="card-body">
                     <form method="POST" action="{{ route('login') }}">
                         @csrf
-
+                        @if ($errors)
+                        <div class="alert alert-danger">
+                            {{ $errors->first() }}
+                          </div>
+                        @endif
                         <div class="form-group row d-flex justify-content-center">
                             
                             
@@ -21,7 +25,7 @@
                                     <div class="input-group-prepend">
                                       <span class="input-group-text" id="basic-addon1"><i  class="fas fa-envelope"></i></span>
                                     </div>
-                                    <input id="username" placeholder="username" type="text" class="form-control @error('email') is-invalid @enderror" name="usernameb" value="{{ old('email') }}" required autocomplete="email" autofocus aria-describedby="basic-addon1">
+                                    <input id="username" placeholder="username" type="text" class="form-control @error('username') is-invalid @enderror" name="username" value="{{ old('username') }}" required autocomplete="username" autofocus aria-describedby="basic-addon1">
                                 </div>
                                 @error('username')
                                     <span class="invalid-feedback" role="alert">
@@ -40,7 +44,7 @@
                                     </div>
                                     <input id="password" placeholder="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="current-password aria-describedby="basic-addon1">
                                 </div>
-
+                            
                                 @error('password')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
@@ -64,8 +68,6 @@
                                 <button type="submit" style="background-color: transparent; color: red; border: solid 5px white" class="rounded btn btn-primary">
                                     SA
                                 </button>
-
-                               
                             </div>
                         </div>
                     </form>
