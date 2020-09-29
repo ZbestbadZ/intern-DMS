@@ -3,13 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Models\Item;
+use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Http\Request;
 
 class StickerController extends Controller
 {
-    public function __construct()
+    protected $auth;
+    public function __construct(Guard $auth )
     {
-        
+        $this->auth = $auth;
     }
 
     public function index() {
