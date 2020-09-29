@@ -45,8 +45,9 @@
                     ...
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Save changes</button>
+
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+                    <button type="button" data-dismiss="modal" class="delete-accecpt btn btn-danger">Yes</button>
                 </div>
             </div>
         </div>
@@ -55,6 +56,7 @@
 @endsection
 @push('scripts')
     <script>
+        var callback = null;
         $(document).ready(function() {
 
             var table = $('#display').DataTable({
@@ -100,23 +102,41 @@
                 var data = table.row($(this).parents('tr')).data();
                 window.location.href = "/sticker/" + data['id'];
             });
-            $('#display tbody ').on('click', '.delete', function() {
 
-                var data = table.row($(this).parents('tr')).data();
+            $('#display tbody ').on('click', '.delete', function() {
+                var row = table.row($(this).parents('tr'));
+                var data = row.data();
                 $('#myModalLabel').html('a')
                 $('#myModal').modal('show');
-                // $.ajax({
-                //     type: 'DELETE',
-                //     url: '/api/sticker/' + data['id'],
-                //     data: '_token = <?php echo csrf_token(); ?>',
-                //     success: function(data) {
-                //         // var re = table.row($(this).parents('tr')).remove().draw(true);
-                //         // table.ajax.reload();
+                 callback = function(result) {
+                    if (result) {
+                        $.ajax({
+                            type: 'DELETE',
+                            url: '/api/sticker/' + data['id'],
+                            data: '_token = <?php echo csrf_token(); ?>',
+                            success: function(data) {
+                                var re = row
+                                    .remove().draw(true);
+                                table.ajax.reload();
 
-                //     }
-                // });
+                            }
+                        });
+                    }
+                };
+
+                $('#myModal').on('click', '.btn, .close', function() {
+                    $(this).addClass('modal-result'); // mark which button was clicked
+
+                });
             });
 
+            $('#myModal').on('hidden.bs.modal', function() {
+                console.log('c');
+                var result = $(this).find('.modal-result').filter('.btn-danger').length >
+                    0; // attempt to filter by what you consider the "YES" button; if it was clicked, result should be true.
+
+                callback(result); // invoke the callback with result
+            });
         });
 
     </script>
