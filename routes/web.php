@@ -25,5 +25,9 @@ Route::get('/home', 'HomeController@index')->name('home');
 Route::prefix('sticker')->middleware('auth')->group( function() {
     Route::get('index',function(){
         return view('sticker.index');
-    })->name('Sticker.Index');
+    })->name('Sticker.index');
+    Route::get('{id}',function(){
+   
+        return view('sticker.edit');
+    })->name('Sticker.edit');
 });
