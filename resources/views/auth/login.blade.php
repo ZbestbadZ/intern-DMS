@@ -25,7 +25,7 @@
                                     <div class="input-group-prepend">
                                       <span class="input-group-text" id="basic-addon1"><i  class="fas fa-envelope"></i></span>
                                     </div>
-                                    <input id="username" placeholder="username" type="text" class="form-control @error('username') is-invalid @enderror" name="username" value="{{ old('username') }}" required autocomplete="username" autofocus aria-describedby="basic-addon1">
+                                    <input id="username" placeholder="username" type="text" class="form-control @error('username') is-invalid @enderror" name="username" value="{{ old('username') }}"  autocomplete="username" autofocus aria-describedby="basic-addon1">
                                 </div>
                                 @error('username')
                                     <span class="invalid-feedback" role="alert">
