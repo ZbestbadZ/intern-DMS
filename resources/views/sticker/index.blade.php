@@ -32,11 +32,11 @@
     </div>
 
     <!-- Modal -->
-    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="myModalLabel"></h5>
+                    <h5 class="modal-title" id="deleteModalLabel"></h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -45,7 +45,6 @@
                     ...
                 </div>
                 <div class="modal-footer">
-
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
                     <button type="button" data-dismiss="modal" class="delete-accecpt btn btn-danger">Yes</button>
                 </div>
@@ -106,9 +105,11 @@
             $('#display tbody ').on('click', '.delete', function() {
                 var row = table.row($(this).parents('tr'));
                 var data = row.data();
-                $('#myModalLabel').html('a')
-                $('#myModal').modal('show');
-                 callback = function(result) {
+                $('#deleteModalLabel').html('a')
+                $('#deleteModal').modal('show');
+
+                callback = function(result) {
+                
                     if (result) {
                         $.ajax({
                             type: 'DELETE',
@@ -124,19 +125,14 @@
                     }
                 };
 
-                $('#myModal').on('click', '.btn, .close', function() {
-                    $(this).addClass('modal-result'); // mark which button was clicked
 
-                });
             });
-
-            $('#myModal').on('hidden.bs.modal', function() {
-                console.log('c');
-                var result = $(this).find('.modal-result').filter('.btn-danger').length >
-                    0; // attempt to filter by what you consider the "YES" button; if it was clicked, result should be true.
-
-                callback(result); // invoke the callback with result
+            $('#deleteModal').on('click', '.btn', function() {
+             
+                if($(this).hasClass("delete-accecpt"))callback(true);
+                else callback(false);
             });
+           
         });
 
     </script>
