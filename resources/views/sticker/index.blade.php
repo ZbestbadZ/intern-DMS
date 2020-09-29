@@ -56,8 +56,9 @@
                         "data": "item_price"
                     },
                     {
-                        "defaultContent": "<button id=\"edit\">Edit</button>"
-                    }
+                        "defaultContent": "<button id=\"edit\">Edit</button> <button id=\"delete\">Delete</button>"
+                    },
+                    
 
                 ],
                 "columnDefs": [{
@@ -72,7 +73,7 @@
             });
 
             $('#display tbody ').on('click', '#edit', function() {
-                console.log(table.row($(this).parents('tr')).data());
+                
                 var data = table.row($(this).parents('tr')).data();
                 $.ajax({
                     type: 'GET',
@@ -83,6 +84,19 @@
                     }
                 });
             });
+            $('#display tbody ').on('click', '#delete', function() {
+                
+                var data = table.row($(this).parents('tr')).data();
+                $.ajax({
+                    type: 'DELETE',
+                    url: '/api/sticker/'+ data['id'],
+                    data: '_token = <?php echo csrf_token(); ?>',
+                    success: function(data) {
+                        console.log(data);
+                    }
+                });
+            });
+            
         });
 
     </script>

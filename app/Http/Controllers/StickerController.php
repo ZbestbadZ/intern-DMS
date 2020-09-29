@@ -18,9 +18,16 @@ class StickerController extends Controller
         $items = Item::all();
         return response()->json(['data'=>$items]);
     }
+    
     public function get(Request $request, $id) {
 
         $item = Item::find($id);
+        return response()->json(['item'=>$item]);
+    }
+
+    public function destroy($id) {
+        $item = Item::find($id);
+        $item->delete();
         return response()->json(['item'=>$item]);
     }
 }
