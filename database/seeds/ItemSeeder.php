@@ -15,38 +15,38 @@ class ItemSeeder extends Seeder
         for ($i=0; $i<20 ; $i++) { 
             DB::table('items')->insert([
                 'name'=> 'name_item'.(5+1),
-                'item_price'=> '100',
-                'image_path'=> 'img/item1_image.png',
+                'price'=> '100',
+                'path'=> 'img/item1_image.png',
             ]);
         }
         DB::table('items')->insert([
             'name'=> 'name_item1',
-            'item_price'=> '100',
-            'image_path'=> 'img/item1_image.png',
+            'price'=> '100',
+            'path'=> 'img/item1_image.png',
         ]);
 
         DB::table('items')->insert([
             'name'=> 'name_item2',
-            'item_price'=> '101',
-            'image_path'=> 'img/item2_image.png',
+            'price'=> '101',
+            'path'=> 'img/item2_image.png',
         ]);
 
         DB::table('items')->insert([
             'name'=> 'name_item3',
-            'item_price'=> '102',
-            'image_path'=> 'img/item3_image.png',
+            'price'=> '102',
+            'path'=> 'img/item3_image.png',
         ]);
 
         DB::table('items')->insert([
             'name'=> 'name_item4',
-            'item_price'=> '103',
-            'image_path'=> 'img/item4_image.png',
+            'price'=> '103',
+            'path'=> 'img/item4_image.png',
         ]);
 
         DB::table('items')->insert([
             'name'=> 'name_item5',
-            'item_price'=> '104',
-            'image_path'=> 'img/item5_image.png',
+            'price'=> '104',
+            'path'=> 'img/item5_image.png',
         ]);
     }
 }

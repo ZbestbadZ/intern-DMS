@@ -2,21 +2,15 @@
 
 @section('content')
     <div class="container">
-         
+
         <div class="row d-flex justify-content-center">
-            <div class="col-6">
-            <img class="img-fluid" src="{{url('storage/'.$item->path)}}" alt="">
-            </div>
-            <div class="col-6">
-            <form method="POST" enctype="multipart/form-data" action="{{url('sticker/'.$item->id)}}">
+            <div class="col-8">
+                <form method="POST" enctype="multipart/form-data" action="/sticker">
                     @csrf
-                    @method('PATCH')
                     <!-- input -->
                     <div class="form-group">
                         <label for="name">Name</label>
-                        <input name="name" type="text" id="name" required placeholder=""
-                    value="{{$item->name}}"
-                        >
+                        <input name="name" type="text" id="name" required placeholder="">
                         @error('name')
 
                         <div class="text-danger"><strong>{{ $message }}</strong></div>
@@ -25,9 +19,7 @@
                     </div>
                     <div class="form-group">
                         <label for="price">Price</label>
-                        <input name="price" required type="number" id="price" 
-                        value="{{$item->price}}" placeholder="">
-                        
+                        <input name="price" required type="number" id="price" placeholder="">
                         @error('price')
 
                         <div class="text-danger"><strong>{{ $message }}</strong></div>
@@ -36,7 +28,7 @@
                     </div>
                     <div class="form-group">
                         <label for="image">Image File</label>
-                        <input name="image" class="form-control-file" type="file" id="image"  placeholder="">
+                        <input name="image" class="form-control-file" type="file" id="image" required placeholder="">
                         @error('image')
 
                         <div class="text-danger"><strong>{{ $message }}</strong></div>

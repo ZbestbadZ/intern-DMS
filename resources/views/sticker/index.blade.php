@@ -10,12 +10,23 @@
             </div>
         </div>
 
+        <div class="row d-flex justify-content-end">
+            @if (session()->has('message'))
+                <div class="alert alert-success">
+                    {{ session()->get('message') }}
+                </div>
+            @endif
+            <div class="col-4 text-decoration-none  float-right">
+                <a href="{{ url('/sticker/create') }}">Add a new sticker</a>
+            </div>
+        </div>
+
         <div class="row d-flex justify-content-center">
             <div class="col-8">
                 <table id="display" class="display" style="width:100%">
                     <thead>
                         <th>id</th>
-                        <th>path</th>
+
                         <th>name</th>
                         <th>price</th>
                         <!-- <th>size</th> -->
@@ -32,7 +43,8 @@
     </div>
 
     <!-- Modal -->
-    <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel"
+        aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -70,14 +82,12 @@
                 "columns": [{
                         "data": "id"
                     },
-                    {
-                        "data": "image_path"
-                    },
+
                     {
                         "data": "name"
                     },
                     {
-                        "data": "item_price"
+                        "data": "price"
                     },
                     {
                         "defaultContent": "<button class=\"edit\">Edit</button> <button class=\"delete\">Delete</button>"
@@ -88,7 +98,7 @@
                 "columnDefs": [{
                     "searchable": false,
                     "orderable": false,
-                    "targets": 4,
+                    "targets": 3,
 
                 }],
                 "order": [
@@ -99,7 +109,7 @@
             $('#display tbody ').on('click', '.edit', function() {
 
                 var data = table.row($(this).parents('tr')).data();
-                window.location.href = "/sticker/" + data['id'];
+                window.location.href = "/sticker/" + data['id'] + "/edit";
             });
 
             $('#display tbody ').on('click', '.delete', function() {
@@ -109,7 +119,7 @@
                 $('#deleteModal').modal('show');
 
                 callback = function(result) {
-                
+
                     if (result) {
                         $.ajax({
                             type: 'DELETE',
@@ -128,11 +138,11 @@
 
             });
             $('#deleteModal').on('click', '.btn', function() {
-             
-                if($(this).hasClass("delete-accecpt"))callback(true);
+
+                if ($(this).hasClass("delete-accecpt")) callback(true);
                 else callback(false);
             });
-           
+
         });
 
     </script>

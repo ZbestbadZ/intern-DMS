@@ -2,9 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StickerStoreRequest;
+use App\Http\Requests\StickerUpdateRequest;
 use App\Models\Item;
+use Exception;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class StickerController extends Controller
 {
@@ -29,5 +33,58 @@ class StickerController extends Controller
         $item = Item::find($id);
         $item->delete();
         return response()->json(['item'=>$item]);
+    }
+
+    public function edit($id) {
+        $item = Item::find($id);
+        return view('sticker.edit',compact('item'));
+    }
+
+    public function update(StickerUpdateRequest $request, $id) {
+        $item = Item::find($id);
+        $data = $request->only(['name','price','image']);
+
+        if ($request->hasFile('image')) {
+            try{
+                Storage::delete($item->path);
+
+                $file = $request->file('image');
+                $newPath = $file->store('uploads/sticker/' . $data['name'], 'public');
+                $item->update([
+                    'path' => $newPath
+                ]);
+            } catch (Exception $e) {
+                return back()->withErrors('Error when storing file');
+            }
+            
+        }
+        $item->update([
+            'name' => $data['name'],
+            'price' => $data['price']
+        ]);
+        
+        return redirect()->route('sticker.index')->with('message', 'IT WORKS!');
+
+    }
+
+    public function store(StickerStoreRequest $request) {
+        $data = $request->only(['name','price','image']);
+        if ($request->hasFile('image')) {
+            try{
+                $file = $request->file('image');
+                $path = $file->store('uploads/sticker/' . $data['name'], 'public');
+              
+            } catch (Exception $e) {
+                return back()->withErrors('Error when storing file');
+            }
+            Item::create([
+                'name' => $data['name'],
+                'price' => $data['price'],
+                'path' => $path
+            ]);
+            return redirect()->route('sticker.index')->with('message', 'IT WORKS!');;
+
+        }
+        return back()->withInput();
     }
 }
