@@ -9,7 +9,7 @@
                     @csrf
                     <div class="form-group">
                         
-                        <label for="name">Name: </label>
+                        <label for="name">Name(*) </label>
                         <input class="form-control" type="text" name="name" id="name" value="" autofocus>
                         @error('name')
 
@@ -18,7 +18,7 @@
                         @enderror
                     </div>
                     <div class="form-group">
-                        <label for="username">Username: </label>
+                        <label for="username">Username(*) </label>
                         <input class="form-control" type="text" name="username" id="username" value="">
                         @error('username')
 
@@ -28,7 +28,7 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="email">Email: </label>
+                        <label for="email">Email(*)</label>
                         <input class="form-control" type="email" name="email" id="email" value="">
                         @error('email')
 
@@ -38,7 +38,7 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="sex">Sex: </label>
+                        <label for="sex">Sex(*) </label>
                         <input type="radio" id="male" name="sex" value="1">
                             <label for="male">Male</label>
                         <input type="radio" id="female" name="sex" value="0">
@@ -49,7 +49,7 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="birthday">Birthday:</label>
+                        <label for="birthday">Birthday(*)</label>
                         <input type="date" name="birthday" id="birthday" value="">
                             @error ('birthday')
                             <div class="text-danger" ><strong>{{ $message }}</strong></div>
@@ -142,7 +142,7 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="about">About:</label>
+                        <label for="about">About(*)</label>
                         <input class="form-control" type="text" name="about" id="about" value="">
                             @error ('about')
                             <div class="text-danger" ><strong>{{ $message }}</strong></div>
@@ -150,7 +150,7 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="about_title">About Title:</label>
+                        <label for="about_title">About Title(*)</label>
                         <input class="form-control" type="text" name="about_title" id="about_title" value="">
                             @error ('about_title')
                             <div class="text-danger" ><strong>{{ $message }}</strong></div>
@@ -158,12 +158,12 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="password">Password: </label>
+                        <label for="password">Password(*) </label>
                         <input class="form-control"  type="password" name="password" id="password" required autocomplete="new-password">
                     </div>
 
                     <div class="form-group">
-                        <label for="password-confirm">Password Confirm</label>
+                        <label for="password-confirm">Password Confirm(*)</label>
                         <input id="password-confirm" type="password" class="form-control" name="password_confirmation" required autocomplete="new-password">
                     </div>
                      

@@ -162,11 +162,12 @@
                     <div class="form-group">
                         <label for="password">Password: </label>
                         <input class="form-control"  type="password" name="password" id="password" value="{{$user->password}}">
+                            <label for="change" class="click"><a class="btn btn-primary">Change</a></label>
                     </div>
 
                     <div class="form-group">
-                        <label for="password-confirm">Password Confirm</label>
-                        <input id="password-confirm" type="password" class="form-control" name="password_confirmation" required autocomplete="new-password">
+                        <label for="password_confirm">Password Confirm</label>
+                        <input id="password_confirm" type="password" class="form-control" name="password_confirmation" value="{{$user->password}}" required autocomplete="new-password">
                     </div>
                      
                     <button class="btn btn-primary" type="submit" name="update">Update</button>
@@ -176,5 +177,20 @@
     </div>
 @endsection
 @push('scripts')
+<script>
+    $(document).ready(function() {
+        $(password).attr('disabled', 'disabled');
+        $(password_confirm).attr('disabled', 'disabled');
 
+        $('.click').click(function() {
+            if ($(password).attr('disabled')) $(password).removeAttr('disabled');
+            else $(password).attr('disabled', 'disabled');
+        });
+        $('.click').click(function() {
+            if ($(password_confirm).attr('disabled')) $(password_confirm).removeAttr('disabled');
+            else $(password_confirm).attr('disabled', 'disabled');
+        });
+    });
+
+</script>
 @endpush

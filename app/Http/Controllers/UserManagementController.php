@@ -59,7 +59,7 @@ class UserManagementController extends Controller
 
     public function show($id) {
         $user = User::find($id);
-        return view('admin.detail_user', ['user' => $user]);
+        return view('admin.detail_user',compact('user'));
     }
 
     public function destroy($id) {

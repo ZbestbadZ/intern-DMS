@@ -142,6 +142,10 @@
                 if($(this).hasClass("delete-accecpt"))callback(true);
                 else callback(false);
             });
+
+            setTimeout(function(){
+            $("div.alert").remove();
+            }, 2000 );
            
         });
 
