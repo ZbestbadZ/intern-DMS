@@ -96,8 +96,7 @@
                 "columnDefs": [{
                     "searchable": false,
                     "orderable": false,
-                    "targets": 4,
-
+                    "targets": 5
                 }],
                 "order": [
                     [1, 'asc']
