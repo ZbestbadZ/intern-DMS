@@ -33,5 +33,7 @@ Route::group(['prefix'=>'admin'],function(){
 
     Route::get('{id}/edit', 'UserManagementController@edit')->name('admin.edit');
     Route::patch('edit_user/{id}', 'UserManagementController@update');
+
+    Route::get('{id}', 'UserManagementController@show')->name('admin.show');
 });
 

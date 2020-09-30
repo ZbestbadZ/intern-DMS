@@ -76,7 +76,10 @@
                         "data": "id"
                     },
                     {
-                        "data": "name"
+                        "data": "name",
+                        "fnCreatedCell": function(nTd, sData, oData, iRow, iCol) {
+                            $(nTd).html("<a href='detail_user'>" + oData.name + "</a>");
+                        }
                     },
                     {
                         "data": "email"
