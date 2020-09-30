@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -18,5 +19,11 @@ Route::get('/', function () {
 });
 
 Auth::routes();
+
+Route::prefix('recommend')->middleware('auth')->group(function() {
+    Route::get('','RecommendController@index');
+    
+});
+
 
 Route::get('/home', 'HomeController@index')->name('home');
