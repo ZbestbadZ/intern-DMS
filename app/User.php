@@ -21,6 +21,7 @@ class User extends Authenticatable
         'name', 
         'email', 
         'password',
+        'username',
         'address',
         'phone',
         'sex',
@@ -39,6 +40,7 @@ class User extends Authenticatable
         'tabaco',
         'birthplace',
         'housemate'
+
     ];
 
     /**
@@ -56,7 +58,8 @@ class User extends Authenticatable
      * @var array
      */
     protected $casts = [
-        'email_verified_at' => 'datetime'
+        'email_verified_at' => 'datetime',
+        'birthday' => 'datetime:Y-m-d'
     ];
 
     public function likes(){
