@@ -33,15 +33,5 @@ Route::group(['prefix'=>'admin'],function(){
 
     Route::get('{id}/edit', 'UserManagementController@edit')->name('admin.edit');
     Route::patch('edit_user/{id}', 'UserManagementController@update');
-
-    // Route::get('list_user', 'UserManagementController@index')->name('admin.list_user');
-
-    // Route::get('add_user', 'UserManagementController@getAddUser');
-    // Route::post('add_user', 'UserManagementController@store')->name('admin.add_user');
-
-    // Route::get('edit_user/{id}', 'UserManagementController@getEditUser')->name('admin.edit_user');
-    // Route::patch('edit_user/{id}', 'UserManagementController@update')->name('admin.update');
-
-    // Route::delete('{id}', 'UserManagementController@deleteUser')->name('admin.destroy');
 });
 

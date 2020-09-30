@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UserManagementRequest extends FormRequest
+class EditUserManagementRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -26,7 +26,7 @@ class UserManagementRequest extends FormRequest
         return [
             'name' => 'required|max:50|min:3',
             'username'=>'required|max:50|min:3',
-            'email' =>'required|max:50|unique:users',
+            'email' =>'required|max:50|email',
             'password' => 'required|min:3|max:50|required_with:password_confirmation|same:password_confirmation',
             'password_confirmation' => 'min:3|max:50',
             'sex' => 'required',
@@ -45,7 +45,6 @@ class UserManagementRequest extends FormRequest
             'housemate' => 'nullable|integer',
             'birthplace' => 'nullable|integer',
         ];
-
     }
 
     public function messages()
@@ -55,5 +54,4 @@ class UserManagementRequest extends FormRequest
             'password.same' => 'Password must be the same at password confirm',
         ];
     }
-
 }

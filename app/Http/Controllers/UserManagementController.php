@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\User;
 use Exception;
 use App\Http\Requests\UserManagementRequest;
+use App\Http\Requests\EditUserManagementRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Carbon;
 use DB;
@@ -29,8 +30,7 @@ class UserManagementController extends Controller
 
     public function store(UserManagementRequest $request) {
         try {
-            $data = $request->only(['name', 'username', 'email', 'password', 'sex', 'birthday', 
-                                    'about', 'about_title']);
+            $data = $request->all();
             $user = User::create($data);
         } catch (Exception $e) {
             $mess = $e->getMessage();
@@ -44,11 +44,10 @@ class UserManagementController extends Controller
         return view('admin.edit_user', compact('user'));
     }
 
-    public function update(Request $request, $id) {
+    public function update(EditUserManagementRequest $request, $id) {
         try {
             $user = User::find($id);
-            $data = $request->only(['name', 'username', 'email', 'password', 'sex', 'birthday', 
-                                    'about', 'about_title']);
+            $data = $request->all();
             $user->update($data);
             
         } catch (Exception $e) {

@@ -2,8 +2,9 @@
 
 @section('content')
     <div class="container">
-        <div class="row">
-            <div class=" col-5">
+        <div class="row d-flex justify-content-center">
+            <div class="col-6">
+                <h2>Edit User</h2>
                 <form method="POST" enctype="multipart/form-data" action="/admin/edit_user/{{$user->id}}">
                     @csrf
                     @method('PATCH')
@@ -30,7 +31,7 @@
 
                     <div class="form-group">
                         <label for="email">Email: </label>
-                        <input class="form-control" type="email" name="email" id="email" value="{{$user->email}}">
+                        <input class="form-control" type="email" name="email" id="email" value="{{$user->email}}" >
                         @error('email')
 
                         <div class="text-danger" ><strong>{{ $message }}</strong></div>
@@ -58,6 +59,91 @@
                     </div>
 
                     <div class="form-group">
+                        <label for="height">Height:</label>
+                        <input type="number" name="height" id="height" min="130" max="200" value="{{ $user->height }}">
+                            @error ('height')
+                            <div class="text-danger" ><strong>{{ $message }}</strong></div>
+                            @enderror
+                        <label for="figure">Figure:</label>
+                        <input type="number" name="figure" id="figure" min="1" max="7" value="{{ $user->figure }}">
+                            @error ('figure')
+                            <div class="text-danger" ><strong>{{ $message }}</strong></div>
+                            @enderror
+                        <label for="matching_expect">Matching Expect:</label>
+                        <input type="number" name="matching_expect" id="matching_expect" min="1" max="5" value="{{ $user->matching_expect }}">
+                            @error ('matching_expect')
+                            <div class="text-danger" ><strong>{{ $message }}</strong></div>
+                            @enderror
+                        <label for="job">Job:</label>
+                        <input type="number" name="job" id="job" min="1" max="47" value="{{ $user->job }}">
+                            @error ('job')
+                            <div class="text-danger" ><strong>{{ $message }}</strong></div>
+                            @enderror
+                    </div>
+
+                    <div class="form-group">
+                        <label for="anual_income">Anual Income:</label>
+                        <input type="number" name="anual_income" id="anual_income" min="1" max="8" value="{{ $user->anual_income }}">
+                            @error ('anual_income')
+                            <div class="text-danger" ><strong>{{ $message }}</strong></div>
+                            @enderror
+                        <label for="holiday">Holiday:</label>
+                        <input type="number" name="holiday" id="holiday" min="1" max="5" value="{{ $user->holiday }}">
+                            @error ('holiday')
+                            <div class="text-danger" ><strong>{{ $message }}</strong></div>
+                            @enderror
+                        <label for="aca_background">Aca Background:</label>
+                        <input type="number" name="aca_background" id="aca_background" min="1" max="6" value="{{ $user->aca_background }}">
+                            @error ('aca_background')
+                            <div class="text-danger" ><strong>{{ $message }}</strong></div>
+                            @enderror
+                        <label for="alcohol">Alcohol:</label>
+                        <input type="number" name="alcohol" id="alcohol" min="1" max="4" value="{{ $user->alcohol }}">
+                            @error ('alcohol')
+                            <div class="text-danger" ><strong>{{ $message }}</strong></div>
+                            @enderror
+                    </div>
+
+                    <div class="form-group">
+                        <label for="tabaco">Tabaco:</label>
+                        <input type="number" name="tabaco" id="tabaco" min="1" max="5" value="{{ $user->tabaco }}">
+                            @error ('tabaco')
+                            <div class="text-danger" ><strong>{{ $message }}</strong></div>
+                            @enderror
+                        <label for="housemate">Housemate:</label>
+                        <input type="number" name="housemate" id="housemate" min="1" max="6" value="{{ $user->housemate }}">
+                            @error ('housemate')
+                            <div class="text-danger" ><strong>{{ $message }}</strong></div>
+                            @enderror
+                        <label for="hobby">Hobby:</label>
+                        <input type="number" name="hobby" id="hobby" min="1" max="7" value="{{ $user->hobby }}">
+                            @error ('aca_bahobbyckground')
+                            <div class="text-danger" ><strong>{{ $message }}</strong></div>
+                            @enderror
+                        <label for="birthplace">Birthplace:</label>
+                        <input type="number" name="birthplace" id="birthplace" min="1" max="47" value="{{ $user->birthplace }}">
+                            @error ('birthplace')
+                            <div class="text-danger" ><strong>{{ $message }}</strong></div>
+                            @enderror
+                    </div>
+
+                    <div class="form-group">
+                        <label for="phone">Phone Number:</label>
+                        <input class="form-control" type="number" name="phone" id="phone" value="{{$user->phone}}">
+                            @error ('phone')
+                            <div class="text-danger" ><strong>{{ $message }}</strong></div>
+                            @enderror
+                    </div>
+
+                    <div class="form-group">
+                        <label for="address">Address:</label>
+                        <input class="form-control" type="text" name="address" id="address" value="{{$user->address}}">
+                            @error ('address')
+                            <div class="text-danger" ><strong>{{ $message }}</strong></div>
+                            @enderror
+                    </div>
+
+                    <div class="form-group">
                         <label for="about">About:</label>
                         <input class="form-control" type="text" name="about" id="about" value="{{$user->about}}"><br>
                             @error ('about')
@@ -77,6 +163,11 @@
                         <label for="password">Password: </label>
                         <input class="form-control"  type="password" name="password" id="password" value="{{$user->password}}">
                     </div>
+
+                    <div class="form-group">
+                        <label for="password-confirm">Password Confirm</label>
+                        <input id="password-confirm" type="password" class="form-control" name="password_confirmation" required autocomplete="new-password">
+                    </div>
                      
                     <button class="btn btn-primary" type="submit" name="update">Update</button>
                 </form>
@@ -84,3 +175,6 @@
         </div>
     </div>
 @endsection
+@push('scripts')
+
+@endpush

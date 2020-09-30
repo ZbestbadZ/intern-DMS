@@ -21,7 +21,7 @@
         <div class="row d-flex justify-content-center">
             <div class="col-8">
                 <table id="mytable" class="mytable" style="width:100%">
-                    <thead>
+                    <thead> 
                         <th>ID</th>
                         <th>Name</th>
                         <th>Email</th>
