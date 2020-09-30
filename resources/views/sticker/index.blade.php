@@ -67,7 +67,7 @@
 @endsection
 @push('scripts')
     <script>
-        var callback = null;
+        var deleteCallback = null;
         $(document).ready(function() {
 
             var table = $('#display').DataTable({
@@ -84,7 +84,11 @@
                     },
 
                     {
-                        "data": "name"
+                        "data": "name",
+                        "fnCreatedCell": function(nTd, sData, oData, iRow, iCol) {
+                            $(nTd).html("<a href='#'>" + oData
+                                .name + "</a>");
+                        }
                     },
                     {
                         "data": "price"
@@ -118,7 +122,7 @@
                 $('#deleteModalLabel').html('a')
                 $('#deleteModal').modal('show');
 
-                callback = function(result) {
+                deleteCallback = function(result) {
 
                     if (result) {
                         $.ajax({
@@ -139,8 +143,8 @@
             });
             $('#deleteModal').on('click', '.btn', function() {
 
-                if ($(this).hasClass("delete-accecpt")) callback(true);
-                else callback(false);
+                if ($(this).hasClass("delete-accecpt")) deleteCallback(true);
+                else deleteCallback(false);
             });
 
         });
