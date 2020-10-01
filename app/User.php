@@ -38,7 +38,8 @@ class User extends Authenticatable
         'alcohol',
         'tabaco',
         'birthplace',
-        'housemate'
+        'housemate',
+        'pickup_status'
     ];
 
     /**
@@ -78,5 +79,11 @@ class User extends Authenticatable
     public function hobbies()
     {
         return $this->hasMany(UserHobby::class, 'user_id', 'id');
+    }
+
+    public static function getPickup() 
+    {
+        $users  = User::where('pickup_status' ,'1')->get();
+        dd($users);
     }
 }

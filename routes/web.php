@@ -19,4 +19,9 @@ Route::get('/', function () {
 
 Auth::routes();
 
+Route::prefix('pickup')->middleware('auth')->group(function(){
+    Route::get('','PickupController@index');
+});
+
+
 Route::get('/home', 'HomeController@index')->name('home');
