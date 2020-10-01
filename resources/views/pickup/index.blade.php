@@ -34,6 +34,7 @@
 
 @push('scripts')
     <script>
+         
         var  deleteCallback = null;
         $(document).ready(function() {
 
@@ -47,7 +48,7 @@
 
                 ajax: {
                     type: 'GET',
-                    url: '/api/pickup',
+                    url: '/api/pickup/index',
                     dataSrc: 'data'
                 },
                 "columns": [

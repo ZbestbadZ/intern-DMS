@@ -1,5 +1,7 @@
 <?php
 
+use App\User;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -20,7 +22,10 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::prefix('pickup')->middleware('auth')->group(function(){
-    Route::get('','PickupController@index');
+    Route::get('',function(){
+       
+        return view('pickup.index');
+    })->name('pickup.index');
 });
 
 

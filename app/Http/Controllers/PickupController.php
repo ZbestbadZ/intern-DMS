@@ -8,6 +8,8 @@ use Illuminate\Http\Request;
 class PickupController extends Controller
 {
     public function index() {
-        User::getPickup();
+        $users  = User::getPickup();
+        return response()->json(['data'=>$users]);
+
     }
 }

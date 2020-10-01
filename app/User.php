@@ -6,6 +6,7 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use App\Models;
+use App\Models\UserHobby;
 
 class User extends Authenticatable
 {
@@ -84,6 +85,17 @@ class User extends Authenticatable
     public static function getPickup() 
     {
         $users  = User::where('pickup_status' ,'1')->get();
-        dd($users);
+        return $users;
+    }
+
+    public function getHobbiesParsed() {
+        $hobbiesRaw = $this->hobbies;
+        $result = array_map(function($hobby) {
+            
+            $hobby['hobby'] = config('masterdata.hobby.'.$hobby['hobby']);
+            return $hobby;
+        },$hobbiesRaw->toArray());
+        return $result;
     }
 }
+

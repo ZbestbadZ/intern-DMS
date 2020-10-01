@@ -16,10 +16,10 @@ class DatabaseSeeder extends Seeder
             UserReportSeeder::class,
             AdminSeeder::class,
             ItemSeeder::class,
-            UserHobbiesSeeder::class,
             UserImageSeeder::class,
             UserLikeSeeder::class,
-            UserSeeder::class
+            UserSeeder::class,
+            UserHobbySeeder::class
         ];
 
         $this->call($classes); 
