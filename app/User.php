@@ -2,10 +2,8 @@
 
 namespace App;
 
-use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use App\Models;
 
 class User extends Authenticatable
 {
@@ -18,8 +16,8 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 
-        'email', 
+        'name',
+        'email',
         'password',
         'address',
         'phone',
@@ -38,7 +36,7 @@ class User extends Authenticatable
         'alcohol',
         'tabaco',
         'birthplace',
-        'housemate'
+        'housemate',
     ];
 
     /**
@@ -47,7 +45,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $hidden = [
-        'password', 'remember_token'
+        'password', 'remember_token',
     ];
 
     /**
@@ -56,27 +54,80 @@ class User extends Authenticatable
      * @var array
      */
     protected $casts = [
-        'email_verified_at' => 'datetime'
+        'email_verified_at' => 'datetime',
     ];
 
-    public function likes(){
+    public function likes()
+    {
         return $this->belongsToMany(User::class, 'user_likes', 'user_id', 'target_id');
     }
 
-    public function reports() {
+    public function reports()
+    {
         return $this->belongsToMany(User::class, 'user_reports', 'user_id', 'target_id');
     }
-    
-    public function blocks() {
-        return $this->belongsToMany(User::class,'user_blocks','user_id', 'target_id');
+
+    public function blocks()
+    {
+        return $this->belongsToMany(User::class, 'user_blocks', 'user_id', 'target_id');
     }
 
-    public function images() {
+    public function images()
+    {
         return $this->hasMany(UserImage::class, 'user_id', 'id');
     }
 
     public function hobbies()
     {
         return $this->hasMany(UserHobby::class, 'user_id', 'id');
+    }
+    public static function mapUser($users)
+    {
+      
+        $result = array_map(function ($user) {
+            
+            $user['birthplace'] = config('masterdata.birthplace.' .$user['birthplace']);
+            $user['housemate'] = config('masterdata.housemate.'.$user['housemate'].'.'.$user['sex'] );
+            $user['aca_background'] = config('masterdata.aca_background.'.$user['aca_background'].'.'.$user['sex'] );
+            $user['holiday'] = config('masterdata.holiday.'.$user['holiday'].'.'.$user['sex'] );
+            $user['matching_expect'] = config('masterdata.matching_expect.'.$user['matching_expect'] );
+            $user['anual_income'] = config('masterdata.anual_income.'.$user['anual_income'].'.'.$user['sex'] );
+            $user['figure'] = config('masterdata.figure.'.$user['figure'] );
+            $user['height'] = config('masterdata.height.'.$user['height'] );
+            $user['alcohol'] = config('masterdata.alcohol.'.$user['alcohol'].'.'.$user['sex'] );
+            $user['tabaco'] = config('masterdata.tabaco.'.$user['tabaco'].'.'.$user['sex'] );
+            $user['job'] = config('masterdata.job.'.$user['job'].'.'.$user['sex'] );
+            return $user;
+        }, $users->toArray());
+      
+        return $result;
+
+    }
+    public static function getRecommended()
+    {
+        //    return DB::table('user_likes')->selectRaw('count(id) as total')
+
+        //                ->where('target_id', '2')
+        //               ->get();
+
+        $users = User::where(
+            function ($query) {
+                $query->selectRaw('count(id) as total')
+                    ->from('user_likes')
+                    ->whereColumn('target_id', 'users.id');
+
+            }, '>=', config('const.recommendStandard.like')
+        )
+            ->where(
+                function ($query) {
+                    $query->selectRaw('count(id) as total')
+                        ->from('user_reports')
+                        ->whereColumn('target_id', 'users.id');
+
+                }, '<=', config('const.recommendStandard.report')
+            )
+            ->get();
+            
+        return User::mapUser($users);
     }
 }

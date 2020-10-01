@@ -12,10 +12,13 @@ class UserLikeSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('user_likes')->insert([
-            'user_id'=> '1',
-            'target_id'=> '2',
-        ]);
+        for ($i=1; $i < 11; $i++) { 
+            DB::table('user_likes')->insert([
+                'user_id'=> $i,
+                'target_id'=> '2',
+            ]);
+        }
+        
 
         DB::table('user_likes')->insert([
             'user_id'=> '2',

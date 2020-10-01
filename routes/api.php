@@ -14,6 +14,11 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::prefix('recommend')->group(function() {
+    Route::get('','RecommendController@index');
+    Route::get('/{id}','RecommendController@show');
+});
+
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
