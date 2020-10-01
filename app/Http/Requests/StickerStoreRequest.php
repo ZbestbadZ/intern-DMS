@@ -26,7 +26,7 @@ class StickerStoreRequest extends FormRequest
         return [
             'name' => 'required|max:50',
             'image'=> 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-            'price' => 'required|max:2000000|min:0'
+            'price' => 'required|numeric|max:2000000|min:100'
         ];
     }
 }

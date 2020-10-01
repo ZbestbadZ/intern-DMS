@@ -26,7 +26,6 @@
                 <table id="display" class="display" style="width:100%">
                     <thead>
                         <th>id</th>
-
                         <th>name</th>
                         <th>price</th>
                         <!-- <th>size</th> -->
@@ -53,8 +52,8 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <div class="modal-body">
-                    ...
+                <div id="deleteBody" class="modal-body">
+                    
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
@@ -76,7 +75,7 @@
                 ajax: {
                     type: 'GET',
                     url: '/api/sticker/index',
-                    data: '_token = <?php echo csrf_token(); ?>',
+                    
                     dataSrc: 'data'
                 },
                 "columns": [{
@@ -119,7 +118,8 @@
             $('#display tbody ').on('click', '.delete', function() {
                 var row = table.row($(this).parents('tr'));
                 var data = row.data();
-                $('#deleteModalLabel').html('a')
+                $('#deleteModalLabel').html('Warning!');
+                $('#deleteBody').html('Item ' + data['name'] + ' wil be permanently delete');
                 $('#deleteModal').modal('show');
 
                 deleteCallback = function(result) {
