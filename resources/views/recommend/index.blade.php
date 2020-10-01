@@ -10,7 +10,7 @@
         </div>
         <div class="row d-flex justify-content-center">
             <div class="col-8">
-                <table id="display" class="table table-light">
+                <table id="display" class="m-0 p-0  table table-light">
                     <thead class="thead-light">
                         <tr>
 
@@ -23,14 +23,7 @@
                         </tr>
                     </thead>
                     <tfoot>
-                        <tr>
-                            <th>id</th>
-                            <th>name</th>
-                            <th>email</th>
-                            <th>gender</th>
-                            <th>birthday</th>
-                            <th>options</th>
-                        </tr>
+                        
                     </tfoot>
                 </table>
             </div>
