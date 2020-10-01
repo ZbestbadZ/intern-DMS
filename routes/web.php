@@ -1,5 +1,7 @@
 <?php
 
+use App\User;
+use Illuminate\Foundation\Auth\User as AuthUser;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -21,7 +23,11 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::prefix('recommend')->middleware('auth')->group(function() {
-    Route::get('','RecommendController@index');
+    Route::get('',function(){
+       
+        return view('recommend.index');
+    });
+
     
 });
 
