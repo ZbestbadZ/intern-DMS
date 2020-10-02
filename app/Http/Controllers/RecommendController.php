@@ -13,13 +13,13 @@ class RecommendController extends Controller
         return response()->json(['data'=>$users]);
     }
     public function show($id) {
-        $user = User::find($id);
-        
-        return response()->json(['data'=>$user]);
+        $userRaw = User::find($id);
+        $user = User::mapUser($userRaw);
+        return response()->json(['user'=>$user]);
     }
     public function edit($id) {
-        $user = User::find($id);
-        
+        $userRaw = User::find($id);
+       
         return view('recommend.edit',compact('user'));
     }
     
