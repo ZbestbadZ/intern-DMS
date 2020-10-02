@@ -171,7 +171,7 @@ return [
         '7' => 'Multiple selections possible'
     ],
     'birthplace' => [
-        '1' => 'Please choose',
+        '1' => 'Not selected',
         '2' => 'Tokyo',
         '3' => 'Kanagawa Prefecture',
         '4' => 'Saitama',
@@ -206,7 +206,7 @@ return [
         '33' => 'Tottori prefecture',
         '34' => 'Shimane Prefecture',
         '35' => 'Hiroshima Prefecture',
-        '36' => '山Yamaguchi Prefecture口県',
+        '36' => 'Mountain Yamaguchi Prefecture',
         '37' => 'Tokushima',
         '38' => 'Kagawa Prefecture',
         '39' => 'Ehime Prefecture',
