@@ -1,7 +1,7 @@
 <?php
 return [
-    'recommendStandard' => [
-        'like' => '10',
-        'report' => '0'
+    'RECOMMEND_STANDARD' => [
+        'LIKE' => 10,
+        'REPORT' => 0
     ]
 ];

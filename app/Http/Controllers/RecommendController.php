@@ -7,6 +7,9 @@ use Illuminate\Http\Request;
 
 class RecommendController extends Controller
 {
+    public function indexView() {
+        return view('recommend.index');
+    }
     public function index() {
        
         $users = User::getRecommended();
@@ -14,13 +17,13 @@ class RecommendController extends Controller
     }
     public function show($id) {
         $userRaw = User::find($id);
+        if($userRaw === null) {
+            return abort(404);
+        }
         $user = User::mapUser($userRaw);
+
+
         return response()->json(['user'=>$user]);
     }
-    public function edit($id) {
-        $userRaw = User::find($id);
-       
-        return view('recommend.edit',compact('user'));
-    }
-    
+   
 }

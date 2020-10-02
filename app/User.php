@@ -81,6 +81,12 @@ class User extends Authenticatable
     {
         return $this->hasMany(UserHobby::class, 'user_id', 'id');
     }
+
+    /**
+     * Convert data response
+     * $user array
+     * @return array
+     */
     public static function mapUsers($users)
     {
       
@@ -120,18 +126,14 @@ class User extends Authenticatable
     }
     public static function getRecommended()
     {
-        //    return DB::table('user_likes')->selectRaw('count(id) as total')
-
-        //                ->where('target_id', '2')
-        //               ->get();
-
+       
         $users = User::where(
             function ($query) {
                 $query->selectRaw('count(id) as total')
                     ->from('user_likes')
                     ->whereColumn('target_id', 'users.id');
 
-            }, '>=', config('const.recommendStandard.like')
+            }, '>=', config('const.RECOMMEND_STANDARD.LIKE')
         )
             ->where(
                 function ($query) {
@@ -139,7 +141,7 @@ class User extends Authenticatable
                         ->from('user_reports')
                         ->whereColumn('target_id', 'users.id');
 
-                }, '<=', config('const.recommendStandard.report')
+                }, '<=', config('const.RECOMMEND_STANDARD.REPORT')
             )
             ->get();
             

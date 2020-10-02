@@ -23,10 +23,7 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::prefix('recommend')->middleware('auth')->group(function() {
-    Route::get('',function(){
-       
-        return view('recommend.index');
-    });
+    Route::get('','RecommendController@indexView');
 
     
 });
