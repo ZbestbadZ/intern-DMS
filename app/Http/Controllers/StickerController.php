@@ -53,7 +53,7 @@ class StickerController extends Controller
         $item = Item::find($id);
         if($item == null)return abort(404);
         $data = $request->only(['name','price','image']);
-
+if($item->name != $data['name'])
         if ($request->hasFile('image')) {
             try{
                 Storage::delete($item->path);

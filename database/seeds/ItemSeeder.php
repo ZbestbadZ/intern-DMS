@@ -12,11 +12,11 @@ class ItemSeeder extends Seeder
      */
     public function run()
     {
-        for ($i=0; $i<20 ; $i++) { 
+        for ($i=1; $i<=20 ; $i++) { 
             DB::table('items')->insert([
                 'name'=> 'name_item'.($i+1),
                 'price'=> '100',
-                'path'=> 'img/item1_image.png',
+                'path'=> 'uploads/sticker/demo_defaut_sticker/'.($i+1).'.png',
             ]);
         }
        

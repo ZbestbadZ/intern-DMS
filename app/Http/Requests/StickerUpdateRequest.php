@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class StickerUpdateRequest extends FormRequest
 {
@@ -24,7 +25,7 @@ class StickerUpdateRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'unique:items|required|max:50',
+            'name' => [Rule::unique('items')->ignore($this->id),'max:50'],
             'image'=> 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'price' => 'required|numeric|max:2000000|min:100'
         ];
