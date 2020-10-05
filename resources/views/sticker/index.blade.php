@@ -53,11 +53,32 @@
                     </button>
                 </div>
                 <div id="deleteBody" class="modal-body">
-                    
+
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
                     <button type="button" data-dismiss="modal" class="delete-accecpt btn btn-danger">Yes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="messageModal" tabindex="-1" role="dialog" aria-labelledby="messageModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="messageModalLabel"></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div id="messageBody" class="modal-body">
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">OK</button>
+                    
                 </div>
             </div>
         </div>
@@ -75,7 +96,7 @@
                 ajax: {
                     type: 'GET',
                     url: '/api/sticker/index',
-                    
+
                     dataSrc: 'data'
                 },
                 "columns": [{
@@ -84,10 +105,7 @@
 
                     {
                         "data": "name",
-                        "fnCreatedCell": function(nTd, sData, oData, iRow, iCol) {
-                            $(nTd).html("<a href='#'>" + oData
-                                .name + "</a>");
-                        }
+                        
                     },
                     {
                         "data": "price"
@@ -103,6 +121,9 @@
                     "orderable": false,
                     "targets": 3,
 
+                } , {
+                    "searchable": false,
+                    "targets": [0,2,3],
                 }],
                 "order": [
                     [1, 'asc']
@@ -118,6 +139,7 @@
             $('#display tbody ').on('click', '.delete', function() {
                 var row = table.row($(this).parents('tr'));
                 var data = row.data();
+                let itemName = data['name'];
                 $('#deleteModalLabel').html('Warning!');
                 $('#deleteBody').html('Item ' + data['name'] + ' wil be permanently delete');
                 $('#deleteModal').modal('show');
@@ -127,13 +149,23 @@
                     if (result) {
                         $.ajax({
                             type: 'DELETE',
-                            url: '/api/sticker/' + data['id'],
+                            url: '/api/sticker/'+data['id'] ,
                             data: '_token = <?php echo csrf_token(); ?>',
                             success: function(data) {
                                 var re = row
                                     .remove().draw(true);
-                                table.ajax.reload();
-
+                                
+                                $('#messageModalLabel').html('Success');
+                                $('#messageBody').html('Deleted ' + data['item'][
+                                    'name'
+                                ]);
+                                $('#messageModal').modal('show');
+                            },
+                            error: function(xhr, textStatus, errorThrown) {
+                                $('#messageModalLabel').html('ERORR');
+                                $('#messageBody').html('somthing went wrong can\'t  delete ' + itemName 
+                                );
+                                $('#messageModal').modal('show');
                             }
                         });
                     }

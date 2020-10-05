@@ -26,22 +26,27 @@ class StickerController extends Controller
     public function get(Request $request, $id) {
 
         $item = Item::find($id);
+        if($item == null)return abort(404);
         return response()->json(['item'=>$item]);
     }
 
     public function destroy($id) {
         $item = Item::find($id);
+        if($item == null)return abort(404);
+        
         $item->delete();
         return response()->json(['item'=>$item]);
     }
 
     public function edit($id) {
         $item = Item::find($id);
+        if($item == null)return abort(404);
         return view('sticker.edit',compact('item'));
     }
 
     public function update(StickerUpdateRequest $request, $id) {
         $item = Item::find($id);
+        if($item == null)return abort(404);
         $data = $request->only(['name','price','image']);
 
         if ($request->hasFile('image')) {
