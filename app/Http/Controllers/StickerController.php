@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StickerStoreRequest;
 use App\Http\Requests\StickerUpdateRequest;
 use App\Models\Item;
+use App\User;
 use Exception;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Http\Request;
@@ -33,7 +34,11 @@ class StickerController extends Controller
     public function destroy($id) {
         $item = Item::find($id);
         if($item == null)return abort(404);
-        
+        try{
+            Storage::disk('public')->delete($item->path);
+        } catch (Exception $e) {
+            abort(404);
+        }
         $item->delete();
         return response()->json(['item'=>$item]);
     }
@@ -54,7 +59,7 @@ class StickerController extends Controller
                 Storage::delete($item->path);
 
                 $file = $request->file('image');
-                $newPath = $file->store('uploads/sticker/' . $data['name'], 'public');
+                $newPath = $file->store('uploads/sticker/' . $data['id'], 'public');
                 $item->update([
                     'path' => $newPath
                 ]);
@@ -74,6 +79,7 @@ class StickerController extends Controller
 
     public function store(StickerStoreRequest $request) {
         $data = $request->only(['name','price','image']);
+       
         if ($request->hasFile('image')) {
             try{
                 $file = $request->file('image');

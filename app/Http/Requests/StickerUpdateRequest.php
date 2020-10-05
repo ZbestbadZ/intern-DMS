@@ -24,7 +24,7 @@ class StickerUpdateRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|max:50',
+            'name' => 'unique:items|required|max:50',
             'image'=> 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'price' => 'required|numeric|max:2000000|min:100'
         ];
