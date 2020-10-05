@@ -72,7 +72,7 @@
             </div>
         </nav>
 
-        <main style="background-color:  #dedcbd;" class="p-0 m-0">
+        <main style="background-color:  white;" class="p-0 m-0">
             @yield('content')
         </main>
     </div>
