@@ -1,5 +1,6 @@
 <?php
 
+use Carbon\Carbon;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
@@ -16,50 +17,42 @@ class UserLikeSeeder extends Seeder
             DB::table('user_likes')->insert([
                 'user_id'=> $i,
                 'target_id'=> '2',
+                'created_at' => Carbon::now(),
+            'updated_at' => Carbon::now(),
             ]);
         }
         for ($i=1; $i < 11; $i++) { 
             DB::table('user_likes')->insert([
                 'user_id'=> $i,
                 'target_id'=> '3',
+                'created_at' => Carbon::now(),
+            'updated_at' => Carbon::now(),
             ]);
         }
         for ($i=1; $i < 11; $i++) { 
             DB::table('user_likes')->insert([
                 'user_id'=> $i,
                 'target_id'=> '4',
+                'created_at' => Carbon::now(),
+            'updated_at' => Carbon::now(),
             ]);
         }
         for ($i=1; $i < 11; $i++) { 
             DB::table('user_likes')->insert([
                 'user_id'=> $i,
                 'target_id'=> '5',
+                'created_at' => Carbon::now(),
+            'updated_at' => Carbon::now(),
             ]);
         }
         for ($i=1; $i < 11; $i++) { 
             DB::table('user_likes')->insert([
                 'user_id'=> $i,
                 'target_id'=> '6',
+                'created_at' => Carbon::now(),
+            'updated_at' => Carbon::now(),
             ]);
         }
-        DB::table('user_likes')->insert([
-            'user_id'=> '2',
-            'target_id'=> '3',
-        ]);
-
-        DB::table('user_likes')->insert([
-            'user_id'=> '3',
-            'target_id'=> '4',
-        ]);
-
-        DB::table('user_likes')->insert([
-            'user_id'=> '4',
-            'target_id'=> '5',
-        ]);
-
-        DB::table('user_likes')->insert([
-            'user_id'=> '5',
-            'target_id'=> '6',
-        ]);
+     
     }
 }
