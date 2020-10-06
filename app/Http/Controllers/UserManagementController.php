@@ -76,6 +76,35 @@ class UserManagementController extends Controller
         'tabaco', 'alcohol', 'aca_background', 'holiday', 'anual_income', 'matching_expect'));
     }
 
+    public function getMaleOption() {
+        $hobbies = config('masterdata.hobby');
+        $height = config('masterdata.height');
+        $job = config('masterdata.job');
+        $figure = config('masterdata.figure');
+        $matching_expect = config('masterdata.matching_expect');
+        $anual_income = config('masterdata.anual_income');
+        $holiday = config('masterdata.holiday');
+        $aca_background = config('masterdata.aca_background');
+        $alcohol = config('masterdata.alcohol');
+        $tabaco = config('masterdata.tabaco');
+        $housemate = config('masterdata.housemate');
+        
+        $birthplace = config('masterdata.birthplace');
+        return response()->json([
+            'hobbies' => $hobbies,
+            'height' => $height,
+            'job' => $job,
+            'figure' => $figure,
+            'matching_expect' => $matching_expect,
+            'anual_income' => $anual_income,
+            'holiday' => $holiday,
+            'aca_background' => $aca_background,
+            'alcohol' => $alcohol,
+            'tabaco' => $tabaco,
+            'housemate' => $housemate
+        ]);
+    }
+
     public function update(EditUserManagementRequest $request, $id) {
         try {
             $user = User::find($id);
@@ -112,9 +141,10 @@ class UserManagementController extends Controller
     }
 
     public function destroy($id) {
-        $users = User::find($id);
-        $users->delete();
-        return response()->json(['users'=>$users]);
+        $user = User::find($id);
+        if($user === null) return abort(404);
+        $user->delete();
+        return response()->json(['user'=>$user]);
     }
 
 }

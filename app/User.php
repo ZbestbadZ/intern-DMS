@@ -83,7 +83,7 @@ class User extends Authenticatable
         return $this->hasMany(UserHobby::class, 'user_id', 'id');
     }
 
-    public static function mapUser($users)
+    public static function mapUser($user)
     {
         $user['birthplace'] = config('masterdata.birthplace.' .$user['birthplace']);
         $user['housemate'] = config('masterdata.housemate.'.$user['housemate'].'.'.$user['sex'] );

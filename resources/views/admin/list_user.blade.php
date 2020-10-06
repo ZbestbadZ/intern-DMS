@@ -6,13 +6,13 @@
 
         <div class="row">
             <div class="col">
-                <a href="add_user" class="btn btn-primary" >Create new User</a>
+                <a href="add_user" class="btn btn-primary">Create new User</a>
             </div>
         </div>
         <div class="row d-flex justify-content-end">
             @if (session()->has('message'))
                 <div class="alert alert-success">
-                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
                     {{ session()->get('message') }}
                 </div>
             @endif
@@ -40,7 +40,8 @@
     </div>
 
     <!-- Modal -->
-    <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel"
+        aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -145,7 +146,7 @@
                         "data": "phone"
                     },
                     {
-                      "defaultContent": "<button class=\"edit\">Edit</button> <button class=\"delete\">Delete</button>"
+                        "defaultContent": "<button class=\"edit\">Edit</button> <button class=\"delete\">Delete</button>"
                     },
 
 
@@ -181,7 +182,8 @@
                         $('#detailBody > .about_title').html(spanGen(user['about_title']));
 
                         $('#detailBody > .username').html(spanGen(user['username']));
-                        $('#detailBody > .aca_background').html(spanGen(user['aca_background']));
+                        $('#detailBody > .aca_background').html(spanGen(user[
+                        'aca_background']));
                         $('#detailBody > .job').html(spanGen(user['job']));
                         $('#detailBody > .anual_income').html(spanGen(user['anual_income']));
                         $('#detailBody > .birthplace').html(spanGen(user['birthplace']));
@@ -190,7 +192,8 @@
                         $('#detailBody > .tabaco').html(spanGen(user['tabaco']));
                         $('#detailBody > .alcohol').html(spanGen(user['alcohol']));
                         $('#detailBody > .holiday').html(spanGen(user['holiday']));
-                        $('#detailBody > .matching_expect').html(spanGen(user['matching_expect']));
+                        $('#detailBody > .matching_expect').html(spanGen(user[
+                            'matching_expect']));
                         $('#detailModal').modal('show');
 
                         console.log(data);
@@ -214,7 +217,7 @@
                 $('#deleteModal').modal('show');
 
                 callback = function(result) {
-                
+
                     if (result) {
                         $.ajax({
                             type: 'DELETE',
@@ -233,17 +236,16 @@
 
             });
             $('#deleteModal').on('click', '.btn', function() {
-             
-                if($(this).hasClass("delete-accecpt"))callback(true);
+
+                if ($(this).hasClass("delete-accecpt")) callback(true);
                 else callback(false);
             });
 
-            setTimeout(function(){
-            $("div.alert").remove();
-            }, 2000 );
-           
+            setTimeout(function() {
+                $("div.alert").remove();
+            }, 2000);
+
         });
 
     </script>
 @endpush
-
