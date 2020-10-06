@@ -138,7 +138,7 @@
 
                 ajax: {
                     type: 'GET',
-                    url: '/api/pickup',
+                    url: '/api/pickup/',
                     dataSrc: 'data',
                     
                     
