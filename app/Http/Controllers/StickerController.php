@@ -70,13 +70,15 @@ class StickerController extends Controller
 
         $data = $request->only(['name', 'price', 'image']);
 
-        if ($item->name != $data['name']) {
+        
             if ($request->hasFile('image')) {
                 try {
+                    
                     Storage::delete($item->path);
-
+                    
                     $file = $request->file('image');
-                    $newPath = $file->store('uploads/sticker/' . $data['id'], 'public');
+                    
+                    $newPath = $file->store('uploads/sticker/' . $id, 'public');
                     $item->update([
                         'path' => $newPath,
                     ]);
@@ -85,7 +87,7 @@ class StickerController extends Controller
                 }
 
             }
-        }
+        
 
         $item->update([
             'name' => $data['name'],
