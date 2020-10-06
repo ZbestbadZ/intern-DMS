@@ -25,4 +25,5 @@ Route::prefix('admin')->group(function() {
     Route::get('edit_user/{id}','UserManagementController@edit');
     Route::patch('edit_user/{id}', 'UserManagementController@update');
     Route::delete('{id}','UserManagementController@destroy');
+    Route::get('{id}', 'UserManagementController@show');
 });

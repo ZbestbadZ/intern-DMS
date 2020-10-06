@@ -12,14 +12,14 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         $classes = [
-            UserBlockSeeder::class,
-            UserReportSeeder::class,
             AdminSeeder::class,
+            UserSeeder::class,
             ItemSeeder::class,
             UserHobbiesSeeder::class,
             UserImageSeeder::class,
             UserLikeSeeder::class,
-            UserSeeder::class
+            UserBlockSeeder::class,
+            UserReportSeeder::class,
         ];
 
         $this->call($classes); 

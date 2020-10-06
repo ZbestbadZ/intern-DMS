@@ -3,7 +3,7 @@
 @section('content')
     <div class="container">
         <div class="row d-flex justify-content-center">
-            <div class="col-6">
+            <div class="col-7">
                 <h2>Create new User</h2>
                 <form method="POST" enctype="multipart/form-data" action="{{ route('admin.add_user') }}">
                     @csrf
@@ -39,9 +39,9 @@
 
                     <div class="form-group">
                         <label for="sex">Sex(*) </label>
-                        <input type="radio" id="male" name="sex" value="1">
+                        <input type="radio" class="click1" id="male" name="sex" checked="checked" value="1">
                             <label for="male">Male</label>
-                        <input type="radio" id="female" name="sex" value="0">
+                        <input type="radio" class="click2" id="female" name="sex" value="0">
                             <label for="female">Female</label>  
                         @error('sex')
                         <div class="text-danger" ><strong>{{ $message }}</strong></div>
@@ -57,70 +57,129 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="height">Height:</label>
-                        <input type="number" name="height" id="height" min="130" max="200">
+                        <label for="height">Height:</label>      
+                        <select name="height">
+                            @foreach($height  as  $key => $value)
+                                <option value="{{$key}}">{{$value}}</option>
+                            @endforeach
+                        </select>
                             @error ('height')
                             <div class="text-danger" ><strong>{{ $message }}</strong></div>
                             @enderror
                         <label for="figure">Figure:</label>
-                        <input type="number" name="figure" id="figure" min="1" max="7">
+                        <select name="figure">
+                            @foreach($figure  as  $key1 => $value1)
+                                <option value="{{$key1}}">{{$value1}}</option>
+                            @endforeach
+                        </select>
                             @error ('figure')
                             <div class="text-danger" ><strong>{{ $message }}</strong></div>
                             @enderror
-                        <label for="matching_expect">Matching Expect:</label>
-                        <input type="number" name="matching_expect" id="matching_expect" min="1" max="5">
-                            @error ('matching_expect')
-                            <div class="text-danger" ><strong>{{ $message }}</strong></div>
-                            @enderror
                         <label for="job">Job:</label>
-                        <input type="number" name="job" id="job" min="1" max="47">
+                        <select name="job">
+                            @foreach($job  as  $key3 => $value3)
+                                <option value="{{$key3}}">{{$value3['male']}}</option>
+                            @endforeach
+                        </select>
                             @error ('job')
                             <div class="text-danger" ><strong>{{ $message }}</strong></div>
                             @enderror
                     </div>
 
                     <div class="form-group">
+                        <label for="matching_expect">Matching Expect:</label>
+                        <select name="matching_expect">
+                            @foreach($matching_expect  as  $key2 => $value2)
+                                <option value="{{$key2}}">{{$value2}}</option>
+                            @endforeach
+                        </select>
+                            @error ('matching_expect')
+                            <div class="text-danger" ><strong>{{ $message }}</strong></div>
+                            @enderror
+
+                    </div>
+
+                    <div class="form-group">
                         <label for="anual_income">Anual Income:</label>
-                        <input type="number" name="anual_income" id="anual_income" min="1" max="8">
+                        <select name="anual_income">
+                            @foreach($anual_income as  $key4 => $value4)
+                                <option value="{{$key4}}">{{$value4['male']}}</option>
+                            @endforeach
+                        </select>
                             @error ('anual_income')
                             <div class="text-danger" ><strong>{{ $message }}</strong></div>
                             @enderror
                         <label for="holiday">Holiday:</label>
-                        <input type="number" name="holiday" id="holiday" min="1" max="5">
+                        <select name="holiday">
+                            @foreach($holiday as  $key5 => $value5)
+                                <option value="{{$key5}}">{{$value5['male']}}</option>
+                            @endforeach
+                        </select>
                             @error ('holiday')
                             <div class="text-danger" ><strong>{{ $message }}</strong></div>
                             @enderror
+                    </div>
+
+                    <div class="form-group">
                         <label for="aca_background">Aca Background:</label>
-                        <input type="number" name="aca_background" id="aca_background" min="1" max="6">
+                        <select name="aca_background">
+                            @foreach($aca_background  as  $key6 => $value6)
+                                <option value="{{$key6}}">{{$value6['male']}}</option>
+                            @endforeach
+                        </select>
                             @error ('aca_background')
                             <div class="text-danger" ><strong>{{ $message }}</strong></div>
                             @enderror
                         <label for="alcohol">Alcohol:</label>
-                        <input type="number" name="alcohol" id="alcohol" min="1" max="4">
+                        <select name="alcohol">
+                            @foreach($alcohol as  $key7 => $value7)
+                                <option value="{{$key7}}">{{$value7['male']}}</option>
+                            @endforeach
+                        </select>
                             @error ('alcohol')
                             <div class="text-danger" ><strong>{{ $message }}</strong></div>
                             @enderror
                     </div>
 
                     <div class="form-group">
+                        
                         <label for="tabaco">Tabaco:</label>
-                        <input type="number" name="tabaco" id="tabaco" min="1" max="5">
+                        <select name="tabaco">
+                            @foreach($tabaco as  $key8 => $value8)
+                                <option value="{{$key8}}">{{$value8['male']}}</option>
+                            @endforeach
+                        </select>
                             @error ('tabaco')
                             <div class="text-danger" ><strong>{{ $message }}</strong></div>
                             @enderror
                         <label for="housemate">Housemate:</label>
-                        <input type="number" name="housemate" id="housemate" min="1" max="6">
+                        <select name="housemate">
+                            @foreach($housemate  as  $key9 => $value9)
+                                <option value="{{$key9}}">{{$value9['male']}}</option>
+                            @endforeach
+                        </select>
                             @error ('housemate')
                             <div class="text-danger" ><strong>{{ $message }}</strong></div>
                             @enderror
-                        <label for="hobby">Hobby:</label>
-                        <input type="number" name="hobby" id="hobby" min="1" max="7">
-                            @error ('aca_bahobbyckground')
+                    </div>
+
+                    <div class="form-group">  
+                        <label for="birthplace">Birthplace:</label>
+                        <select name="birthplace">
+                            @foreach($birthplace as  $key10 => $value10)
+                                <option value="{{$key10}}">{{$value10}}</option>
+                            @endforeach
+                        </select>
+                            @error ('birthplace')
                             <div class="text-danger" ><strong>{{ $message }}</strong></div>
                             @enderror
-                        <label for="birthplace">Birthplace:</label>
-                        <input type="number" name="birthplace" id="birthplace" min="1" max="47">
-                            @error ('birthplace')
+                        <label for="hobby">Hobby:</label>
+                        <select name="hobby" id="hobby">
+                            @foreach($hobby as  $key11 => $value11)
+                                <option value="{{$key11}}">{{$value11}}</option>
+                            @endforeach
+                        </select>
+                            @error ('hobby')
                             <div class="text-danger" ><strong>{{ $message }}</strong></div>
                             @enderror
                     </div>

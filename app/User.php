@@ -6,6 +6,7 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use App\Models;
+use App\Models\UserHobby;
 
 class User extends Authenticatable
 {
@@ -82,4 +83,25 @@ class User extends Authenticatable
     {
         return $this->hasMany(UserHobby::class, 'user_id', 'id');
     }
+
+    public static function mapUser($user)
+    {
+        $result = array_map(function ($user) {
+            $user['birthplace'] = config('masterdata.birthplace.' .$user['birthplace']);
+            $user['housemate'] = config('masterdata.housemate.'.$user['housemate'].'.'.$user['sex'] );
+            $user['aca_background'] = config('masterdata.aca_background.'.$user['aca_background'].'.'.$user['sex'] );
+            $user['holiday'] = config('masterdata.holiday.'.$user['holiday'].'.'.$user['sex'] );
+            $user['matching_expect'] = config('masterdata.matching_expect.'.$user['matching_expect'] );
+            $user['anual_income'] = config('masterdata.anual_income.'.$user['anual_income'].'.'.$user['sex'] );
+            $user['figure'] = config('masterdata.figure.'.$user['figure'] );
+            $user['height'] = config('masterdata.height.'.$user['height'] );
+            $user['alcohol'] = config('masterdata.alcohol.'.$user['alcohol'].'.'.$user['sex'] );
+            $user['tabaco'] = config('masterdata.tabaco.'.$user['tabaco'].'.'.$user['sex'] );
+            $user['job'] = config('masterdata.job.'.$user['job'].'.'.$user['sex'] );
+            return $user;
+        }, $users->toArray());
+      
+        return $result;
+    }
+
 }

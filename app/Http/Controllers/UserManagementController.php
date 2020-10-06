@@ -9,7 +9,7 @@ use App\Http\Requests\UserManagementRequest;
 use App\Http\Requests\EditUserManagementRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Carbon;
-use DB;
+use App\Models\UserHobby;
 
 class UserManagementController extends Controller
 {
@@ -25,13 +25,30 @@ class UserManagementController extends Controller
     }
     
     public function add() {
-        return view('admin.add_user');
+        $height = config('masterdata.height');
+        $job = config('masterdata.job');
+        $figure = config('masterdata.figure');
+        $matching_expect = config('masterdata.matching_expect');
+        $anual_income = config('masterdata.anual_income');
+        $holiday = config('masterdata.holiday');
+        $aca_background = config('masterdata.aca_background');
+        $alcohol = config('masterdata.alcohol');
+        $tabaco = config('masterdata.tabaco');
+        $housemate = config('masterdata.housemate');
+        $hobby = config('masterdata.hobby');
+        $birthplace = config('masterdata.birthplace');
+        return view('admin.add_user', compact('figure', 'birthplace', 'hobby', 'housemate', 'job', 'height', 
+                'tabaco', 'alcohol', 'aca_background', 'holiday', 'anual_income', 'matching_expect'));
     }
 
     public function store(UserManagementRequest $request) {
         try {
             $data = $request->all();
             $user = User::create($data);
+            UserHobby::create([
+                'user_id' => $user->id,
+                'hobby' => $request->hobby,
+            ]);
         } catch (Exception $e) {
             $mess = $e->getMessage();
             return redirect()->back()->withErrors($mess)->withInput();
@@ -41,7 +58,21 @@ class UserManagementController extends Controller
 
     public function edit(Request $request, $id) {
         $user = User::find($id);
-        return view('admin.edit_user', compact('user'));
+        $userHobby = UserHobby::where('user_id', $user->id)->first();
+        $height = config('masterdata.height');
+        $job = config('masterdata.job');
+        $figure = config('masterdata.figure');
+        $matching_expect = config('masterdata.matching_expect');
+        $anual_income = config('masterdata.anual_income');
+        $holiday = config('masterdata.holiday');
+        $aca_background = config('masterdata.aca_background');
+        $alcohol = config('masterdata.alcohol');
+        $tabaco = config('masterdata.tabaco');
+        $housemate = config('masterdata.housemate');
+        $hobby = config('masterdata.hobby');
+        $birthplace = config('masterdata.birthplace');
+        return view('admin.edit_user', compact('user', 'userHobby', 'figure', 'birthplace', 'hobby', 'housemate', 'job', 'height', 
+        'tabaco', 'alcohol', 'aca_background', 'holiday', 'anual_income', 'matching_expect'));
     }
 
     public function update(EditUserManagementRequest $request, $id) {
@@ -58,8 +89,15 @@ class UserManagementController extends Controller
     }
 
     public function show($id) {
-        $user = User::find($id);
-        return view('admin.detail_user',compact('user'));
+        $userRaw = User::find($id);
+        if($userRaw === null) {
+            return abort(404);
+        }
+        $userHob = UserHobby::where('user_id', $userRaw->id);
+        $user = User::mapUsers($userRaw);
+        $userHobby = UserHobby::mapUsers($userHob);
+
+        return response()->json(['user'=>$user, 'userHobby' => $userHobby]);
     }
 
     public function destroy($id) {

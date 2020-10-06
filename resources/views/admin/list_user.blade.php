@@ -20,14 +20,17 @@
 
         <div class="row d-flex justify-content-center">
             <div class="col-8">
-                <table id="mytable" class="mytable" style="width:100%">
-                    <thead> 
-                        <th>ID</th>
-                        <th>Name</th>
-                        <th>Email</th>
-                        <th>Sex</th>
-                        <th>Birthday</th>
-                        <th>Action</th>
+                <table id="mytable" class="m-0 p-0 table table-light" style="width:100%">
+                    <thead class="thead-light">
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Birthday</th>
+                            <th>Gender</th>
+                            <th>Job</th>
+                            <th>Phone</th>
+                            <th>Action</th>
+                        </tr>
                     </thead>
                 </table>
             </div>
@@ -57,6 +60,52 @@
         </div>
     </div>
 
+    <div class="modal fade" id="detailModal" tabindex="-1" role="dialog" aria-labelledby="detailModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="detailModalLabel"></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div id="detailBody" class="modal-body">
+                    <!-- personal -->
+                    <div class="name">Name</div>
+                    <div class="gender">Gender</div>
+                    <div class="address"></div>
+                    <div class="phone"></div>
+                    <div class="email"></div>
+                    <div class="birthday"></div>
+                    <div class="about"></div>
+                    <div class="about_title"></div>
+                    <!-- /.personal -->
+                    <!-- account -->
+                    <div class="username"></div>
+                    <div class="aca_background"></div>
+                    <div class="job"></div>
+                    <div class="anual_income"></div>
+                    <div class="birthplace"></div>
+                    <div class="figure"></div>
+                    <div class="height"></div>
+
+                    <div class="tabaco"></div>
+                    <div class="alcohol"></div>
+                    <div class="holiday"></div>
+                    <div class="matching_expect"></div>
+                    <div class="hobby"></div>
+                    <!-- /.account -->
+                </div>
+                <div class="modal-footer">
+
+                    <button type="button" data-dismiss="modal" class="btn btn-primary">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
 @endsection
 @push('scripts')
     <script>
@@ -78,17 +127,22 @@
                     {
                         "data": "name",
                         "fnCreatedCell": function(nTd, sData, oData, iRow, iCol) {
-                            $(nTd).html("<a href='detail_user'>" + oData.name + "</a>");
+                            $(nTd).html("<a id=\"detail\" href='#'>" +
+                                oData.name + "</a>");
                         }
+
                     },
                     {
-                        "data": "email"
+                        "data": "birthday"
                     },
                     {
                         "data": "sex"
                     },
                     {
-                        "data": "birthday"
+                        "data": "job"
+                    },
+                    {
+                        "data": "phone"
                     },
                     {
                       "defaultContent": "<button class=\"edit\">Edit</button> <button class=\"delete\">Delete</button>"
@@ -99,12 +153,51 @@
                 "columnDefs": [{
                     "searchable": false,
                     "orderable": false,
-                    "targets": 5
+                    "targets": 6
                 }],
                 "order": [
                     [1, 'asc']
                 ]
             });
+
+            $('#mytable tbody ').on('click', '#detail', function() {
+                var data = table.row($(this).parents('tr')).data();
+                $.ajax({
+                    type: 'GET',
+                    url: '/api/admin/' + data['id'],
+                    data: '_token = <?php echo csrf_token(); ?>',
+                    success: function(data) {
+                        let user = data['user'];
+                        var spanGen = function(content) {
+                            return '<span>' + content + '</span>';
+                        }
+                        $('#detailBody > .name').html(spanGen(user['name']));
+                        $('#detailBody > .gender').html(spanGen(user['sex']));
+                        $('#detailBody > .address').html(spanGen(user['address']));
+                        $('#detailBody > .phone').html(spanGen(user['phone']));
+                        $('#detailBody > .email').html(spanGen(user['email']));
+                        $('#detailBody > .birthday').html(spanGen(user['birthday']));
+                        $('#detailBody > .about').html(spanGen(user['about']));
+                        $('#detailBody > .about_title').html(spanGen(user['about_title']));
+
+                        $('#detailBody > .username').html(spanGen(user['username']));
+                        $('#detailBody > .aca_background').html(spanGen(user['aca_background']));
+                        $('#detailBody > .job').html(spanGen(user['job']));
+                        $('#detailBody > .anual_income').html(spanGen(user['anual_income']));
+                        $('#detailBody > .birthplace').html(spanGen(user['birthplace']));
+                        $('#detailBody > .figure').html(spanGen(user['figure']));
+                        $('#detailBody > .height').html(spanGen(user['height']));
+                        $('#detailBody > .tabaco').html(spanGen(user['tabaco']));
+                        $('#detailBody > .alcohol').html(spanGen(user['alcohol']));
+                        $('#detailBody > .matching_expect').html(spanGen(user['matching_expect']));
+                        $('#detailModal').modal('show');
+
+                        console.log(data);
+                    }
+                });
+
+            });
+
 
             $('#mytable tbody ').on('click', '.edit', function() {
 
@@ -115,7 +208,8 @@
             $('#mytable tbody ').on('click', '.delete', function() {
                 var row = table.row($(this).parents('tr'));
                 var data = row.data();
-                $('#deleteModalLabel').html('Warning!')
+                $('#deleteModalLabel').html('Warning!');
+                $('#deleteBody').html('User ' + data['name'] + ' will be deleted');
                 $('#deleteModal').modal('show');
 
                 callback = function(result) {
