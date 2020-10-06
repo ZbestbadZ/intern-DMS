@@ -78,7 +78,7 @@
                         <label for="job">Job:</label>
                         <select name="job">
                             @foreach($job  as  $key3 => $value3)
-                                <option value="{{$key3}}">{{$value3['male']}}</option>
+                                <option value="{{$key3}}">{{$value3['1']}}</option>
                             @endforeach
                         </select>
                             @error ('job')
@@ -103,7 +103,7 @@
                         <label for="anual_income">Anual Income:</label>
                         <select name="anual_income">
                             @foreach($anual_income as  $key4 => $value4)
-                                <option value="{{$key4}}">{{$value4['male']}}</option>
+                                <option value="{{$key4}}">{{$value4['1']}}</option>
                             @endforeach
                         </select>
                             @error ('anual_income')
@@ -112,7 +112,7 @@
                         <label for="holiday">Holiday:</label>
                         <select name="holiday">
                             @foreach($holiday as  $key5 => $value5)
-                                <option value="{{$key5}}">{{$value5['male']}}</option>
+                                <option value="{{$key5}}">{{$value5['1']}}</option>
                             @endforeach
                         </select>
                             @error ('holiday')
@@ -124,7 +124,7 @@
                         <label for="aca_background">Aca Background:</label>
                         <select name="aca_background">
                             @foreach($aca_background  as  $key6 => $value6)
-                                <option value="{{$key6}}">{{$value6['male']}}</option>
+                                <option value="{{$key6}}">{{$value6['1']}}</option>
                             @endforeach
                         </select>
                             @error ('aca_background')
@@ -133,7 +133,7 @@
                         <label for="alcohol">Alcohol:</label>
                         <select name="alcohol">
                             @foreach($alcohol as  $key7 => $value7)
-                                <option value="{{$key7}}">{{$value7['male']}}</option>
+                                <option value="{{$key7}}">{{$value7['1']}}</option>
                             @endforeach
                         </select>
                             @error ('alcohol')
@@ -146,7 +146,7 @@
                         <label for="tabaco">Tabaco:</label>
                         <select name="tabaco">
                             @foreach($tabaco as  $key8 => $value8)
-                                <option value="{{$key8}}">{{$value8['male']}}</option>
+                                <option value="{{$key8}}">{{$value8['1']}}</option>
                             @endforeach
                         </select>
                             @error ('tabaco')
@@ -155,7 +155,7 @@
                         <label for="housemate">Housemate:</label>
                         <select name="housemate">
                             @foreach($housemate  as  $key9 => $value9)
-                                <option value="{{$key9}}">{{$value9['male']}}</option>
+                                <option value="{{$key9}}">{{$value9['1']}}</option>
                             @endforeach
                         </select>
                             @error ('housemate')
@@ -173,15 +173,33 @@
                             @error ('birthplace')
                             <div class="text-danger" ><strong>{{ $message }}</strong></div>
                             @enderror
-                        <label for="hobby">Hobby:</label>
-                        <select name="hobby" id="hobby">
-                            @foreach($hobby as  $key11 => $value11)
-                                <option value="{{$key11}}">{{$value11}}</option>
-                            @endforeach
-                        </select>
+                        <label for="hobby">Hobby:
+
+                            
+                                <div class="multipleSelection"> 
+                                    <div class="selectBox" 
+                                        onclick="showCheckboxes()"> 
+                                        <select> 
+                                            <option>Select options</option> 
+                                        </select> 
+                                        <div class="overSelect"></div> 
+                                    </div> 
+                        
+                                    <div id="checkBoxes">
+   
+                                            @foreach($hobby as  $key11 => $value11)
+                                                <input type="checkbox" id="hobby" /> 
+                                                {{$value11}}<br>
+                                            @endforeach
+      
+                                    </div> 
+                                </div> 
+                             
+
                             @error ('hobby')
                             <div class="text-danger" ><strong>{{ $message }}</strong></div>
                             @enderror
+                        </label>
                     </div>
 
                     <div class="form-group">
@@ -233,5 +251,21 @@
     </div>
 @endsection
 @push('scripts')
-
+<script> 
+$(document).ready(function() {
+    var show = true; 
+  
+    function showCheckboxes() { 
+        var checkboxes =  document.getElementById("checkBoxes"); 
+  
+        if (show) { 
+            checkboxes.style.display = "block"; 
+            show = false; 
+        } else { 
+            checkboxes.style.display = "none"; 
+            show = true; 
+        } 
+    } 
+});
+</script> 
 @endpush

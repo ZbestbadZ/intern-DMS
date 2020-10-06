@@ -81,9 +81,9 @@
                             @enderror
                         <label for="job">Job:</label>
                         <select name="job">
-                            <option value="{{$user->job}}" >{{ $job[($user->job)]['male'] }}</option>
+                            <option value="{{$user->job}}" >{{ $job[($user->job)]['1'] }}</option>
                             @foreach($job  as  $key3 => $value3)
-                                <option value="{{$key3}}">{{$value3['male']}}</option>
+                                <option value="{{$key3}}">{{$value3['1']}}</option>
                             @endforeach
                         </select>
                             @error ('job')
@@ -108,9 +108,9 @@
                     <div class="form-group">
                         <label for="anual_income">Anual Income:</label>
                         <select name="anual_income">
-                            <option value="{{$user->anual_income}}" >{{ $anual_income[($user->anual_income)]['male'] }}</option>
+                            <option value="{{$user->anual_income}}" >{{ $anual_income[($user->anual_income)]['1'] }}</option>
                             @foreach($anual_income as  $key4 => $value4)
-                                <option value="{{$key4}}">{{$value4['male']}}</option>
+                                <option value="{{$key4}}">{{$value4['1']}}</option>
                             @endforeach
                         </select>
                             @error ('anual_income')
@@ -118,9 +118,9 @@
                             @enderror
                         <label for="holiday">Holiday:</label>
                         <select name="holiday">
-                            <option value="{{$user->holiday}}" >{{ $holiday[($user->holiday)]['male'] }}</option>
+                            <option value="{{$user->holiday}}" >{{ $holiday[($user->holiday)]['1'] }}</option>
                             @foreach($holiday as  $key5 => $value5)
-                                <option value="{{$key5}}">{{$value5['male']}}</option>
+                                <option value="{{$key5}}">{{$value5['1']}}</option>
                             @endforeach
                         </select>
                             @error ('holiday')
@@ -131,9 +131,9 @@
                     <div class="form-group">
                         <label for="aca_background">Aca Background:</label>
                         <select name="aca_background">
-                            <option value="{{$user->aca_background}}" >{{ $aca_background[($user->aca_background)]['male'] }}</option>
+                            <option value="{{$user->aca_background}}" >{{ $aca_background[($user->aca_background)]['1'] }}</option>
                             @foreach($aca_background  as  $key6 => $value6)
-                                <option value="{{$key6}}">{{$value6['male']}}</option>
+                                <option value="{{$key6}}">{{$value6['1']}}</option>
                             @endforeach
                         </select>
                             @error ('aca_background')
@@ -141,9 +141,9 @@
                             @enderror
                         <label for="alcohol">Alcohol:</label>
                         <select name="alcohol">
-                            <option value="{{$user->alcohol}}" >{{ $alcohol[($user->alcohol)]['male'] }}</option>
+                            <option value="{{$user->alcohol}}" >{{ $alcohol[($user->alcohol)]['1'] }}</option>
                             @foreach($alcohol as  $key7 => $value7)
-                                <option value="{{$key7}}">{{$value7['male']}}</option>
+                                <option value="{{$key7}}">{{$value7['1']}}</option>
                             @endforeach
                         </select>
                             @error ('alcohol')
@@ -155,9 +155,9 @@
                         
                         <label for="tabaco">Tabaco:</label>
                         <select name="tabaco">
-                            <option value="{{$user->tabaco}}" >{{ $tabaco[($user->tabaco)]['male'] }}</option>
+                            <option value="{{$user->tabaco}}" >{{ $tabaco[($user->tabaco)]['1'] }}</option>
                             @foreach($tabaco as  $key8 => $value8)
-                                <option value="{{$key8}}">{{$value8['male']}}</option>
+                                <option value="{{$key8}}">{{$value8['1']}}</option>
                             @endforeach
                         </select>
                             @error ('tabaco')
@@ -165,9 +165,9 @@
                             @enderror
                         <label for="housemate">Housemate:</label>
                         <select name="housemate">
-                            <option value="{{$user->housemate}}" >{{ $housemate[($user->housemate)]['male'] }}</option>
+                            <option value="{{$user->housemate}}" >{{ $housemate[($user->housemate)]['1'] }}</option>
                             @foreach($housemate  as  $key9 => $value9)
-                                <option value="{{$key9}}">{{$value9['male']}}</option>
+                                <option value="{{$key9}}">{{$value9['1']}}</option>
                             @endforeach
                         </select>
                             @error ('housemate')
@@ -187,8 +187,8 @@
                             <div class="text-danger" ><strong>{{ $message }}</strong></div>
                             @enderror
                         <label for="hobby">Hobby:</label>
-                        <select name="hobby">
-                            <option value="{{$userHobby->hobby}}" >{{ $hobby[($userHobby->hobby)] }}</option>
+                        <select id="hobby" name="hobby">
+                            <option value="{{$userHobby->hobby}}" style="color:yellow;" >{{ $hobby[($userHobby->hobby)] }}</option>
                             @foreach($hobby as  $key11 => $value11)
                                 <option value="{{$key11}}">{{$value11}}</option>
                             @endforeach

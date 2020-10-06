@@ -72,8 +72,8 @@
                 </div>
                 <div id="detailBody" class="modal-body">
                     <!-- personal -->
-                    <div class="name">Name</div>
-                    <div class="gender">Gender</div>
+                    <div class="name"></div>
+                    <div class="gender"></div>
                     <div class="address"></div>
                     <div class="phone"></div>
                     <div class="email"></div>
@@ -189,6 +189,7 @@
                         $('#detailBody > .height').html(spanGen(user['height']));
                         $('#detailBody > .tabaco').html(spanGen(user['tabaco']));
                         $('#detailBody > .alcohol').html(spanGen(user['alcohol']));
+                        $('#detailBody > .holiday').html(spanGen(user['holiday']));
                         $('#detailBody > .matching_expect').html(spanGen(user['matching_expect']));
                         $('#detailModal').modal('show');
 

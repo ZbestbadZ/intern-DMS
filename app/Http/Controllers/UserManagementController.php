@@ -59,6 +59,7 @@ class UserManagementController extends Controller
     public function edit(Request $request, $id) {
         $user = User::find($id);
         $userHobby = UserHobby::where('user_id', $user->id)->first();
+        $user_hobby = $user->hobbies;
         $height = config('masterdata.height');
         $job = config('masterdata.job');
         $figure = config('masterdata.figure');
@@ -71,15 +72,25 @@ class UserManagementController extends Controller
         $housemate = config('masterdata.housemate');
         $hobby = config('masterdata.hobby');
         $birthplace = config('masterdata.birthplace');
-        return view('admin.edit_user', compact('user', 'userHobby', 'figure', 'birthplace', 'hobby', 'housemate', 'job', 'height', 
+        return view('admin.edit_user', compact('user','user_hobby', 'userHobby', 'figure', 'birthplace', 'hobby', 'housemate', 'job', 'height', 
         'tabaco', 'alcohol', 'aca_background', 'holiday', 'anual_income', 'matching_expect'));
     }
 
     public function update(EditUserManagementRequest $request, $id) {
         try {
             $user = User::find($id);
+            $userHobby = UserHobby::where('user_id', $user->id)->first();
+            if ($userHobby == null) {
+                return abort(404);
+            }
+    
             $data = $request->all();
             $user->update($data);
+            $userHobby->create([
+                'user_id' => $user->id,
+                'hobby' => $request->hobby,
+            ]);
+            
             
         } catch (Exception $e) {
             $mess = $e->getMessage();
@@ -93,11 +104,11 @@ class UserManagementController extends Controller
         if($userRaw === null) {
             return abort(404);
         }
-        $userHob = UserHobby::where('user_id', $userRaw->id);
-        $user = User::mapUsers($userRaw);
-        $userHobby = UserHobby::mapUsers($userHob);
 
-        return response()->json(['user'=>$user, 'userHobby' => $userHobby]);
+        $user = User::mapUser($userRaw);
+        
+
+        return response()->json(['user'=>$user]);
     }
 
     public function destroy($id) {

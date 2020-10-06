@@ -19,11 +19,8 @@ class UserHobby extends Model
 
     public static function mapUsers($userHobby)
     {
-        $result = array_map(function ($userHobby) {
-            $userHobby['hobby'] = config('masterdata.hobby.'.$userHobby['hobby']);
-            return $userHobby;
-        }, $userHobby->toArray());
-      
-        return $result;
+        $userHobby['hobby'] = config('masterdata.hobby.'.$userHobby['hobby']);
+        return $userHobby;
+
     }
 }
