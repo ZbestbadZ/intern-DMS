@@ -24,7 +24,7 @@ $factory->define(User::class, function (Faker $faker) {
         'address'=>$faker->address,
         'phone' => $faker->e164PhoneNumber,
         'sex' => rand(0,1),
-        'birthday' => $faker->dateTimeBetween($startDate = '-20 years', $endDate = 'now', $timezone = null),
+        'birthday' => $faker->dateTimeBetween($startDate = '-40 years', $endDate = '-20 years', $timezone = null),
         'job' =>rand(1,47),
         'height' =>rand(130,200),
         'figure' =>rand(1,7),

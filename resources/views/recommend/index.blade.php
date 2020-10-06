@@ -16,6 +16,7 @@
 
                             <th>id</th>
                             <th>name</th>
+                            <th>phone</th>
                             <th>email</th>
                             <th>gender</th>
                             <th>birthday</th>
@@ -107,8 +108,10 @@
                 "pagingType": "simple_numbers",
                 searchPanes: {
                     layout: 'columns-1',
+
                 },
-                dom: 'Prtip',
+                "searching": true,
+                dom: 'Pfrtip',
 
                 ajax: {
                     type: 'GET',
@@ -129,16 +132,28 @@
                         }
                     },
                     {
+                        "data": "phone"
+                    },
+                    {
                         "data": "email"
                     },
                     {
-                        "data": "sex"
+                        "data": "sex",
+                        "mRender": function(data, type, row) {
+                            if (data == 1) return "Male";
+                            else return "Female";
+
+                        }
                     },
                     {
-                        "data": "birthday"
+                        "data": "birthday",
+                        "mRender": function(data, type, row) {
+
+                            return getFormattedDate(data);
+                        }
                     },
                     {
-                        "defaultContent": "<button class=\"edit\">Edit</button> <button class=\"delete\">Delete</button>"
+                        "defaultContent": "<button class=\"btn btn-primary  edit\">Edit</button> <button class=\"btn btn-danger delete\">Delete</button>"
                     },
 
 
@@ -146,8 +161,11 @@
                 "columnDefs": [{
                     "searchable": false,
                     "orderable": false,
-                    "targets": 5,
+                    "targets": 6,
 
+                }, {
+                    "searchable": false,
+                    "targets": [0, 3, 4, 5, 6],
                 }, {
                     searchPanes: {
                         show: true,
@@ -159,7 +177,7 @@
                             info: false,
                         }
                     },
-                    targets: [3],
+                    targets: [4],
                 }],
                 "order": [
                     [1, 'asc']
@@ -191,7 +209,8 @@
                         $('#detailBody > .birthday').html(spanGen(user['birthday']));
 
                         $('#detailBody > .username').html(spanGen(user['username']));
-                        $('#detailBody > .aca_background').html(spanGen(user['aca_background']));
+                        $('#detailBody > .aca_background').html(spanGen(user[
+                            'aca_background']));
                         $('#detailBody > .job').html(spanGen(user['job']));
                         $('#detailBody > .anual_income').html(spanGen(user['anual_income']));
                         $('#detailBody > .birthplace').html(spanGen(user['birthplace']));
@@ -200,8 +219,9 @@
                         $('#detailBody > .height').html(spanGen(user['height']));
                         $('#detailBody > .tabaco').html(spanGen(user['tabaco']));
                         $('#detailBody > .alcohol').html(spanGen(user['alcohol']));
-                        $('#detailBody > .matching_expect').html(spanGen(user['matching_expect']));
-                        
+                        $('#detailBody > .matching_expect').html(spanGen(user[
+                            'matching_expect']));
+
                         $('#detailModal').modal('show');
 
                         console.log(data);
@@ -217,7 +237,7 @@
                 $('#deleteBody').html('User ' + data['name'] + ' will be delete');
                 $('#deleteModal').modal('show');
 
-         
+
                 deleteCallback = function(result) {
                     if (result) {
                         $.ajax({
@@ -238,8 +258,23 @@
                 if ($(this).hasClass("delete-accecpt")) deleteCallback(true);
                 else deleteCallback(false);
             });
-
+            $(window).resize(function() {
+                table.draw(false);
+            });
         });
+
+        function getFormattedDate(input) {
+            var date = new Date(input);
+            var year = date.getFullYear();
+
+            var month = (1 + date.getMonth()).toString();
+            month = month.length > 1 ? month : '0' + month;
+
+            var day = date.getDate().toString();
+            day = day.length > 1 ? day : '0' + day;
+
+            return day + '/' + month + '/' + year;
+        }
 
     </script>
 @endpush

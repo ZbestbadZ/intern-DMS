@@ -17,11 +17,12 @@ class RecommendController extends Controller
     }
     public function show($id) {
         $userRaw = User::find($id);
+
         if($userRaw === null) {
             return abort(404);
         }
-        $user = User::mapUser($userRaw);
 
+        $user = User::mapUser($userRaw);
 
         return response()->json(['user'=>$user]);
     }

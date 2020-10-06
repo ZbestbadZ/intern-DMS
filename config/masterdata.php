@@ -138,8 +138,8 @@ return [
         '6' => ['1' => 'Other', '0' => 'Other']
     ],
     'alcohol' => [
-        '1' => ['1' => 'Not selected', '2' => 'Not selected'],
-        '2' => ['1' => "Don't drink", '4' => "Don't drink"],
+        '1' => ['1' => 'Not selected', '0' => 'Not selected'],
+        '2' => ['1' => "Don't drink", '0' => "Don't drink"],
         '3' => ['1' => 'Drink', '0' => 'Drink'],
         '4' => ['1' => 'Drink from time to time', '0' => 'Drink from time to time']
 
