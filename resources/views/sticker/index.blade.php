@@ -16,14 +16,15 @@
                     {{ session()->get('message') }}
                 </div>
             @endif
-            <div class="col-4 text-decoration-none  float-right">
-                <a href="{{ url('/sticker/create') }}">Add a new sticker</a>
-            </div>
+            
         </div>
 
         <div class="row d-flex justify-content-center">
             <div class="col-8">
-                <table id="display" class="display" style="width:100%">
+                <div class=" text-right text-decoration-none  float-right">
+                    <a href="{{ url('/sticker/create') }}">Add a new sticker</a>
+                </div><br>
+                <table id="display" class="table  table-bordered display" style="width:100%">
                     <thead>
                         <th>id</th>
                         <th>name</th>
@@ -111,7 +112,7 @@
                         "data": "price"
                     },
                     {
-                        "defaultContent": "<button class=\"edit\">Edit</button> <button class=\"delete\">Delete</button>"
+                        "defaultContent": "<button class=\"btn btn-primary edit\">Edit</button> <button class=\"btn btn-danger delete\">Delete</button>"
                     },
 
 
