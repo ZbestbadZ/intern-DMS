@@ -15,7 +15,8 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::prefix('pickup')->group(function(){
-    Route::get('index','PickupController@index');
+    Route::get('','PickupController@index');
+    Route::get('{id}');
 });
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
