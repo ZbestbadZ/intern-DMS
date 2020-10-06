@@ -54,6 +54,28 @@
         </div>
     </div>
 
+    <div class="modal fade" id="messageModal" tabindex="-1" role="dialog" aria-labelledby="messageModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="messageModalLabel"></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div id="messageBody" class="modal-body">
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">OK</button>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+
+
     <div class="modal fade" id="detailModal" tabindex="-1" role="dialog" aria-labelledby="detailModalLabel"
         aria-hidden="true">
         <div class="modal-dialog" role="document">
@@ -248,7 +270,20 @@
                             url: '/api/user/' + data['id'],
                             data: '_token = <?php echo csrf_token(); ?>',
                             success: function(data) {
-                                var re = row.remove().draw(false);
+                                var re = row
+                                    .remove().draw(true);
+                                
+                                $('#messageModalLabel').html('Success');
+                                $('#messageBody').html('Deleted ' + data['item'][
+                                    'name'
+                                ]);
+                                $('#messageModal').modal('show');
+                            },
+                            error: function(xhr, textStatus, errorThrown) {
+                                $('#messageModalLabel').html('ERORR');
+                                $('#messageBody').html('somthing went wrong can\'t  delete ' + itemName 
+                                );
+                                $('#messageModal').modal('show');
                             }
                         });
                     }
