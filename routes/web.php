@@ -28,3 +28,18 @@ Route::prefix('pickup')->middleware('auth')->group(function(){
 
 
 Route::get('/home', 'HomeController@index')->name('home');
+
+Route::prefix('sticker')->middleware('auth')->group( function() {
+    Route::get('/index',function(){
+        return view('sticker.index');
+    })->name('sticker.index');
+    
+    Route::get('{id}/edit','StickerController@edit')->name('sticker.edit');
+    
+    Route::get('/create',function(){
+        return view('sticker.create');
+    })->name('sticker.create');
+
+    Route::post('', 'StickerController@store');
+    Route::patch('{id}','StickerController@update');
+});

@@ -16,7 +16,12 @@ use Illuminate\Support\Facades\Route;
 
 Route::prefix('pickup')->group(function(){
     Route::get('','PickupController@index');
-    Route::get('{id}');
+  
+});
+Route::prefix('sticker')->group(function() {
+        Route::get('index','StickerController@index');
+        Route::get('{id}','StickerController@get');
+        Route::delete('{id}','StickerController@destroy');
 });
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
