@@ -141,7 +141,7 @@
                 var data = row.data();
                 let itemName = data['name'];
                 $('#deleteModalLabel').html('Warning!');
-                $('#deleteBody').html('Item ' + data['name'] + ' wil be permanently delete');
+                $('#deleteBody').html('Item ' + data['name'] + ' will be permanently delete');
                 $('#deleteModal').modal('show');
 
                 deleteCallback = function(result) {

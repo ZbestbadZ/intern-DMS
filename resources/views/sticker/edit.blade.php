@@ -45,7 +45,7 @@
                     </div>
                     <!-- end of input -->
 
-                    <button class="btn btn-primary" type="submit" name="create">Create</button>
+                    <button class="btn btn-primary" type="submit" name="save">Save</button>
                 </form>
 
             </div>
