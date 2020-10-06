@@ -16,11 +16,10 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', 'HomeController@index');
 
-Auth::routes();
+Auth::routes(['register' => false]);
+
 
 Route::prefix('recommend')->middleware('auth')->group(function() {
     Route::get('','RecommendController@indexView');
