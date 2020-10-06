@@ -2,7 +2,6 @@
 
 namespace App;
 
-use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use App\Models;
@@ -84,7 +83,7 @@ class User extends Authenticatable
         return $this->hasMany(UserHobby::class, 'user_id', 'id');
     }
 
-    public static function mapUser($user)
+    public static function mapUser($users)
     {
         $user['birthplace'] = config('masterdata.birthplace.' .$user['birthplace']);
         $user['housemate'] = config('masterdata.housemate.'.$user['housemate'].'.'.$user['sex'] );
