@@ -5,7 +5,7 @@
     <div class="container-fluid">
 
         <div class="row">
-            <div class="col">
+            <div class="col-2" style="margin: 10px 0px 10px 0px">
                 <a href="add_user" class="btn btn-primary">Create new User</a>
             </div>
         </div>
@@ -20,7 +20,7 @@
 
         <div class="row d-flex justify-content-center">
             <div class="col-8">
-                <table id="mytable" class="m-0 p-0 table table-light" style="width:100%">
+                <table id="mytable" class="table table-hover table-bordered display" style="width:100%">
                     <thead class="thead-light">
                         <tr>
                             <th>ID</th>
@@ -73,7 +73,7 @@
                 </div>
                 <div id="detailBody" class="modal-body">
                     <!-- personal -->
-                    <div class="name"></div>
+                    <div class="name">Name</div>
                     <div class="gender"></div>
                     <div class="address"></div>
                     <div class="phone"></div>
@@ -134,21 +134,30 @@
 
                     },
                     {
-                        "data": "birthday"
+                        "data": "birthday",
+                        "mRender": function(data, type, row) {
+                            return getFormattedDate(data);
+                        }
                     },
                     {
-                        "data": "sex"
+                        "data": "sex",
+                        "mRender": function(data, type, row) {
+                            if (data == 1) return "Male";
+                            else return "Female";
+
+                        }
                     },
                     {
-                        "data": "job"
+                        "data": "job",
+                        
+                    
                     },
                     {
                         "data": "phone"
                     },
                     {
-                        "defaultContent": "<button class=\"edit\">Edit</button> <button class=\"delete\">Delete</button>"
+                        "defaultContent": "<button class=\"btn btn-primary edit\">Edit</button> <button class=\"btn btn-danger delete\">Delete</button>"
                     },
-
 
                 ],
                 "columnDefs": [{
@@ -166,34 +175,35 @@
                 $.ajax({
                     type: 'GET',
                     url: '/api/admin/' + data['id'],
+                    dataType: 'json',
                     data: '_token = <?php echo csrf_token(); ?>',
                     success: function(data) {
                         let user = data['user'];
+                        let userHob = data['userHob'];
                         var spanGen = function(content) {
-                            return '<span>' + content + '</span>';
+                            return '<span style="margin-left: 50px;">' + content + '</span>';
                         }
-                        $('#detailBody > .name').html(spanGen(user['name']));
-                        $('#detailBody > .gender').html(spanGen(user['sex']));
-                        $('#detailBody > .address').html(spanGen(user['address']));
-                        $('#detailBody > .phone').html(spanGen(user['phone']));
-                        $('#detailBody > .email').html(spanGen(user['email']));
-                        $('#detailBody > .birthday').html(spanGen(user['birthday']));
-                        $('#detailBody > .about').html(spanGen(user['about']));
-                        $('#detailBody > .about_title').html(spanGen(user['about_title']));
+                        $('#detailBody > .name').html(["<b>Name:</b>" ,spanGen(user['name'])]);
+                        $('#detailBody > .gender').html(["<b>Gender:</b>" ,spanGen(user['sex'])]);
+                        $('#detailBody > .address').html(["<b>Address: </b>" ,spanGen(user['address'])]);
+                        $('#detailBody > .phone').html(["<b>Phone: </b>" ,spanGen(user['phone'])]);
+                        $('#detailBody > .email').html(["<b>Email: </b>" ,spanGen(user['email'])]);
+                        $('#detailBody > .birthday').html(["<b>Birthday: </b>" ,spanGen(user['birthday'])]);
+                        $('#detailBody > .about').html(["<b>About: </b>" ,spanGen(user['about'])]);
+                        $('#detailBody > .about_title').html(["<b>About Title: </b>" ,spanGen(user['about_title'])]);
 
-                        $('#detailBody > .username').html(spanGen(user['username']));
-                        $('#detailBody > .aca_background').html(spanGen(user[
-                        'aca_background']));
-                        $('#detailBody > .job').html(spanGen(user['job']));
-                        $('#detailBody > .anual_income').html(spanGen(user['anual_income']));
-                        $('#detailBody > .birthplace').html(spanGen(user['birthplace']));
-                        $('#detailBody > .figure').html(spanGen(user['figure']));
-                        $('#detailBody > .height').html(spanGen(user['height']));
-                        $('#detailBody > .tabaco').html(spanGen(user['tabaco']));
-                        $('#detailBody > .alcohol').html(spanGen(user['alcohol']));
-                        $('#detailBody > .holiday').html(spanGen(user['holiday']));
-                        $('#detailBody > .matching_expect').html(spanGen(user[
-                            'matching_expect']));
+                        $('#detailBody > .username').html(["<b>Username: </b>" ,spanGen(user['username'])]);
+                        $('#detailBody > .aca_background').html(["<b>Aca Background: </b>" ,spanGen(user['aca_background'])]);
+                        $('#detailBody > .job').html(["<b>Job: </b>" ,spanGen(user['job'])]);
+                        $('#detailBody > .anual_income').html(["<b>Anual Income: </b>" ,spanGen(user['anual_income'])]);
+                        $('#detailBody > .birthplace').html(["<b>Birthplace: </b>" ,spanGen(user['birthplace'])]);
+                        $('#detailBody > .figure').html(["<b>Figure: </b>" ,spanGen(user['figure'])]);
+                        $('#detailBody > .height').html(["<b>Height: </b>" ,spanGen(user['height'])]);
+                        $('#detailBody > .tabaco').html(["<b>Tabaco: </b>" ,spanGen(user['tabaco'])]);
+                        $('#detailBody > .alcohol').html(["<b>Alcohol: </b>" ,spanGen(user['alcohol'])]);
+                        $('#detailBody > .holiday').html(["<b>Holiday: </b>" ,spanGen(user['holiday'])]);
+                        $('#detailBody > .matching_expect').html(["<b>Matching Expect: </b>" ,spanGen(user['matching_expect'])]);
+                        $('#detailBody > .hobby').html(["<b>Hobby: </b>" ,spanGen(userHob['holiday'])]);
                         $('#detailModal').modal('show');
 
                         console.log(data);
@@ -201,7 +211,6 @@
                 });
 
             });
-
 
             $('#mytable tbody ').on('click', '.edit', function() {
 
@@ -246,6 +255,19 @@
             }, 2000);
 
         });
+
+        function getFormattedDate(input) {
+            var date = new Date(input);
+            var year = date.getFullYear();
+
+            var month = (1 + date.getMonth()).toString();
+            month = month.length > 1 ? month : '0' + month;
+
+            var day = date.getDate().toString();
+            day = day.length > 1 ? day : '0' + day;
+
+            return day + '/' + month + '/' + year;
+        }
 
     </script>
 @endpush
