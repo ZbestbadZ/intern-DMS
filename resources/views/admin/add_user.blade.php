@@ -4,7 +4,7 @@
     <div class="container">
         <div class="row d-flex justify-content-center">
             <div class="col-7">
-                <h2>Create new User</h2>
+                <h2 style="text-align:center; margin-top:10px;">CREATE NEW USER</h2>
                 <form method="POST" enctype="multipart/form-data" action="{{ route('admin.add_user') }}">
                     @csrf
                     <div class="form-group">

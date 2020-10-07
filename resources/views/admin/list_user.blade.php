@@ -73,7 +73,7 @@
                 </div>
                 <div id="detailBody" class="modal-body">
                     <!-- personal -->
-                    <div class="name">Name</div>
+                    <div class="name"></div>
                     <div class="gender"></div>
                     <div class="address"></div>
                     <div class="phone"></div>
@@ -203,7 +203,6 @@
                         $('#detailBody > .alcohol').html(["<b>Alcohol: </b>" ,spanGen(user['alcohol'])]);
                         $('#detailBody > .holiday').html(["<b>Holiday: </b>" ,spanGen(user['holiday'])]);
                         $('#detailBody > .matching_expect').html(["<b>Matching Expect: </b>" ,spanGen(user['matching_expect'])]);
-                        $('#detailBody > .hobby').html(["<b>Hobby: </b>" ,spanGen(userHob['holiday'])]);
                         $('#detailModal').modal('show');
 
                         console.log(data);

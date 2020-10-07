@@ -16,11 +16,4 @@ class UserHobby extends Model
     public function users() {
         return $this->belongsToMany(User::class, 'user_id', 'id');
     }
-
-    public static function mapUsers($userHobby)
-    {
-        $userHobby['hobby'] = config('masterdata.hobby.'.$userHobby['hobby']);
-        return $userHobby;
-
-    }
 }

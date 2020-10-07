@@ -4,7 +4,7 @@
     <div class="container">
         <div class="row d-flex justify-content-center">
             <div class="col-7">
-                <h2>Edit User</h2>
+                <h2 style="text-align:center; margin-top:10px;">EDIT USER</h2>
                 <form method="POST" enctype="multipart/form-data" action="/admin/edit_user/{{$user->id}}">
                     @csrf
                     @method('PATCH')
