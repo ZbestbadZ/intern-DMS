@@ -27,7 +27,7 @@ class StickerUpdateRequest extends FormRequest
     {
         $id = $this->id;
         return  [
-            'name' => 'unique:items,name,'.$id,
+            'name' => 'max:50|required|unique:items,name,'.$id,
             'image'=> 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'price' => 'required|numeric|max:2000000|min:100'
         ];
