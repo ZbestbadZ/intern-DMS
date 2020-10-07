@@ -17,7 +17,14 @@ class StickerController extends Controller
     {
         $this->auth = $auth;
     }
-
+    public function getIndex(Request $request) {
+        $message = $request->input('message');
+        if($message === null) return view('sticker.index');
+        else return redirect()->route('sticker.index')->with('message', $message);
+    }
+    public function getCreate() {
+        return view('sticker.create');
+    }
     public function index()
     {
         $items = Item::all();
@@ -63,21 +70,22 @@ class StickerController extends Controller
 
     public function update(StickerUpdateRequest $request, $id)
     {
+        // $this->validate($request, [
+        //     'name' => 'unique:items,name,1',
+        // ]);
         $item = Item::find($id);
         if ($item == null) {
             return abort(404);
         }
-
+        
         $data = $request->only(['name', 'price', 'image']);
 
         
             if ($request->hasFile('image')) {
                 try {
-                    
-                    Storage::delete($item->path);
-                    
+                   
+                   Storage::disk('public')->delete($item->path);
                     $file = $request->file('image');
-                    
                     $newPath = $file->store('uploads/sticker/' . $id, 'public');
                     $item->update([
                         'path' => $newPath,
@@ -87,14 +95,13 @@ class StickerController extends Controller
                 }
 
             }
-        
-
         $item->update([
             'name' => $data['name'],
             'price' => $data['price'],
         ]);
 
-        return redirect()->route('sticker.index')->with('message', 'Updated item ' . $data['name']);
+        return response()->json(['success'=> 'Item '.trim($item['name']).' 
+        updated']);
 
     }
 
@@ -110,14 +117,15 @@ class StickerController extends Controller
             } catch (Exception $e) {
                 return abort(500);
             }
-            Item::create([
+           $item =  Item::create([
                 'name' => $data['name'],
                 'price' => $data['price'],
                 'path' => $path,
             ]);
-            return redirect()->route('sticker.index')->with('message', 'Created item ' .  $data['name']);
+            return response()->json(['success'=> 'Item '.$item['name'].' 
+        added']);
 
         }
-        return back()->withInput();
+        return response()->json(['failed'=> 'Image file not found!']);
     }
 }
