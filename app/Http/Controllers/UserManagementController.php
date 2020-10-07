@@ -45,10 +45,16 @@ class UserManagementController extends Controller
         try {
             $data = $request->all();
             $user = User::create($data);
-            UserHobby::create([
-                'user_id' => $user->id,
-                'hobby' => $request->hobby,
-            ]);
+            $hobby = $request->hobby;
+            if ($request->has('hobby')) {
+                foreach ($hobby as $hob) { 
+                    UserHobby::create([
+                        'user_id' => $user->id,
+                        'hobby' => $hob
+                    ]); 
+                }
+            }
+            
         } catch (Exception $e) {
             $mess = $e->getMessage();
             return redirect()->back()->withErrors($mess)->withInput();
@@ -107,20 +113,19 @@ class UserManagementController extends Controller
 
     public function update(EditUserManagementRequest $request, $id) {
         try {
-            $user = User::find($id);
-            $userHobby = UserHobby::where('user_id', $user->id)->first();
-            if ($userHobby == null) {
-                return abort(404);
-            }
-    
+            $user = User::find($id); 
             $data = $request->all();
             $user->update($data);
-            $userHobby->create([
-                'user_id' => $user->id,
-                'hobby' => $request->hobby,
-            ]);
-            
-            
+            $hobby = $request->hobby;
+            if ($request->has('hobby')) {
+                foreach ($hobby as $hob) { 
+                    UserHobby::create([
+                        'user_id' => $user->id,
+                        'hobby' => $hob
+                    ]); 
+                }
+            }
+              
         } catch (Exception $e) {
             $mess = $e->getMessage();
             return back()->withErrors($mess)->withInput();
@@ -136,7 +141,6 @@ class UserManagementController extends Controller
 
         $user = User::mapUser($userRaw);
         
-
         return response()->json(['user'=>$user]);
     }
 

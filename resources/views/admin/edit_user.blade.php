@@ -186,16 +186,20 @@
                             @error ('birthplace')
                             <div class="text-danger" ><strong>{{ $message }}</strong></div>
                             @enderror
-                        <label for="hobby">Hobby:</label>
+                        <label for="hobby">Hobby:
                         <select id="hobby" name="hobby">
-                            <option value="{{$userHobby->hobby}}" style="color:yellow;" >{{ $hobby[($userHobby->hobby)] }}</option>
+                            @foreach ($user_hobby as $hob)
+                                <option value="{{$hob->hobby}}" style="color:yellow;" >{{ $hobby[($hob->hobby)] }}</option>
+                            @endforeach
                             @foreach($hobby as  $key11 => $value11)
-                                <option value="{{$key11}}">{{$value11}}</option>
+                            <input type="checkbox" name="hobby[]" id="hobby" value="{{$key11}}"/>
+                                {{$value11}}
                             @endforeach
                         </select>
                             @error ('hobby')
                             <div class="text-danger" ><strong>{{ $message }}</strong></div>
                             @enderror
+                        </label>
                     </div>
 
                     <div class="form-group">

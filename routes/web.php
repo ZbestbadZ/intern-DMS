@@ -26,13 +26,9 @@ Route::group(['prefix'=>'admin'],function(){
         return view('admin.list_user');
     })->name('admin.list_user');
 
-    Route::get('add_user', 'UserManagementController@add')->name('admin.add_user');
-    Route::post('add_user', 'UserManagementController@store');
+    Route::get('add_user', 'UserManagementController@add');
+    Route::post('add_user', 'UserManagementController@store')->name('admin.add_user');
 
     Route::get('{id}/edit', 'UserManagementController@edit')->name('admin.edit');
     Route::patch('edit_user/{id}', 'UserManagementController@update');
-});
-
-Route::get('data', function () {
-    return config('masterdata');
 });

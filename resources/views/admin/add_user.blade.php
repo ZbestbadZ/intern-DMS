@@ -174,28 +174,12 @@
                             <div class="text-danger" ><strong>{{ $message }}</strong></div>
                             @enderror
                         <label for="hobby">Hobby:
-
-                            
-                                <div class="multipleSelection"> 
-                                    <div class="selectBox" 
-                                        onclick="showCheckboxes()"> 
-                                        <select> 
-                                            <option>Select options</option> 
-                                        </select> 
-                                        <div class="overSelect"></div> 
-                                    </div> 
-                        
-                                    <div id="checkBoxes">
-   
-                                            @foreach($hobby as  $key11 => $value11)
-                                                <input type="checkbox" id="hobby" /> 
-                                                {{$value11}}<br>
-                                            @endforeach
-      
-                                    </div> 
-                                </div> 
-                             
-
+                        <select name="hobby">
+                            @foreach($hobby as  $key11 => $value11)
+                            <input type="checkbox" name="hobby[]" id="hobby" value="{{$key11}}"/>
+                                {{$value11}}
+                            @endforeach
+                        </select>
                             @error ('hobby')
                             <div class="text-danger" ><strong>{{ $message }}</strong></div>
                             @enderror
@@ -251,21 +235,5 @@
     </div>
 @endsection
 @push('scripts')
-<script> 
-$(document).ready(function() {
-    var show = true; 
-  
-    function showCheckboxes() { 
-        var checkboxes =  document.getElementById("checkBoxes"); 
-  
-        if (show) { 
-            checkboxes.style.display = "block"; 
-            show = false; 
-        } else { 
-            checkboxes.style.display = "none"; 
-            show = true; 
-        } 
-    } 
-});
-</script> 
+
 @endpush
