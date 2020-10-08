@@ -8,37 +8,36 @@
                 <img class="img-fluid" src="{{ url('storage/' . $item->path) }}" alt="">
             </div>
             <div class="col-6">
-                <form id="form" enctype="multipart/form-data">
-                    @csrf
-                    {{ method_field('PATCH') }}
+                <form id="form" method="POST"  enctype="multipart/form-data">
+                    {{csrf_field()}}
+    {{ method_field('PATCH') }}
                     <!-- input -->
                     <div class="form-group">
                         <label for="name">Name</label>
                         <input name="name" type="text" id="name" required placeholder="" value="{{ $item->name }}">
-                        @error('name')
 
-                        <div class="text-danger"><strong>{{ $message }}</strong></div>
 
-                        @enderror
+                        <div class="text-danger"><strong><span id="nameMessage"></span></strong></div>
+
                     </div>
                     <div class="form-group">
                         <label for="price">Price</label>
                         <input name="price" required type="number" id="price" value="{{ $item->price }}" placeholder="">
 
-                        @error('price')
 
-                        <div class="text-danger"><strong>{{ $message }}</strong></div>
 
-                        @enderror
+                        <div class="text-danger"><strong><span id="priceMessage"></span></strong></div>
+
+
                     </div>
                     <div class="form-group">
                         <label for="image">Image File</label>
                         <input name="image" class="form-control-file" type="file" id="image" placeholder="">
-                        @error('image')
 
-                        <div class="text-danger"><strong>{{ $message }}</strong></div>
 
-                        @enderror
+                        <div class="text-danger"><strong><span id="imageMessage"></span></strong></div>
+
+
                     </div>
 
 
@@ -56,30 +55,54 @@
     <script>
         $(document).ready(function() {
             $.ajaxSetup({
-                headers: {  
-                    '_token' : '<?php echo csrf_token(); ?>',
-                    
-                    }
+                headers: {
+                    '_token': '<?php echo csrf_token(); ?>',
+                    'Authorization' : 'Bearer '+ "{{Auth::user()->api_token}}",
+
+                }
             });
-            $("form").submit(function(evt) {
+            $("#form").submit(function(evt) {
                 evt.preventDefault();
                 var formData = new FormData($(this)[0]);
-                formData.set( 'api_token','{{ Auth::user()->api_token }}');
+                
                 $.ajax({
                     url: '/api/sticker/' + "{{ $item->id }}",
                     type: 'POST',
-                    data:formData,
+                    data: formData,
                     async: false,
-                    cache: false,
-                    contentType: false,
+                    dataType: "json",
                     enctype: 'multipart/form-data',
-                    
+                    contentType: false,
                     processData: false,
                     success: function(response) {
                         console.log(response['success']);
                         window.location.href = "{{ url('sticker?message=') }}" + response[
                             'success'];
-                    }
+                    },
+                    error: function(xhr, textStatus, errorThrown) {
+                            switch (xhr.status) {
+                                case 404: {
+                                    let message = "item not found";
+                                    Console.log(message);
+                                    break;
+                                }
+                                case 422: {
+                                    var errors = $.parseJSON(xhr.responseText)['errors'];
+                                    if (errors['name']) $('#nameMessage').html("" + errors[
+                                        'name']);
+                                    if (errors['price']) $('#priceMessage').html("" + errors[
+                                        'price']);
+                                    if (errors['image']) $('#imageMessage').html("" + errors[
+                                        'image']);
+                                    break;
+                                }
+                                case 500: {
+                                    let message = "some error on server side please try next time";
+                                    Console.log(message);
+                                    break;
+                                }
+                            }
+                    },
                 });
                 return false;
             });

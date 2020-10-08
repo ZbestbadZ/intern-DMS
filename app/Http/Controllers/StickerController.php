@@ -70,9 +70,7 @@ class StickerController extends Controller
 
     public function update(StickerUpdateRequest $request, $id)
     {
-        // $this->validate($request, [
-        //     'name' => 'unique:items,name,1',
-        // ]);
+      
         $item = Item::find($id);
         if ($item == null) {
             return abort(404);
