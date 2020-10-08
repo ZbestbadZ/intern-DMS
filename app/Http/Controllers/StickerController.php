@@ -116,7 +116,7 @@ class StickerController extends Controller
             try {
                 $md5Name = md5_file($request->file('image')->getRealPath());
                 $guessExtension = $request->file('image')->guessExtension();
-                $newPath = $request->file('image')->storeAs('uploads/sticker/', $md5Name.'.'.$guessExtension  ,'public');
+                $path = $request->file('image')->storeAs('uploads/sticker/', $md5Name.'.'.$guessExtension  ,'public');
             } catch (Exception $e) {
                 return abort(500);
             }
