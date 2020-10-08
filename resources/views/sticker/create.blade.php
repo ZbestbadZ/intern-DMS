@@ -12,21 +12,21 @@
                         <label for="name">Name</label>
                         <input name="name" type="text" id="name" required placeholder="">
 
-                        <div class="text-danger"><strong><span id="nameMessage"></span></strong></div>
+                        <div class="text-danger"><strong><span id="error_name"></span></strong></div>
 
                     </div>
                     <div class="form-group">
                         <label for="price">Price</label>
                         <input name="price" required type="number" id="price" placeholder="">
 
-                        <div class="text-danger"><strong><span id="priceMessage"></span></strong></div>
+                        <div class="text-danger"><strong><span id="error_price"></span></strong></div>
 
                     </div>
                     <div class="form-group">
                         <label for="image">Image File</label>
                         <input name="image" class="form-control-file" type="file" id="image" required placeholder="">
 
-                        <div class="text-danger"><strong><span id="imageMessage"></span></strong></div>
+                        <div class="text-danger"><strong><span id="error_image"></span></strong></div>
 
                     </div>
                     <!-- end of input -->
@@ -55,7 +55,7 @@
                 $.ajax({
                     url: '/api/sticker',
                     type: 'POST',
-                    data: formDataSerialized,
+                    data: formData,
                     async: false,
                     dataType: "json",
                     enctype: 'multipart/form-data',

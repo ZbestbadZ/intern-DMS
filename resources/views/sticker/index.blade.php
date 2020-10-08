@@ -123,16 +123,15 @@
 
                 ],
                 "columnDefs": [{
-                    "searchable": false,
                     "orderable": false,
                     "targets": 3,
 
                 }, {
                     "searchable": false,
-                    "targets": [0, 2, 3],
+                    "targets": [0, 3],
                 }],
                 "order": [
-                    [0, 'asc']
+                    [1, 'asc']
                 ]
             });
 

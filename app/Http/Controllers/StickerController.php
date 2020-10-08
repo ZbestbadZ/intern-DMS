@@ -61,7 +61,7 @@ class StickerController extends Controller
     public function edit($id)
     {
         $item = Item::find($id);
-        if ($item == null) {
+        if (empty($item)) {
             return abort(404);
         }
 
