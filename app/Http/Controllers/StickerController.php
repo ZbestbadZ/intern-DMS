@@ -84,10 +84,12 @@ class StickerController extends Controller
 
         if ($request->hasFile('image')) {
             try {
-
                 Storage::disk('public')->delete($item->path);
-                $file = $request->file('image');
-                $newPath = $file->store('uploads/sticker/' . $id, 'public');
+                
+                $md5Name = md5_file($request->file('image')->getRealPath());
+                $guessExtension = $request->file('image')->guessExtension();
+                $newPath = $request->file('image')->storeAs('uploads/sticker/', $md5Name.'.'.$guessExtension  ,'public');
+
                 $item->update([
                     'path' => $newPath,
                 ]);
@@ -112,9 +114,9 @@ class StickerController extends Controller
 
         if ($request->hasFile('image')) {
             try {
-                $file = $request->file('image');
-                $path = $file->store('uploads/sticker/' . $data['name'], 'public');
-
+                $md5Name = md5_file($request->file('image')->getRealPath());
+                $guessExtension = $request->file('image')->guessExtension();
+                $newPath = $request->file('image')->storeAs('uploads/sticker/', $md5Name.'.'.$guessExtension  ,'public');
             } catch (Exception $e) {
                 return abort(500);
             }
