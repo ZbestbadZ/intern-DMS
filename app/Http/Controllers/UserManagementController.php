@@ -19,6 +19,12 @@ class UserManagementController extends Controller
         $this->userModel = $model;
     }
 
+    public function getIndex(Request $request) {
+        $message = $request->input('message');
+        if(empty($message)) return view('admin.list_user');
+        else return redirect()->route('admin.index')->with('message', $message);
+    }
+
     public function index() {
         $users = User::all();
         if($users == null) {
@@ -56,15 +62,15 @@ class UserManagementController extends Controller
                     UserHobby::create([
                         'user_id' => $user->id,
                         'hobby' => $hob
-                    ]); 
+                    ]);
                 }
             }
             
         } catch (Exception $e) {
             $mess = $e->getMessage();
-            return redirect()->back()->withErrors($mess)->withInput();
+            return abort(500);
         }
-        return redirect()->route('admin.list_user')->with('message', 'User is created successfully!');
+        return response()->json(['message'=>'User is created successfully!']);
     }
 
     public function edit(Request $request, $id) {

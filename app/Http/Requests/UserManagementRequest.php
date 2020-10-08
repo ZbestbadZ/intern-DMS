@@ -53,6 +53,7 @@ class UserManagementRequest extends FormRequest
         return [
             'birthday.date' => 'Birthday must be date',
             'password.same' => 'Password must be the same at password confirm',
+            'password.required_with' => 'Password must be the same at password confirm'
         ];
     }
 

@@ -235,5 +235,59 @@
     </div>
 @endsection
 @push('scripts')
+<script>
+        $(document).ready(function() {
+            $.ajaxSetup({
+                headers: {
+                    '_token': '<?php echo csrf_token(); ?>',
+                    'Authorization': 'Bearer ' + "{{ Auth::user() }}",
+
+                }
+            });
+            $("#form").submit(function(evt) {
+                evt.preventDefault();
+                var formData = new FormData($(this)[0]);
+                $.ajax({
+                    url: '/api/admin/add_user',
+                    type: 'POST',
+                    data: formDataSerialized,
+                    async: false,
+                    dataType: "json",
+                    enctype: 'multipart/form-data',
+                    contentType: false,
+                    processData: false,
+                    success: function(response) {
+                        window.location.href = "{{ url('admin?message=') }}" + response['success'];
+                    },
+                    error: function(xhr, textStatus, errorThrown) {
+                        switch (xhr.status) {
+                            case 404: {
+                                let message = "not found";
+                                Console.log(message);
+                                break;
+                            }
+                            case 422: {
+                                $(".text-danger strong span").html("");
+                                var errors = $.parseJSON(xhr.responseText)['errors'];
+                                $.each(errors, function(index, value) {
+                                    let idErr = "#error_" + index;
+                                    $(idErr).html(value[0]);
+                                });
+                                break;
+                            }
+                            case 500: {
+                                let message = "some error on server side please try next time";
+                                Console.log(message);
+                                break;
+                            }
+                        }
+                    },
+
+                });
+                return false;
+            });
+        });
+
+    </script>
 
 @endpush

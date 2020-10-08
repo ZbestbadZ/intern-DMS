@@ -22,9 +22,7 @@ Auth::routes(['register' => false]);
 Route::get('/home', 'HomeController@index')->name('home');
 
 Route::group(['prefix'=>'admin'],function(){
-    Route::get('list_user', function() {
-        return view('admin.list_user');
-    })->name('admin.list_user');
+    Route::get('list_user', 'UserManagementController@getIndex')->name('admin.list_user');
 
     Route::get('add_user', 'UserManagementController@add');
     Route::post('add_user', 'UserManagementController@store')->name('admin.add_user');
