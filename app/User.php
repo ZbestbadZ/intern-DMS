@@ -99,4 +99,36 @@ class User extends Authenticatable
         return $user;
     }
 
+    public static function mapUsers($users)
+    {
+
+        $result = array_map(function ($user) {
+
+        $user['birthplace'] = config('masterdata.birthplace.' .$user['birthplace']);
+        $user['housemate'] = config('masterdata.housemate.'.$user['housemate'].'.'.$user['sex'] );
+        $user['aca_background'] = config('masterdata.aca_background.'.$user['aca_background'].'.'.$user['sex'] );
+        $user['holiday'] = config('masterdata.holiday.'.$user['holiday'].'.'.$user['sex'] );
+        $user['matching_expect'] = config('masterdata.matching_expect.'.$user['matching_expect'] );
+        $user['anual_income'] = config('masterdata.anual_income.'.$user['anual_income'].'.'.$user['sex'] );
+        $user['figure'] = config('masterdata.figure.'.$user['figure'] );
+        $user['height'] = config('masterdata.height.'.$user['height'] );
+        $user['alcohol'] = config('masterdata.alcohol.'.$user['alcohol'].'.'.$user['sex'] );
+        $user['tabaco'] = config('masterdata.tabaco.'.$user['tabaco'].'.'.$user['sex'] );
+        $user['job'] = config('masterdata.job.'.$user['job'].'.'.$user['sex'] );
+        return $user;
+        }, $users->toArray());
+
+    return $result;
+
+    }
+
+    public function getHobbiesParsed() {
+        $hobbiesRaw = $this->hobbies;
+        $result = array_map(function($hobby) {
+            $hobby['hobby'] = config('masterdata.hobby.'.$hobby['hobby']);
+            return $hobby;
+        },$hobbiesRaw->toArray());
+        return $result;
+    }
+
 }

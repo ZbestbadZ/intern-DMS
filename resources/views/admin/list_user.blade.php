@@ -25,7 +25,7 @@
                         <tr>
                             <th>ID</th>
                             <th>Name</th>
-                            <th>Birthday</th>
+                            <th>Age</th>
                             <th>Gender</th>
                             <th>Job</th>
                             <th>Phone</th>
@@ -136,7 +136,9 @@
                     {
                         "data": "birthday",
                         "mRender": function(data, type, row) {
-                            return getFormattedDate(data);
+                            let birthYear = new Date(data).getFullYear();
+                            age = new Date().getFullYear() - birthYear;
+                            return age;
                         }
                     },
                     {
@@ -150,7 +152,6 @@
                     {
                         "data": "job",
                         
-                    
                     },
                     {
                         "data": "phone"
@@ -179,7 +180,7 @@
                     data: '_token = <?php echo csrf_token(); ?>',
                     success: function(data) {
                         let user = data['user'];
-                        let userHob = data['userHob'];
+                        let hobby = data['hobby'];
                         var spanGen = function(content) {
                             return '<span style="margin-left: 50px;">' + content + '</span>';
                         }
@@ -203,6 +204,7 @@
                         $('#detailBody > .alcohol').html(["<b>Alcohol: </b>" ,spanGen(user['alcohol'])]);
                         $('#detailBody > .holiday').html(["<b>Holiday: </b>" ,spanGen(user['holiday'])]);
                         $('#detailBody > .matching_expect').html(["<b>Matching Expect: </b>" ,spanGen(user['matching_expect'])]);
+                        $('#detailBody > .hobby').html(["<b>Hobby: </b>" ,spanGen(hobby['hobby'])]);
                         $('#detailModal').modal('show');
 
                         console.log(data);

@@ -21,6 +21,11 @@ class UserManagementController extends Controller
 
     public function index() {
         $users = User::all();
+        if($users == null) {
+            return abort(404);
+        }
+
+        $users = User::mapUsers($users);
         return response()->json(['data'=>$users]);
     }
     
@@ -135,13 +140,14 @@ class UserManagementController extends Controller
 
     public function show($id) {
         $userRaw = User::find($id);
-        if($userRaw === null) {
+        if($userRaw == null) {
             return abort(404);
         }
 
         $user = User::mapUser($userRaw);
-        
-        return response()->json(['user'=>$user]);
+        $hobby = User::getHobbiesParsed();
+
+        return response()->json(['user'=>$user, 'hobby'=>$hobby]);
     }
 
     public function destroy($id) {
