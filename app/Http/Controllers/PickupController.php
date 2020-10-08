@@ -11,8 +11,9 @@ class PickupController extends Controller
     
     public function index() {
         
-        $users  = User::getPickup();
-    
+        $usersRaw  = User::getPickup();
+        
+        $users = User::mapUsers($usersRaw);
         return response()->json(['data'=>$users]);
 
     }
