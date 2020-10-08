@@ -12,13 +12,14 @@ class RecommendController extends Controller
     }
     public function index() {
        
-        $users = User::getRecommended();
+        $users = User::mapUsers(User::getRecommended());
+        
         return response()->json(['data'=>$users]);
     }
     public function show($id) {
         $userRaw = User::find($id);
 
-        if($userRaw === null) {
+        if(empty($userRaw)) {
             return abort(404);
         }
 

@@ -16,7 +16,9 @@
 
                             <th>id</th>
                             <th>name</th>
+                            <th>age</th>
                             <th>phone</th>
+                            <th>job</th>
                             <th>email</th>
                             <th>gender</th>
                             <th>birthday</th>
@@ -132,7 +134,19 @@
                         }
                     },
                     {
+                        "data": "birthday",
+                        "mRender": function(data, type, row) {
+                            let birthYear = new Date(data).getFullYear();
+                            age = new Date().getFullYear() - birthYear;
+                            return age
+
+                        }
+                    },
+                    {
                         "data": "phone"
+                    },
+                    {
+                        "data": "job"
                     },
                     {
                         "data": "email"
@@ -161,11 +175,11 @@
                 "columnDefs": [{
                     "searchable": false,
                     "orderable": false,
-                    "targets": 6,
+                    "targets": 8,
 
                 }, {
                     "searchable": false,
-                    "targets": [0, 3, 4, 5, 6],
+                    "targets": [0, 5, 6,7,8],
                 }, {
                     searchPanes: {
                         show: true,
@@ -177,7 +191,7 @@
                             info: false,
                         }
                     },
-                    targets: [4],
+                    targets: [6],
                 }],
                 "order": [
                     [1, 'asc']
@@ -187,7 +201,7 @@
             $('#display tbody ').on('click', '.edit', function() {
 
                 var data = table.row($(this).parents('tr')).data();
-                window.location.href = "/user/" + data['id'] + "/edit";
+                window.location.href = "/admin/" + data['id'] + "/edit";
             });
 
             $('#display tbody ').on('click', '#detail', function() {
@@ -242,7 +256,7 @@
                     if (result) {
                         $.ajax({
                             type: 'DELETE',
-                            url: '/api/user/' + data['id'],
+                            url: '/api/admin/' + data['id'],
                             data: '_token = <?php echo csrf_token(); ?>',
                             success: function(data) {
                                 var re = row.remove().draw(false);
