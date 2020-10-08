@@ -8,16 +8,16 @@
                 <img class="img-fluid" src="{{ url('storage/' . $item->path) }}" alt="">
             </div>
             <div class="col-6">
-                <form id="form" method="POST"  enctype="multipart/form-data">
-                    {{csrf_field()}}
-    {{ method_field('PATCH') }}
+                <form id="form" method="POST" enctype="multipart/form-data">
+                    {{ csrf_field() }}
+                    {{ method_field('PATCH') }}
                     <!-- input -->
                     <div class="form-group">
                         <label for="name">Name</label>
                         <input name="name" type="text" id="name" required placeholder="" value="{{ $item->name }}">
 
 
-                        <div class="text-danger"><strong><span id="nameMessage"></span></strong></div>
+                        <div class="text-danger"><strong><span id="error_name"></span></strong></div>
 
                     </div>
                     <div class="form-group">
@@ -26,7 +26,7 @@
 
 
 
-                        <div class="text-danger"><strong><span id="priceMessage"></span></strong></div>
+                        <div class="text-danger"><strong><span id="error_price"></span></strong></div>
 
 
                     </div>
@@ -35,7 +35,7 @@
                         <input name="image" class="form-control-file" type="file" id="image" placeholder="">
 
 
-                        <div class="text-danger"><strong><span id="imageMessage"></span></strong></div>
+                        <div class="text-danger"><strong><span id="error_image"></span></strong></div>
 
 
                     </div>
@@ -57,14 +57,14 @@
             $.ajaxSetup({
                 headers: {
                     '_token': '<?php echo csrf_token(); ?>',
-                    'Authorization' : 'Bearer '+ "{{Auth::user()->api_token}}",
+                    'Authorization': 'Bearer ' + "{{ Auth::user()->api_token }}",
 
                 }
             });
             $("#form").submit(function(evt) {
                 evt.preventDefault();
                 var formData = new FormData($(this)[0]);
-                
+
                 $.ajax({
                     url: '/api/sticker/' + "{{ $item->id }}",
                     type: 'POST',
@@ -80,28 +80,27 @@
                             'success'];
                     },
                     error: function(xhr, textStatus, errorThrown) {
-                            switch (xhr.status) {
-                                case 404: {
-                                    let message = "item not found";
-                                    Console.log(message);
-                                    break;
-                                }
-                                case 422: {
-                                    var errors = $.parseJSON(xhr.responseText)['errors'];
-                                    if (errors['name']) $('#nameMessage').html("" + errors[
-                                        'name']);
-                                    if (errors['price']) $('#priceMessage').html("" + errors[
-                                        'price']);
-                                    if (errors['image']) $('#imageMessage').html("" + errors[
-                                        'image']);
-                                    break;
-                                }
-                                case 500: {
-                                    let message = "some error on server side please try next time";
-                                    Console.log(message);
-                                    break;
-                                }
+                        switch (xhr.status) {
+                            case 404: {
+                                let message = "item not found";
+                                Console.log(message);
+                                break;
                             }
+                            case 422: {
+                                $(".text-danger strong span").html("");
+                                var errors = $.parseJSON(xhr.responseText)['errors'];
+                                $.each(errors, function(index, value) {
+                                    let idErr = "#error_" + index;
+                                    $(idErr).html(value[0]);
+                                });
+                                break;
+                            }
+                            case 500: {
+                                let message = "some error on server side please try next time";
+                                Console.log(message);
+                                break;
+                            }
+                        }
                     },
                 });
                 return false;

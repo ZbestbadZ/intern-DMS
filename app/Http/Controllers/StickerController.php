@@ -19,7 +19,7 @@ class StickerController extends Controller
     }
     public function getIndex(Request $request) {
         $message = $request->input('message');
-        if($message === null) return view('sticker.index');
+        if(empty($message)) return view('sticker.index');
         else return redirect()->route('sticker.index')->with('message', $message);
     }
     public function getCreate() {
@@ -35,7 +35,7 @@ class StickerController extends Controller
     {
 
         $item = Item::find($id);
-        if ($item == null) {
+        if (empty($item)) {
             return abort(404);
         }
 
@@ -45,7 +45,7 @@ class StickerController extends Controller
     public function destroy($id)
     {
         $item = Item::find($id);
-        if ($item == null) {
+        if (empty($item)) {
             return abort(404);
         }
 
@@ -72,7 +72,7 @@ class StickerController extends Controller
     {
       
         $item = Item::find($id);
-        if ($item == null) {
+        if (empty($item)) {
             return abort(404);
         }
         

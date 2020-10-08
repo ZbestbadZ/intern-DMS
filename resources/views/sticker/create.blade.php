@@ -75,12 +75,10 @@
                             case 422: {
                                 $(".text-danger strong span").html("");
                                 var errors = $.parseJSON(xhr.responseText)['errors'];
-                                if (errors['name']) $('#nameMessage').html("" + errors[
-                                    'name']);
-                                if (errors['price']) $('#priceMessage').html("" + errors[
-                                    'price']);
-                                if (errors['image']) $('#imageMessage').html("" + errors[
-                                    'image']);
+                                $.each(errors, function(index, value) {
+                                    let idErr = "#error_" + index;
+                                    $(idErr).html(value[0]);
+                                });
                                 break;
                             }
                             case 500: {

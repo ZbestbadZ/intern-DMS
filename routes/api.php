@@ -14,17 +14,17 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:api')->prefix('sticker')->group(function() {
-    Route::get('','StickerController@index');
-    Route::patch('{id}','StickerController@update');
-    Route::post('', 'StickerController@store');
-    Route::get('{id}','StickerController@get');
-    Route::delete('{id}','StickerController@destroy');
+Route::group(['middleware'=>'auth:api'],function() {
+    Route::group(['prefix'=>'sticker'],function(){
+        Route::get('','StickerController@index');
+        Route::get('{id}','StickerController@get');
+        Route::patch('{id}','StickerController@update');
+        Route::post('', 'StickerController@store');
+        Route::delete('{id}','StickerController@destroy');
+    });
 });
 
-Route:: prefix('sticker')->group(function() {
-   
-});
+
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();

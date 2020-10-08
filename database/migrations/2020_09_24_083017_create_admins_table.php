@@ -21,7 +21,7 @@ class CreateAdminsTable extends Migration
             $table->string('email', 50)->unique();
             $table->string('password', 100);
             $table->timestamp('email_verified_at')->nullable();
-            $table->string('p', 60)
+            $table->string('api_token', 60)
                 ->unique()
                 ->nullable()
                 ->default(Str::random(60)); $table->rememberToken();

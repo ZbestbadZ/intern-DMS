@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
-
+use Illuminate\Support\Str;
 class AdminSeeder extends Seeder
 {
     /**
@@ -16,6 +16,7 @@ class AdminSeeder extends Seeder
             'name' => 'abc',
             'username'=> 'admin',
             'email'=> 'admin@gmail.com',
+            'api_token'=>Str::random(60),
             'password'=> bcrypt('123'),
         ]);
         
