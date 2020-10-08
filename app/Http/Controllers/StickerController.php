@@ -17,12 +17,16 @@ class StickerController extends Controller
     {
         $this->auth = $auth;
     }
-    public function getIndex(Request $request) {
+    public function getIndex(Request $request)
+    {
         $message = $request->input('message');
-        if(empty($message)) return view('sticker.index');
-        else return redirect()->route('sticker.index')->with('message', $message);
+        if (empty($message)) {
+            return view('sticker.index');
+        }
+        return redirect()->route('sticker.index')->with('message', $message);
     }
-    public function getCreate() {
+    public function getCreate()
+    {
         return view('sticker.create');
     }
     public function index()
@@ -70,35 +74,34 @@ class StickerController extends Controller
 
     public function update(StickerUpdateRequest $request, $id)
     {
-      
+
         $item = Item::find($id);
         if (empty($item)) {
             return abort(404);
         }
-        
+
         $data = $request->only(['name', 'price', 'image']);
 
-        
-            if ($request->hasFile('image')) {
-                try {
-                   
-                   Storage::disk('public')->delete($item->path);
-                    $file = $request->file('image');
-                    $newPath = $file->store('uploads/sticker/' . $id, 'public');
-                    $item->update([
-                        'path' => $newPath,
-                    ]);
-                } catch (Exception $e) {
-                    return abort(500);
-                }
+        if ($request->hasFile('image')) {
+            try {
 
+                Storage::disk('public')->delete($item->path);
+                $file = $request->file('image');
+                $newPath = $file->store('uploads/sticker/' . $id, 'public');
+                $item->update([
+                    'path' => $newPath,
+                ]);
+            } catch (Exception $e) {
+                return abort(500);
             }
+
+        }
         $item->update([
             'name' => $data['name'],
             'price' => $data['price'],
         ]);
 
-        return response()->json(['success'=> 'Item '.trim($item['name']).' 
+        return response()->json(['success' => 'Item ' . trim($item['name']) . '
         updated']);
 
     }
@@ -115,15 +118,12 @@ class StickerController extends Controller
             } catch (Exception $e) {
                 return abort(500);
             }
-           $item =  Item::create([
-                'name' => $data['name'],
-                'price' => $data['price'],
-                'path' => $path,
-            ]);
-            return response()->json(['success'=> 'Item '.$item['name'].' 
+            $data['path'] = $path;
+            $item = Item::create($data);
+            return response()->json(['success' => 'Item ' . $item['name'] . '
         added']);
 
         }
-        return response()->json(['failed'=> 'Image file not found!']);
+        return response()->json(['failed' => 'Image file not found!']);
     }
 }

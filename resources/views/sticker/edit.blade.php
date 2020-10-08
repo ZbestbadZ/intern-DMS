@@ -12,6 +12,8 @@
                     {{ csrf_field() }}
                     {{ method_field('PATCH') }}
                     <!-- input -->
+                    <input class="" type="hidden" name="user_id" value="{{ $item->id }}">
+                    <input class="" type="hidden" name="api_token" value="{{ Auth::user()->api_token }}">
                     <div class="form-group">
                         <label for="name">Name</label>
                         <input name="name" type="text" id="name" required placeholder="" value="{{ $item->name }}">
@@ -57,7 +59,7 @@
             $.ajaxSetup({
                 headers: {
                     '_token': '<?php echo csrf_token(); ?>',
-                    'Authorization': 'Bearer ' + "{{ Auth::user()->api_token }}",
+                    'Authorization': 'Bearer ' + $('[name="api_token"]').val(),
 
                 }
             });
@@ -66,7 +68,7 @@
                 var formData = new FormData($(this)[0]);
 
                 $.ajax({
-                    url: '/api/sticker/' + "{{ $item->id }}",
+                    url: '/api/sticker/' + $('[name="user_id"]').val(),
                     type: 'POST',
                     data: formData,
                     async: false,
