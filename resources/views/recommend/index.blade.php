@@ -65,7 +65,7 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <div id="detailBody" class="modal-body">
+                <div id="detail_body" class="modal-body">
                     <!-- personal -->
                     <div class="name"></div>
                     <div class="gender"></div>
@@ -179,7 +179,7 @@
 
                 }, {
                     "searchable": false,
-                    "targets": [0, 5, 6,7,8],
+                    "targets": [0, 5, 6, 7, 8],
                 }, {
                     searchPanes: {
                         show: true,
@@ -215,30 +215,10 @@
                         var spanGen = function(content) {
                             return '<span>' + content + '</span>';
                         }
-                        $('#detailBody > .name').html(spanGen(user['name']));
-                        $('#detailBody > .gender').html(spanGen(user['sex']));
-                        $('#detailBody > .address').html(spanGen(user['address']));
-                        $('#detailBody > .phone').html(spanGen(user['phone']));
-                        $('#detailBody > .email').html(spanGen(user['email']));
-                        $('#detailBody > .birthday').html(spanGen(user['birthday']));
-
-                        $('#detailBody > .username').html(spanGen(user['username']));
-                        $('#detailBody > .aca_background').html(spanGen(user[
-                            'aca_background']));
-                        $('#detailBody > .job').html(spanGen(user['job']));
-                        $('#detailBody > .anual_income').html(spanGen(user['anual_income']));
-                        $('#detailBody > .birthplace').html(spanGen(user['birthplace']));
-                        $('#detailBody > .figure').html(spanGen(user['figure']));
-
-                        $('#detailBody > .height').html(spanGen(user['height']));
-                        $('#detailBody > .tabaco').html(spanGen(user['tabaco']));
-                        $('#detailBody > .alcohol').html(spanGen(user['alcohol']));
-                        $('#detailBody > .matching_expect').html(spanGen(user[
-                            'matching_expect']));
-
-                        $('#detailModal').modal('show');
-
-                        console.log(data);
+                        $.each(user, function(index, value) {
+                            let idRow = "#" + "detail_body" + " > " + "." + index;
+                            $(idRow).html(spanGen(value));
+                        });
                     }
                 });
 
