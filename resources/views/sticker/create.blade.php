@@ -69,7 +69,7 @@
                         switch (xhr.status) {
                             case 404: {
                                 let message = "item not found";
-                                Console.log(message);
+                                console.log(message);
                                 break;
                             }
                             case 422: {
@@ -83,7 +83,7 @@
                             }
                             case 500: {
                                 let message = "some error on server side please try next time";
-                                Console.log(message);
+                                console.log(message);
                                 break;
                             }
                         }
