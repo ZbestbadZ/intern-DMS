@@ -19,11 +19,10 @@ Route::get('/', 'HomeController@index');
 Auth::routes(['register' => false]);
 
 
-Route::prefix('pickup')->middleware('auth')->group(function(){
-    Route::get('',function(){
-       
-        return view('pickup.index');
-    })->name('pickup.index');
+Route::group(['middleware'=>'auth'], function(){
+    Route::group(['prefix'=>'pickup'],function(){
+        Route::get('','PickupController@getIndex')->name('pickup.index');
+    });
 });
 
 

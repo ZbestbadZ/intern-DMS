@@ -5,7 +5,6 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col">
-                
                 <a href=""></a>
             </div>
         </div>
@@ -56,28 +55,6 @@
         </div>
     </div>
 
-    <div class="modal fade" id="messageModal" tabindex="-1" role="dialog" aria-labelledby="messageModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="messageModalLabel"></h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div id="messageBody" class="modal-body">
-
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">OK</button>
-                    
-                </div>
-            </div>
-        </div>
-    </div>
-
-
     <div class="modal fade" id="detailModal" tabindex="-1" role="dialog" aria-labelledby="detailModalLabel"
         aria-hidden="true">
         <div class="modal-dialog" role="document">
@@ -88,7 +65,7 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <div id="detailBody" class="modal-body">
+                <div id="detail_body" class="modal-body">
                     <!-- personal -->
                     <div class="name"></div>
                     <div class="gender"></div>
@@ -140,10 +117,8 @@
 
                 ajax: {
                     type: 'GET',
-                    url: '/api/pickup/',
-                    dataSrc: 'data',
-                    
-                    
+                    url: '/api/recommend',
+                    dataSrc: 'data'
                 },
                 "columns": [
 
@@ -204,7 +179,7 @@
 
                 }, {
                     "searchable": false,
-                    "targets": [0,5,7,8],
+                    "targets": [0, 5, 6,7,8],
                 }, {
                     searchPanes: {
                         show: true,
@@ -240,30 +215,11 @@
                         var spanGen = function(content) {
                             return '<span>' + content + '</span>';
                         }
-                        $('#detailBody > .name').html(spanGen(user['name']));
-                        $('#detailBody > .gender').html(spanGen(user['sex']));
-                        $('#detailBody > .address').html(spanGen(user['address']));
-                        $('#detailBody > .phone').html(spanGen(user['phone']));
-                        $('#detailBody > .email').html(spanGen(user['email']));
-                        $('#detailBody > .birthday').html(spanGen(user['birthday']));
-
-                        $('#detailBody > .username').html(spanGen(user['username']));
-                        $('#detailBody > .aca_background').html(spanGen(user[
-                            'aca_background']));
-                        $('#detailBody > .job').html(spanGen(user['job']));
-                        $('#detailBody > .anual_income').html(spanGen(user['anual_income']));
-                        $('#detailBody > .birthplace').html(spanGen(user['birthplace']));
-                        $('#detailBody > .figure').html(spanGen(user['figure']));
-
-                        $('#detailBody > .height').html(spanGen(user['height']));
-                        $('#detailBody > .tabaco').html(spanGen(user['tabaco']));
-                        $('#detailBody > .alcohol').html(spanGen(user['alcohol']));
-                        $('#detailBody > .matching_expect').html(spanGen(user[
-                            'matching_expect']));
-
-                        $('#detailModal').modal('show');
-
-                        console.log(data);
+                        $.each(user,function(index,value) {
+                            let idRow = "#" + "detail_body" + " > "+ "." + index;
+                            $(idRow).html(spanGen(value));
+                        });
+                        
                     }
                 });
 
@@ -284,19 +240,7 @@
                             url: '/api/admin/' + data['id'],
                             data: '_token = <?php echo csrf_token(); ?>',
                             success: function(data) {
-                                var re = row
-                                    .remove().draw(true);
-                                $('#messageModalLabel').html('Success');
-                                $('#messageBody').html('Deleted ' + data['item'][
-                                    'name'
-                                ]);
-                                $('#messageModal').modal('show');
-                            },
-                            error: function(xhr, textStatus, errorThrown) {
-                                $('#messageModalLabel').html('ERORR');
-                                $('#messageBody').html('somthing went wrong can\'t  delete ' + itemName 
-                                );
-                                $('#messageModal').modal('show');
+                                var re = row.remove().draw(false);
                             }
                         });
                     }

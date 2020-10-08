@@ -8,7 +8,9 @@ use Illuminate\Support\Facades\Auth;
 
 class PickupController extends Controller
 {
-    
+    public function getIndex() {
+        return view('pickup.index');
+    }
     public function index() {
         
         $usersRaw  = User::getPickup();
