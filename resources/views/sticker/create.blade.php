@@ -6,7 +6,9 @@
         <div class="row d-flex justify-content-center">
             <div class="col-8">
                 <form id="form" enctype="multipart/form-data">
-                   
+                    <!-- hidden -->
+                
+                    <input class="" type="hidden" name="api_token" value="{{ Auth::user()->api_token }}">
                     <!-- input -->
                     <div class="form-group">
                         <label for="name">Name</label>
@@ -44,9 +46,8 @@
         $(document).ready(function() {
             $.ajaxSetup({
                 headers: {
-                    '_token': '<?php echo csrf_token(); ?>',
-                    'Authorization': 'Bearer ' + "{{ Auth::user()->api_token }}",
-
+                    '_token': $('meta[name="csrf-token"]').attr('content'),
+                    'Authorization': 'Bearer ' + $('[name="api_token"]').val(),
                 }
             });
             $("#form").submit(function(evt) {

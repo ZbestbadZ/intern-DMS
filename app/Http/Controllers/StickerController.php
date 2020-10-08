@@ -111,7 +111,6 @@ class StickerController extends Controller
     public function store(StickerStoreRequest $request)
     {
         $data = $request->only(['name', 'price', 'image']);
-
         if ($request->hasFile('image')) {
             try {
                 $md5Name = md5_file($request->file('image')->getRealPath());

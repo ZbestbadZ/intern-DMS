@@ -58,7 +58,7 @@
         $(document).ready(function() {
             $.ajaxSetup({
                 headers: {
-                    '_token': '<?php echo csrf_token(); ?>',
+                    '_token': $('meta[name="csrf-token"]').attr('content'),
                     'Authorization': 'Bearer ' + $('[name="api_token"]').val(),
 
                 }
