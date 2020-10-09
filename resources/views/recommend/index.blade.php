@@ -102,9 +102,15 @@
 
 @push('scripts')
     <script>
+        
         var deleteCallback = null;
+           
         $(document).ready(function() {
-
+            $.ajaxSetup({
+                headers:{
+                    "_token" : $('meta[name="csrf-token"]').attr('content'),
+                },
+            });
             var table = $('#display').DataTable({
                 "pageLength": 10,
                 "pagingType": "simple_numbers",
@@ -209,7 +215,7 @@
                 $.ajax({
                     type: 'GET',
                     url: '/api/recommend/' + data['id'],
-                    data: '_token = <?php echo csrf_token(); ?>',
+                    
                     success: function(data) {
                         let user = data['user'];
                         var spanGen = function(content) {
