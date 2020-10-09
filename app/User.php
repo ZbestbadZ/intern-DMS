@@ -2,9 +2,10 @@
 
 namespace App;
 
+use App\Models\UserHobby;
+use Carbon\Carbon;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use App\Models\UserHobby;
 
 class User extends Authenticatable
 {
@@ -17,8 +18,8 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 
-        'email', 
+        'name',
+        'email',
         'password',
         'address',
         'phone',
@@ -38,7 +39,7 @@ class User extends Authenticatable
         'tabaco',
         'birthplace',
         'housemate',
-        'pickup_status'
+        'pickup_status',
     ];
 
     /**
@@ -47,7 +48,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $hidden = [
-        'password', 'remember_token','api_token'
+        'password', 'remember_token', 'api_token',
     ];
 
     /**
@@ -56,22 +57,29 @@ class User extends Authenticatable
      * @var array
      */
     protected $casts = [
-        'email_verified_at' => 'datetime'
+        'email_verified_at' => 'datetime',
     ];
 
-    public function likes(){
+    protected $appends = [
+        'age'
+    ];
+    public function likes()
+    {
         return $this->belongsToMany(User::class, 'user_likes', 'user_id', 'target_id');
     }
 
-    public function reports() {
+    public function reports()
+    {
         return $this->belongsToMany(User::class, 'user_reports', 'user_id', 'target_id');
     }
-    
-    public function blocks() {
-        return $this->belongsToMany(User::class,'user_blocks','user_id', 'target_id');
+
+    public function blocks()
+    {
+        return $this->belongsToMany(User::class, 'user_blocks', 'user_id', 'target_id');
     }
 
-    public function images() {
+    public function images()
+    {
         return $this->hasMany(UserImage::class, 'user_id', 'id');
     }
 
@@ -79,48 +87,68 @@ class User extends Authenticatable
     {
         return $this->hasMany(UserHobby::class, 'user_id', 'id');
     }
+
+    public function getAgeAttribute() {
+        return  Carbon::parse($this->birthday)->diffInYears(Carbon::now());
+    }
+
     /**
-* Convert data response
-* $user array
-* @return array
-*/
-public static function mapUsers($users)
-{
-
-$result = array_map(function ($user) {
-
-$user['birthplace'] = config('masterdata.birthplace.' .$user['birthplace']);
-$user['housemate'] = config('masterdata.housemate.'.$user['housemate'].'.'.$user['sex'] );
-$user['aca_background'] = config('masterdata.aca_background.'.$user['aca_background'].'.'.$user['sex'] );
-$user['holiday'] = config('masterdata.holiday.'.$user['holiday'].'.'.$user['sex'] );
-$user['matching_expect'] = config('masterdata.matching_expect.'.$user['matching_expect'] );
-$user['anual_income'] = config('masterdata.anual_income.'.$user['anual_income'].'.'.$user['sex'] );
-$user['figure'] = config('masterdata.figure.'.$user['figure'] );
-$user['height'] = config('masterdata.height.'.$user['height'] );
-$user['alcohol'] = config('masterdata.alcohol.'.$user['alcohol'].'.'.$user['sex'] );
-$user['tabaco'] = config('masterdata.tabaco.'.$user['tabaco'].'.'.$user['sex'] );
-$user['job'] = config('masterdata.job.'.$user['job'].'.'.$user['sex'] );
-return $user;
-}, $users->toArray());
-
-return $result;
-
-}
-
-    public static function getPickup() 
+     * Convert data response
+     * $user array
+     * @return array
+     */
+    public static function mapUsers($users)
     {
-        $users  = User::where('pickup_status' ,'1')->get();
+
+        $result = array_map(function ($user) {
+
+            $user['birthplace'] = config('masterdata.birthplace.' . $user['birthplace']);
+            $user['housemate'] = config('masterdata.housemate.' . $user['housemate'] . '.' . $user['sex']);
+            $user['aca_background'] = config('masterdata.aca_background.' . $user['aca_background'] . '.' . $user['sex']);
+            $user['holiday'] = config('masterdata.holiday.' . $user['holiday'] . '.' . $user['sex']);
+            $user['matching_expect'] = config('masterdata.matching_expect.' . $user['matching_expect']);
+            $user['anual_income'] = config('masterdata.anual_income.' . $user['anual_income'] . '.' . $user['sex']);
+            $user['figure'] = config('masterdata.figure.' . $user['figure']);
+            $user['height'] = config('masterdata.height.' . $user['height']);
+            $user['alcohol'] = config('masterdata.alcohol.' . $user['alcohol'] . '.' . $user['sex']);
+            $user['tabaco'] = config('masterdata.tabaco.' . $user['tabaco'] . '.' . $user['sex']);
+            $user['job'] = config('masterdata.job.' . $user['job'] . '.' . $user['sex']);
+            return $user;
+        }, $users->toArray());
+
+        return $result;
+
+    }
+
+    public static function getPickup($data)
+    {
+
+       
+        $users = User::with(['hobbies'])
+        ->where('pickup_status', config('const.PICKUP_STANDARD.PICKUP_STATUS'))
+        ->where(function($q) use ($data) {
+            $q->where('name' ,'like','%'.$data['columns']['1']['search']['value'].'%')
+            ->where('phone' , 'like' ,'%'.$data['columns']['3']['search']['value'].'%')
+            ;
+        })
+        ->skip($data['start'])->take($data['length'])
+        ->get();
+
+        $users = User::mapUsers($users);
+        array_filter($users,function($user) use($data) {
+            if(!strpos($user->job, $data['columns']['3']['search']['value']));
+        });
+
         return $users;
     }
 
-    public function getHobbiesParsed() {
+    public function getHobbiesParsed()
+    {
         $hobbiesRaw = $this->hobbies;
-        $result = array_map(function($hobby) {
-            
-            $hobby['hobby'] = config('masterdata.hobby.'.$hobby['hobby']);
+        $result = array_map(function ($hobby) {
+            $hobby['hobby'] = config('masterdata.hobby.' . $hobby['hobby']);
             return $hobby;
-        },$hobbiesRaw->toArray());
+        }, $hobbiesRaw->toArray());
         return $result;
     }
 }
-

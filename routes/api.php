@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::prefix('pickup')->group(function(){
+Route::group(['prefix'=>'pickup'],function(){
     Route::get('','PickupController@index');
   
 });

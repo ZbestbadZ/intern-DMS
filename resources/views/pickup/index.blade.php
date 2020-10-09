@@ -5,7 +5,7 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col">
-                
+
                 <a href=""></a>
             </div>
         </div>
@@ -14,7 +14,6 @@
                 <table id="display" class="m-0 p-0  table table-light">
                     <thead class="thead-light">
                         <tr>
-
                             <th>id</th>
                             <th>name</th>
                             <th>age</th>
@@ -27,7 +26,17 @@
                         </tr>
                     </thead>
                     <tfoot>
-
+                        <tr>
+                            <th></th>
+                            <th>name</th>
+                            <th>age</th>
+                            <th>phone</th>
+                            <th>job</th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                        </tr>
                     </tfoot>
                 </table>
             </div>
@@ -71,7 +80,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">OK</button>
-                    
+
                 </div>
             </div>
         </div>
@@ -128,56 +137,77 @@
         var deleteCallback = null;
         $(document).ready(function() {
 
-            var table = $('#display').DataTable({
-                "pageLength": 10,
-                "pagingType": "simple_numbers",
-                searchPanes: {
-                    layout: 'columns-1',
+            $('#display tfoot th').each(function(index, value) {
+                searchColIndex = [1,2,3,4];
+                if ($.inArray(index, searchColIndex)!= -1) {
+                    var title = $(this).text();
+                    console.log(this);
+                    $(this).html('<input type="text" placeholder="Search ' + title + '" />');
 
+                }
+            });
+
+            var table = $('#display').DataTable({
+                initComplete: function() {
+                    this.api().columns().every(function() {
+                        var that = this;
+
+                        $('input', this.footer()).on('keyup change clear', function() {
+                            if (that.search() !== this.value) {
+                               
+                                that
+                                    .search(this.value)
+                                    .draw();
+                            }
+                        });
+                    });
                 },
+                "processing": true,
+                "serverSide": true,
+                "pagingType": "simple_numbers",
+
                 "searching": true,
                 dom: 'Pfrtip',
 
                 ajax: {
-                    type: 'GET',
-                    url: '/api/pickup/',
-                    dataSrc: 'data',
-                    
-                    
+                    url: '/api/pickup',
                 },
+
                 "columns": [
 
                     {
-                        "data": "id"
+                        "data": "id",
+                        "name": "id",
                     },
 
                     {
                         "data": "name",
+                        "name": "name",
                         "fnCreatedCell": function(nTd, sData, oData, iRow, iCol) {
                             $(nTd).html("<a id=\"detail\" href='#'>" +
                                 oData.name + "</a>");
                         }
                     },
                     {
-                        "data": "birthday",
-                        "mRender": function(data, type, row) {
-                            let birthYear = new Date(data).getFullYear();
-                            age = new Date().getFullYear() - birthYear;
-                            return age
-
-                        }
+                        "data": "age",
+                        "name": "age",
+                        
                     },
                     {
-                        "data": "phone"
+                        "data": "phone",
+                        "name": "phone",
                     },
                     {
-                        "data": "job"
+                        "data": "job",
+                        "name": "job",
                     },
                     {
-                        "data": "email"
+                        "data": "email",
+                        "name": "email"
                     },
                     {
                         "data": "sex",
+                        "name": "gender",
                         "mRender": function(data, type, row) {
                             if (data == 1) return "Male";
                             else return "Female";
@@ -186,6 +216,7 @@
                     },
                     {
                         "data": "birthday",
+                        "name": "birthday",
                         "mRender": function(data, type, row) {
 
                             return getFormattedDate(data);
@@ -204,19 +235,7 @@
 
                 }, {
                     "searchable": false,
-                    "targets": [0,5,7,8],
-                }, {
-                    searchPanes: {
-                        show: true,
-                        controls: false,
-                        orthogonal: 'sp',
-                        dtOpts: {
-                            searching: false,
-                            dom: "rt",
-                            info: false,
-                        }
-                    },
-                    targets: [6],
+                    "targets": [0, 5, 7, 8],
                 }],
                 "order": [
                     [1, 'asc']
@@ -294,7 +313,8 @@
                             },
                             error: function(xhr, textStatus, errorThrown) {
                                 $('#messageModalLabel').html('ERORR');
-                                $('#messageBody').html('somthing went wrong can\'t  delete ' + itemName 
+                                $('#messageBody').html(
+                                    'somthing went wrong can\'t  delete ' + itemName
                                 );
                                 $('#messageModal').modal('show');
                             }

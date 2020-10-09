@@ -11,11 +11,11 @@ class PickupController extends Controller
     public function getIndex() {
         return view('pickup.index');
     }
-    public function index() {
+    public function index(Request $request) {
+        $data = $request->only(['start','length' ,'search','order','columns']);
         
-        $usersRaw  = User::getPickup();
+        $users  = User::getPickup($data);
         
-        $users = User::mapUsers($usersRaw);
         return response()->json(['data'=>$users]);
 
     }
