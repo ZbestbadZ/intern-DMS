@@ -67,9 +67,8 @@ class UserManagementController extends Controller
             }
             
         } catch (Exception $e) {
-            $mess = $e->getMessage();
             return abort(500);
-        }
+        }  
         return response()->json(['message'=>'User is created successfully!']);
     }
 
@@ -138,10 +137,9 @@ class UserManagementController extends Controller
             }
               
         } catch (Exception $e) {
-            $mess = $e->getMessage();
-            return back()->withErrors($mess)->withInput();
+            return abort(500);
         }
-        return redirect()->route('admin.list_user')->with('message', 'User is updated successfully!');
+        return response()->json(['message' => 'User is updated successfully!' ]);
     }
 
     public function show($id) {

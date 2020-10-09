@@ -5,7 +5,7 @@
         <div class="row d-flex justify-content-center">
             <div class="col-7">
                 <h2 style="text-align:center; margin-top:10px;">CREATE NEW USER</h2>
-                <form method="POST" enctype="multipart/form-data" action="{{ route('admin.add_user') }}">
+                <form id="form" method="POST" enctype="multipart/form-data" action="{{ route('admin.add_user') }}">
                     @csrf
                     <div class="form-group">
                         
@@ -174,12 +174,12 @@
                             <div class="text-danger" ><strong>{{ $message }}</strong></div>
                             @enderror
                         <label for="hobby">Hobby:
-                        <select name="hobby">
+                        
                             @foreach($hobby as  $key11 => $value11)
                             <input type="checkbox" name="hobby[]" id="hobby" value="{{$key11}}"/>
                                 {{$value11}}
                             @endforeach
-                        </select>
+                        
                             @error ('hobby')
                             <div class="text-danger" ><strong>{{ $message }}</strong></div>
                             @enderror
@@ -228,7 +228,7 @@
                         <input id="password-confirm" type="password" class="form-control" name="password_confirmation" required autocomplete="new-password">
                     </div>
                      
-                    <button class="btn btn-primary" type="submit" name="create">Create</button>
+                    <button class="btn btn-primary" type="submit" name="create" data-url="{{ route('admin.list_user')}}">Create</button>
                 </form>
             </div>
         </div>
@@ -236,58 +236,27 @@
 @endsection
 @push('scripts')
 <script>
-        $(document).ready(function() {
-            $.ajaxSetup({
-                headers: {
-                    '_token': '<?php echo csrf_token(); ?>',
-                    'Authorization': 'Bearer ' + "{{ Auth::user() }}",
-
-                }
-            });
-            $("#form").submit(function(evt) {
-                evt.preventDefault();
-                var formData = new FormData($(this)[0]);
-                $.ajax({
-                    url: '/api/admin/add_user',
-                    type: 'POST',
-                    data: formDataSerialized,
-                    async: false,
-                    dataType: "json",
-                    enctype: 'multipart/form-data',
-                    contentType: false,
-                    processData: false,
-                    success: function(response) {
-                        window.location.href = "{{ url('admin?message=') }}" + response['success'];
-                    },
-                    error: function(xhr, textStatus, errorThrown) {
-                        switch (xhr.status) {
-                            case 404: {
-                                let message = "not found";
-                                Console.log(message);
-                                break;
-                            }
-                            case 422: {
-                                $(".text-danger strong span").html("");
-                                var errors = $.parseJSON(xhr.responseText)['errors'];
-                                $.each(errors, function(index, value) {
-                                    let idErr = "#error_" + index;
-                                    $(idErr).html(value[0]);
-                                });
-                                break;
-                            }
-                            case 500: {
-                                let message = "some error on server side please try next time";
-                                Console.log(message);
-                                break;
-                            }
-                        }
-                    },
-
-                });
-                return false;
+    $(document).ready(function() {
+        $("#form").submit(function(event) {
+            event.preventDefault();
+            let url = $('[name="create"]').data('url');
+            var formData = new FormData($(this)[0]);
+            $.ajax({
+                url: "/api/admin/add_user",
+                type: "POST",
+                data: formData,
+                async: false,
+                dataType: "json",
+                enctype: 'multipart/form-data',
+                contentType: false,
+                processData: false,
+                success: function(response) {
+                     window.location.href = url;
+                },
             });
         });
+    });    
 
-    </script>
+</script>
 
 @endpush

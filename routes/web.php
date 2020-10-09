@@ -25,8 +25,6 @@ Route::group(['prefix'=>'admin'],function(){
     Route::get('list_user', 'UserManagementController@getIndex')->name('admin.list_user');
 
     Route::get('add_user', 'UserManagementController@add');
-    Route::post('add_user', 'UserManagementController@store')->name('admin.add_user');
 
     Route::get('{id}/edit', 'UserManagementController@edit')->name('admin.edit');
-    Route::patch('edit_user/{id}', 'UserManagementController@update');
 });
