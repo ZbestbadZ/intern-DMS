@@ -17,11 +17,7 @@ class StickerUpdateRequest extends FormRequest
     {
         return true;
     }
-    protected function failedValidation(Validator $validator)
-    {
-       return back()->withInput();
-
-    }
+    
     /**
      * Get the validation rules that apply to the request.
      *
@@ -29,9 +25,9 @@ class StickerUpdateRequest extends FormRequest
      */
     public function rules()
     {
-        
-        return [
-            'name' => 'max:50|required|unique:items,name,' . $this->id,
+        $id = $this->id;
+        return  [
+            'name' => 'required|max:50|unique:items,name,'.$id,
             'image'=> 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'price' => 'required|numeric|max:2000000|min:100'
         ];

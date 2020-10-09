@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Route;
 | routes are loaded by the RouteServiceProvider within a group which
 | contains the "web" middleware group. Now create something great!
 |
-*/
+ */
 
 Route::get('/', 'HomeController@index');
 
@@ -28,17 +28,12 @@ Route::group(['middleware'=>'auth'], function(){
 
 Route::get('/home', 'HomeController@index')->name('home');
 
-Route::prefix('sticker')->middleware('auth')->group( function() {
-    Route::get('/index',function(){
-        return view('sticker.index');
-    })->name('sticker.index');
-    
-    Route::get('{id}/edit','StickerController@edit')->name('sticker.edit');
-    
-    Route::get('/create',function(){
-        return view('sticker.create');
-    })->name('sticker.create');
+Route::group(['middleware' => 'api'], function () {
+    Route::group(['prefix' => 'sticker'], function () {
+        Route::get('', 'StickerController@getIndex')->name('sticker.index');
+        Route::get('{id}/edit', 'StickerController@edit')->name('sticker.edit');
+        Route::get('/create', 'StickerController@getCreate')->name('sticker.create');
 
-    Route::post('', 'StickerController@store');
-    Route::patch('{id}','StickerController@update');
+    });
+
 });

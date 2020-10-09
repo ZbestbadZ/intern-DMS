@@ -9,14 +9,14 @@
                 <!--Bread Crumbs-->
             </div>
         </div>
-
+        
         <div class="row d-flex justify-content-end">
             @if (session()->has('message'))
                 <div class="alert alert-success">
                     {{ session()->get('message') }}
                 </div>
             @endif
-            
+
         </div>
 
         <div class="row d-flex justify-content-center">
@@ -79,26 +79,33 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">OK</button>
-                    
+
                 </div>
             </div>
         </div>
     </div>
-
+    <!-- hidden -->
+    <input class="" type="hidden" name="api_token" value="{{ Auth::user()->api_token }}">
 @endsection
 @push('scripts')
     <script>
         var deleteCallback = null;
         $(document).ready(function() {
-
+            $.ajaxSetup({
+                headers: {
+                    '_token': '<?php echo csrf_token(); ?>',
+                }
+            });
             var table = $('#display').DataTable({
                 "pageLength": 10,
                 "pagingType": "simple_numbers",
                 ajax: {
                     type: 'GET',
-                    url: '/api/sticker/index',
-
-                    dataSrc: 'data'
+                    url: '/api/sticker',
+                    data: {
+                        "api_token": $('[name="api_token"]').val(),
+                    },
+                    dataSrc: 'data',
                 },
                 "columns": [{
                         "data": "id"
@@ -106,7 +113,7 @@
 
                     {
                         "data": "name",
-                        
+
                     },
                     {
                         "data": "price"
@@ -118,16 +125,15 @@
 
                 ],
                 "columnDefs": [{
-                    "searchable": false,
                     "orderable": false,
                     "targets": 3,
 
-                } , {
+                }, {
                     "searchable": false,
-                    "targets": [0,2,3],
+                    "targets": [0, 3],
                 }],
                 "order": [
-                    [0, 'asc']
+                    [1, 'asc']
                 ]
             });
 
@@ -150,12 +156,14 @@
                     if (result) {
                         $.ajax({
                             type: 'DELETE',
-                            url: '/api/sticker/'+data['id'] ,
-                            data: '_token = <?php echo csrf_token(); ?>',
+                            url: '/api/sticker/' + data['id'],
+                            data: {
+                                "api_token": $('[name="api_token"]').val(),
+                            },
                             success: function(data) {
                                 var re = row
                                     .remove().draw(true);
-                                
+
                                 $('#messageModalLabel').html('Success');
                                 $('#messageBody').html('Deleted ' + data['item'][
                                     'name'
@@ -164,14 +172,14 @@
                             },
                             error: function(xhr, textStatus, errorThrown) {
                                 $('#messageModalLabel').html('ERORR');
-                                $('#messageBody').html('somthing went wrong can\'t  delete ' + itemName 
+                                $('#messageBody').html(
+                                    'somthing went wrong can\'t  delete ' + itemName
                                 );
                                 $('#messageModal').modal('show');
                             }
                         });
                     }
                 };
-
 
             });
             $('#deleteModal').on('click', '.btn', function() {
