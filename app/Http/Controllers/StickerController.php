@@ -17,7 +17,18 @@ class StickerController extends Controller
     {
         $this->auth = $auth;
     }
-
+    public function getIndex(Request $request)
+    {
+        $message = $request->input('message');
+        if (empty($message)) {
+            return view('sticker.index');
+        }
+        return redirect()->route('sticker.index')->with('message', $message);
+    }
+    public function getCreate()
+    {
+        return view('sticker.create');
+    }
     public function index()
     {
         $items = Item::all();
@@ -28,7 +39,7 @@ class StickerController extends Controller
     {
 
         $item = Item::find($id);
-        if ($item == null) {
+        if (empty($item)) {
             return abort(404);
         }
 
@@ -38,7 +49,7 @@ class StickerController extends Controller
     public function destroy($id)
     {
         $item = Item::find($id);
-        if ($item == null) {
+        if (empty($item)) {
             return abort(404);
         }
 
@@ -54,7 +65,7 @@ class StickerController extends Controller
     public function edit($id)
     {
         $item = Item::find($id);
-        if ($item == null) {
+        if (empty($item)) {
             return abort(404);
         }
 
@@ -63,61 +74,53 @@ class StickerController extends Controller
 
     public function update(StickerUpdateRequest $request, $id)
     {
+
         $item = Item::find($id);
-        if ($item == null) {
+        if (empty($item)) {
             return abort(404);
         }
 
         $data = $request->only(['name', 'price', 'image']);
 
-        
-            if ($request->hasFile('image')) {
-                try {
-                    
-                    Storage::delete($item->path);
-                    
-                    $file = $request->file('image');
-                    
-                    $newPath = $file->store('uploads/sticker/' . $id, 'public');
-                    $item->update([
-                        'path' => $newPath,
-                    ]);
-                } catch (Exception $e) {
-                    return abort(500);
-                }
+        if ($request->hasFile('image')) {
+            try {
+                Storage::disk('public')->delete($item->path);
+                $file = $request->file('image');
+                $fileName = uniqid() . "-" . $file->getClientOriginalName();
+                $newPath = $file->storeAs('uploads/sticker/', $fileName, 'public');
 
+                $data['path'] = $newPath;
+
+            } catch (Exception $e) {
+                return abort(500);
             }
-        
 
-        $item->update([
-            'name' => $data['name'],
-            'price' => $data['price'],
-        ]);
+        }
+        $item->update($data);
 
-        return redirect()->route('sticker.index')->with('message', 'Updated item ' . $data['name']);
+        return response()->json(['success' => 'Item ' . trim($item['name']) . '
+        updated', ]);
 
     }
 
     public function store(StickerStoreRequest $request)
     {
         $data = $request->only(['name', 'price', 'image']);
-
         if ($request->hasFile('image')) {
             try {
                 $file = $request->file('image');
-                $path = $file->store('uploads/sticker/' . $data['name'], 'public');
+                $fileName = uniqid() . "-" . $file->getClientOriginalName();
+                $newPath = $file->storeAs('uploads/sticker/', $fileName, 'public');
 
+                $data['path'] = $newPath;
             } catch (Exception $e) {
                 return abort(500);
             }
-            Item::create([
-                'name' => $data['name'],
-                'price' => $data['price'],
-                'path' => $path,
-            ]);
-            return redirect()->route('sticker.index')->with('message', 'Created item ' .  $data['name']);
+            $item = Item::create($data);
+            return response()->json(['success' => 'Item ' . $item['name'] . '
+        added', ]);
 
         }
-        return back()->withInput();
+        return response()->json(['failed' => 'Image file not found!']);
     }
 }
