@@ -9,7 +9,7 @@
                 <!--Bread Crumbs-->
             </div>
         </div>
-
+        
         <div class="row d-flex justify-content-end">
             @if (session()->has('message'))
                 <div class="alert alert-success">
@@ -84,7 +84,8 @@
             </div>
         </div>
     </div>
-
+    <!-- hidden -->
+    <input class="" type="hidden" name="api_token" value="{{ Auth::user()->api_token }}">
 @endsection
 @push('scripts')
     <script>
@@ -93,8 +94,6 @@
             $.ajaxSetup({
                 headers: {
                     '_token': '<?php echo csrf_token(); ?>',
-                    'Authorization' : 'Bearer '+ "{{Auth::user()->api_token}}",
-
                 }
             });
             var table = $('#display').DataTable({
@@ -103,6 +102,9 @@
                 ajax: {
                     type: 'GET',
                     url: '/api/sticker',
+                    data: {
+                        "api_token": $('[name="api_token"]').val(),
+                    },
                     dataSrc: 'data',
                 },
                 "columns": [{
@@ -155,6 +157,9 @@
                         $.ajax({
                             type: 'DELETE',
                             url: '/api/sticker/' + data['id'],
+                            data: {
+                                "api_token": $('[name="api_token"]').val(),
+                            },
                             success: function(data) {
                                 var re = row
                                     .remove().draw(true);

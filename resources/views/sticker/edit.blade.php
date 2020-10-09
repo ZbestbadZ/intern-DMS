@@ -59,14 +59,12 @@
             $.ajaxSetup({
                 headers: {
                     '_token': $('meta[name="csrf-token"]').attr('content'),
-                    'Authorization': 'Bearer ' + $('[name="api_token"]').val(),
-
                 }
             });
             $("#form").submit(function(evt) {
                 evt.preventDefault();
                 var formData = new FormData($(this)[0]);
-
+                formData.set("api_token",$('[name="api_token"]').val());
                 $.ajax({
                     url: '/api/sticker/' + $('[name="user_id"]').val(),
                     type: 'POST',

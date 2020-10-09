@@ -85,26 +85,21 @@ class StickerController extends Controller
         if ($request->hasFile('image')) {
             try {
                 Storage::disk('public')->delete($item->path);
-                
-                $md5Name = md5_file($request->file('image')->getRealPath());
-                $guessExtension = $request->file('image')->guessExtension();
-                $newPath = $request->file('image')->storeAs('uploads/sticker/', $md5Name.'.'.$guessExtension  ,'public');
+                $file = $request->file('image');
+                $fileName = uniqid() . "-" . $file->getClientOriginalName();
+                $newPath = $file->storeAs('uploads/sticker/', $fileName, 'public');
 
-                $item->update([
-                    'path' => $newPath,
-                ]);
+                $data['path'] = $newPath;
+
             } catch (Exception $e) {
                 return abort(500);
             }
 
         }
-        $item->update([
-            'name' => $data['name'],
-            'price' => $data['price'],
-        ]);
+        $item->update($data);
 
         return response()->json(['success' => 'Item ' . trim($item['name']) . '
-        updated']);
+        updated', ]);
 
     }
 
@@ -113,16 +108,17 @@ class StickerController extends Controller
         $data = $request->only(['name', 'price', 'image']);
         if ($request->hasFile('image')) {
             try {
-                $md5Name = md5_file($request->file('image')->getRealPath());
-                $guessExtension = $request->file('image')->guessExtension();
-                $path = $request->file('image')->storeAs('uploads/sticker/', $md5Name.'.'.$guessExtension  ,'public');
+                $file = $request->file('image');
+                $fileName = uniqid() . "-" . $file->getClientOriginalName();
+                $newPath = $file->storeAs('uploads/sticker/', $fileName, 'public');
+
+                $data['path'] = $newPath;
             } catch (Exception $e) {
                 return abort(500);
             }
-            $data['path'] = $path;
             $item = Item::create($data);
             return response()->json(['success' => 'Item ' . $item['name'] . '
-        added']);
+        added', ]);
 
         }
         return response()->json(['failed' => 'Image file not found!']);
