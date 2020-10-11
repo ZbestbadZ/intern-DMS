@@ -61,7 +61,7 @@ class User extends Authenticatable
     ];
 
     protected $appends = [
-        'age'
+        'age',
     ];
     public function likes()
     {
@@ -88,8 +88,9 @@ class User extends Authenticatable
         return $this->hasMany(UserHobby::class, 'user_id', 'id');
     }
 
-    public function getAgeAttribute() {
-        return  Carbon::parse($this->birthday)->diffInYears(Carbon::now());
+    public function getAgeAttribute()
+    {
+        return Carbon::parse($this->birthday)->diffInYears(Carbon::now());
     }
 
     /**
@@ -123,22 +124,21 @@ class User extends Authenticatable
     public static function getPickup($data)
     {
 
-       
         $users = User::with(['hobbies'])
-        ->where('pickup_status', config('const.PICKUP_STANDARD.PICKUP_STATUS'))
-        ->where(function($q) use ($data) {
-            $q->where('name' ,'like','%'.$data['columns']['1']['search']['value'].'%')
-            ->where('phone' , 'like' ,'%'.$data['columns']['3']['search']['value'].'%')
-            ;
-        })
-        ->skip($data['start'])->take($data['length'])
-        ->get();
+            ->where('pickup_status', config('const.PICKUP_STANDARD.PICKUP_STATUS'))
+            ->where(function ($q) use ($data) {
+                $q->where('name', 'like', '%' . $data['columns']['1']['search']['value'] . '%')
+                    ->where('phone', 'like', '%' . $data['columns']['3']['search']['value'] . '%')
+                ;
+            })
+            ->skip($data['start'])->take($data['length'])
+            ->get();
 
         $users = User::mapUsers($users);
-        array_filter($users,function($user) use($data) {
-            if(!strpos($user->job, $data['columns']['3']['search']['value']));
-        });
 
+        
+        
+        
         return $users;
     }
 

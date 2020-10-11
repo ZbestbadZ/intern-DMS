@@ -129,7 +129,8 @@
             </div>
         </div>
     </div>
-
+    <!-- hidden -->
+    <input type="hidden" name="api_token" value="{{ Auth::user()->api_token }}">
 @endsection
 
 @push('scripts')
@@ -138,11 +139,12 @@
         $(document).ready(function() {
 
             $('#display tfoot th').each(function(index, value) {
-                searchColIndex = [1,2,3,4];
-                if ($.inArray(index, searchColIndex)!= -1) {
+                searchbyTextColIndex = [1, 2, 3, 4];
+                if ($.inArray(index, searchbyTextColIndex) != -1) {
                     var title = $(this).text();
-                    console.log(this);
+                    
                     $(this).html('<input type="text" placeholder="Search ' + title + '" />');
+                    
 
                 }
             });
@@ -154,7 +156,7 @@
 
                         $('input', this.footer()).on('keyup change clear', function() {
                             if (that.search() !== this.value) {
-                               
+
                                 that
                                     .search(this.value)
                                     .draw();
@@ -171,6 +173,9 @@
 
                 ajax: {
                     url: '/api/pickup',
+                    data: {
+                        "api_token": $('input[name="api_token"]').val(),
+                    }
                 },
 
                 "columns": [
@@ -191,7 +196,7 @@
                     {
                         "data": "age",
                         "name": "age",
-                        
+
                     },
                     {
                         "data": "phone",
@@ -282,7 +287,7 @@
 
                         $('#detailModal').modal('show');
 
-                        console.log(data);
+                       
                     }
                 });
 

@@ -19,21 +19,18 @@ Route::get('/', 'HomeController@index');
 Auth::routes(['register' => false]);
 
 
-Route::group(['middleware'=>'auth'], function(){
-    Route::group(['prefix'=>'pickup'],function(){
-        Route::get('','PickupController@getIndex')->name('pickup.index');
-    });
-});
 
 
 Route::get('/home', 'HomeController@index')->name('home');
 
-Route::group(['middleware' => 'api'], function () {
+Route::group(['middleware' => 'auth'], function () {
     Route::group(['prefix' => 'sticker'], function () {
         Route::get('', 'StickerController@getIndex')->name('sticker.index');
         Route::get('{id}/edit', 'StickerController@edit')->name('sticker.edit');
         Route::get('/create', 'StickerController@getCreate')->name('sticker.create');
 
     });
-
+    Route::group(['prefix'=>'pickup'],function(){
+        Route::get('','PickupController@getIndex')->name('pickup.index');
+    });
 });

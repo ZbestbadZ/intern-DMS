@@ -15,8 +15,9 @@ class PickupController extends Controller
         $data = $request->only(['start','length' ,'search','order','columns']);
         
         $users  = User::getPickup($data);
-        
+       
         return response()->json(['data'=>$users]);
 
     }
 }
+        
