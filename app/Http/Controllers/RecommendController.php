@@ -10,12 +10,14 @@ class RecommendController extends Controller
     public function indexView() {
         return view('recommend.index');
     }
+    
     public function index() {
        
-        $users = User::mapUsers(User::getRecommended());
+        $users = User::getRecommended();
         
         return response()->json(['data'=>$users]);
     }
+
     public function show($id) {
         $userRaw = User::find($id);
 

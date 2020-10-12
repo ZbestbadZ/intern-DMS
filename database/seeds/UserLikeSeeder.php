@@ -21,7 +21,7 @@ class UserLikeSeeder extends Seeder
             'updated_at' => Carbon::now(),
             ]);
         }
-        for ($i=1; $i < 11; $i++) { 
+        for ($i=11; $i < 21; $i++) { 
             DB::table('user_likes')->insert([
                 'user_id'=> $i,
                 'target_id'=> '3',
@@ -29,7 +29,7 @@ class UserLikeSeeder extends Seeder
             'updated_at' => Carbon::now(),
             ]);
         }
-        for ($i=1; $i < 11; $i++) { 
+        for ($i=31; $i < 41; $i++) { 
             DB::table('user_likes')->insert([
                 'user_id'=> $i,
                 'target_id'=> '4',
@@ -37,7 +37,7 @@ class UserLikeSeeder extends Seeder
             'updated_at' => Carbon::now(),
             ]);
         }
-        for ($i=1; $i < 11; $i++) { 
+        for ($i=51; $i < 51; $i++) { 
             DB::table('user_likes')->insert([
                 'user_id'=> $i,
                 'target_id'=> '5',
@@ -45,7 +45,7 @@ class UserLikeSeeder extends Seeder
             'updated_at' => Carbon::now(),
             ]);
         }
-        for ($i=1; $i < 11; $i++) { 
+        for ($i=61; $i < 61; $i++) { 
             DB::table('user_likes')->insert([
                 'user_id'=> $i,
                 'target_id'=> '6',
