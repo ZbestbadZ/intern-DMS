@@ -123,32 +123,32 @@ class User extends Authenticatable
 
     public static function getPickup($data)
     {
+        $orderBy = $data['columns'][$data['order'][0]['column']]['name'];
+        $orderDir = $data['order'][0]['dir'];
+        $searchName = $data['columns']['1']['search']['value'];
+        $searchPhone = $data['columns']['3']['search']['value'];
+        $searchAge = isset($data['columns']['2']['search']['value']) ? Carbon::now()->format('yy') - $data['columns']['2']['search']['value'] : "";
+
+        if ($orderBy == 'age') {
+            $orderBy = 'birthday';
+        }
+        
 
         $users = User::with(['hobbies'])
             ->where('pickup_status', config('const.PICKUP_STANDARD.PICKUP_STATUS'))
-            ->where(function ($q) use ($data) {
-                $q->where('name', 'like', '%' . $data['columns']['1']['search']['value'] . '%')
-                    ->where('phone', 'like', '%' . $data['columns']['3']['search']['value'] . '%')
+            ->where(function ($q) use ($searchName, $searchAge, $searchPhone) {
+                $q->where('name', 'like', '%' . $searchName . '%')
+                    ->whereYear('birthday', 'like', '%' . $searchAge . '%')
+                    ->where('phone', 'like', '%' . $searchPhone . '%')
                 ;
             })
-            ->skip($data['start'])->take($data['length'])
+            ->orderBy($orderBy, $orderDir)
+            ->skip($data['start'])->take(config('const.PAGINATION.ROW'))
             ->get();
 
         $users = User::mapUsers($users);
 
-        
-        
-        
         return $users;
     }
 
-    public function getHobbiesParsed()
-    {
-        $hobbiesRaw = $this->hobbies;
-        $result = array_map(function ($hobby) {
-            $hobby['hobby'] = config('masterdata.hobby.' . $hobby['hobby']);
-            return $hobby;
-        }, $hobbiesRaw->toArray());
-        return $result;
-    }
 }

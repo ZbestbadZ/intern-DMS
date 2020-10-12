@@ -29,6 +29,9 @@ Route::group(['middleware'=>'auth:api'],function() {
       
     });
     
+    Route::group(['prefix'=>'masterData'],function(){
+        Route::get('job','MasterDataController@job');
+    });
 });
 
 

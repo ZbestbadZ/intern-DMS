@@ -4,14 +4,14 @@
 
     <div class="container-fluid">
         <div class="row">
-            <div class="col">
-
+            <div class="col d-flex justify-content-center">
+                <span class="display-4">PICK UP USERS</span>
                 <a href=""></a>
             </div>
         </div>
         <div class="row d-flex justify-content-center">
-            <div class="col-8">
-                <table id="display" class="m-0 p-0  table table-light">
+            <div class="col">
+                <table id="display" class="table   table-light">
                     <thead class="thead-light">
                         <tr>
                             <th>id</th>
@@ -29,9 +29,9 @@
                         <tr>
                             <th></th>
                             <th>name</th>
-                            <th>age</th>
+                            <th><input type="number" placeholder="Search age" /></th>
                             <th>phone</th>
-                            <th>job</th>
+                            <th><select name="jobSearch" id=""></select></th>
                             <th></th>
                             <th></th>
                             <th></th>
@@ -139,14 +139,31 @@
         $(document).ready(function() {
 
             $('#display tfoot th').each(function(index, value) {
-                searchbyTextColIndex = [1, 2, 3, 4];
+                searchbyTextColIndex = [1,  3];
                 if ($.inArray(index, searchbyTextColIndex) != -1) {
                     var title = $(this).text();
-                    
-                    $(this).html('<input type="text" placeholder="Search ' + title + '" />');
-                    
 
+                    $(this).html('<input type="text" placeholder="Search ' + title + '" />');
                 }
+
+                if (index === 4) {
+                    let thisTag = $(this);
+                      $.ajax({
+                          url: 'api/masterData/job',
+                          data: {
+                              "api_token": $('input[name="api_token"]').val()
+                          },
+                          success: function(data)  {
+                              $.each(data ,function(index, value) {
+                                 
+                                  let selectTag = "<option value=\""+index+"\">"+value+"</option>" ;
+                                    console.log($(this));
+                                      $(thisTag).find("select").append(selectTag);
+                                  });
+                          },
+                      });
+                      
+                  }
             });
 
             var table = $('#display').DataTable({
@@ -162,6 +179,7 @@
                                     .draw();
                             }
                         });
+                        
                     });
                 },
                 "processing": true,
@@ -212,7 +230,7 @@
                     },
                     {
                         "data": "sex",
-                        "name": "gender",
+                        "name": "sex",
                         "mRender": function(data, type, row) {
                             if (data == 1) return "Male";
                             else return "Female";
@@ -287,7 +305,7 @@
 
                         $('#detailModal').modal('show');
 
-                       
+
                     }
                 });
 
