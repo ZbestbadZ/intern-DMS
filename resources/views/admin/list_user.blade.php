@@ -95,7 +95,7 @@
                     <div class="alcohol"></div>
                     <div class="holiday"></div>
                     <div class="matching_expect"></div>
-                    <div class="hobby"></div>
+                    <div><b>Hooby:</b> <span class="hobby"></span></div>
                     <!-- /.account -->
                 </div>
                 <div class="modal-footer">
@@ -179,6 +179,7 @@
                     dataType: 'json',
                     data: '_token = <?php echo csrf_token(); ?>',
                     success: function(data) {
+                        $('.hobby').html('');
                         let user = data['user'];
                         let hobby = data['hobby'];
                         var spanGen = function(content) {
@@ -204,7 +205,13 @@
                         $('#detailBody > .alcohol').html(["<b>Alcohol: </b>" ,spanGen(user['alcohol'])]);
                         $('#detailBody > .holiday').html(["<b>Holiday: </b>" ,spanGen(user['holiday'])]);
                         $('#detailBody > .matching_expect').html(["<b>Matching Expect: </b>" ,spanGen(user['matching_expect'])]);
-                        $('#detailBody > .hobby').html(["<b>Hobby: </b>" ,spanGen(hobby['hobby'])]);
+
+                        $.each(hobby, function(index, value) {
+                            var hobby = "<li>" + value.hobby + "<br>" + "</li>"
+                            $('.hobby').append(hobby);
+                        })
+                        
+
                         $('#detailModal').modal('show');
 
                         console.log(data);

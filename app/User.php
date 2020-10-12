@@ -122,12 +122,12 @@ class User extends Authenticatable
 
     }
 
-    public function getHobbiesParsed() {
-        $hobbiesRaw = $this->hobbies;
+    public function getHobbiesParsed($id) {
+        $hobbiesRaw = User::with('hobbies')->find($id);
         $result = array_map(function($hobby) {
             $hobby['hobby'] = config('masterdata.hobby.'.$hobby['hobby']);
             return $hobby;
-        },$hobbiesRaw->toArray());
+        },$hobbiesRaw->hobbies->toArray());
         return $result;
     }
 

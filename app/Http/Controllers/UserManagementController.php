@@ -155,8 +155,8 @@ class UserManagementController extends Controller
         }
 
         $user = User::mapUser($userRaw);
-        $hobby = User::getHobbiesParsed();
-
+        $userHobby = new User();
+        $hobby = $userHobby->getHobbiesParsed($id);
         return response()->json(['user'=>$user, 'hobby'=>$hobby]);
     }
 
