@@ -141,7 +141,7 @@ class User extends Authenticatable
             ->whereYear('birthday', 'like', '%' . $searchAge . '%')
             ->where('phone', 'like', '%' . $searchPhone . '%')
             ->orderBy($orderBy, $orderDir)
-            ->skip($data['start'])->take(config('const.PAGINATION.ROW'))
+            ->skip($data['start'])->take(PAGINATION)
             ->get();
 
         $users = User::mapUsers($users);
