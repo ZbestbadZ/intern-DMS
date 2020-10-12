@@ -97,18 +97,18 @@
             </div>
         </div>
     </div>
-
+    <!-- hidden -->
+    <input class="" type="hidden" name="api_token" value="{{ Auth::user()->api_token }}">
 @endsection
 
 @push('scripts')
     <script>
-        
         var deleteCallback = null;
-           
+
         $(document).ready(function() {
             $.ajaxSetup({
-                headers:{
-                    "_token" : $('meta[name="csrf-token"]').attr('content'),
+                headers: {
+                    "_token": $('meta[name="csrf-token"]').attr('content'),
                 },
             });
             var table = $('#display').DataTable({
@@ -124,6 +124,9 @@
                 ajax: {
                     type: 'GET',
                     url: '/api/recommend',
+                    data: {
+                        "api_token": $('[name="api_token"]').val(),
+                    },
                     dataSrc: 'data'
                 },
                 "columns": [
@@ -215,7 +218,9 @@
                 $.ajax({
                     type: 'GET',
                     url: '/api/recommend/' + data['id'],
-                    
+                    data: {
+                        "api_token": $('[name="api_token"]').val(),
+                    },
                     success: function(data) {
                         let user = data['user'];
                         var spanGen = function(content) {
@@ -243,7 +248,9 @@
                         $.ajax({
                             type: 'DELETE',
                             url: '/api/admin/' + data['id'],
-                            data: '_token = <?php echo csrf_token(); ?>',
+                            data: {
+                                "api_token": $('[name="api_token"]').val(),
+                            },
                             success: function(data) {
                                 var re = row.remove().draw(false);
                             }
