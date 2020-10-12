@@ -26,5 +26,5 @@ Route::group(['prefix'=>'admin'],function(){
 
     Route::get('add_user', 'UserManagementController@add');
 
-    Route::get('{id}/edit', 'UserManagementController@edit')->name('admin.edit');
+    Route::get('edit_user/{id}', 'UserManagementController@edit')->name('admin.edit_user');
 });

@@ -216,7 +216,7 @@
             $('#mytable tbody ').on('click', '.edit', function() {
 
                 var data = table.row($(this).parents('tr')).data();
-                window.location.href = "/admin/" + data['id'] + "/edit";
+                window.location.href = "/admin/edit_user/" + data['id'] ;
             });
 
             $('#mytable tbody ').on('click', '.delete', function() {
@@ -256,19 +256,6 @@
             }, 2000);
 
         });
-
-        function getFormattedDate(input) {
-            var date = new Date(input);
-            var year = date.getFullYear();
-
-            var month = (1 + date.getMonth()).toString();
-            month = month.length > 1 ? month : '0' + month;
-
-            var day = date.getDate().toString();
-            day = day.length > 1 ? day : '0' + day;
-
-            return day + '/' + month + '/' + year;
-        }
 
     </script>
 @endpush
