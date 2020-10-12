@@ -14,7 +14,6 @@ class RecommendController extends Controller
     public function index() {
        
         $users = User::getRecommended();
-        
         return response()->json(['data'=>$users]);
     }
 

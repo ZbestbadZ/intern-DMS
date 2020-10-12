@@ -169,7 +169,7 @@
                         "data": "birthday",
                         "mRender": function(data, type, row) {
 
-                            return getFormattedDate(data);
+                            return moment(data).format('DD/MM/YYYY');
                         }
                     },
                     {
