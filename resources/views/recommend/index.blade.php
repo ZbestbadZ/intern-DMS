@@ -152,7 +152,7 @@
                         "data": "phone"
                     },
                     {
-                        "data": "job"
+                        "data": "job_parsed"
                     },
                     {
                         "data": "email"

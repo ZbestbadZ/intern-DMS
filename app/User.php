@@ -39,6 +39,9 @@ class User extends Authenticatable
         'housemate',
     ];
 
+    protected $appends = [
+        'job_parsed', 'tabaco_parsed', 'alcohol_parsed', 'height_parsed', 'figure_parsed', 'income_parsed', 'expect_parsed', 'holiday_parsed', 'aca_parsed', 'housemate_parsed', 'birthplace_parsed',
+    ];
     /**
      * The attributes that should be hidden for arrays.
      *
@@ -82,56 +85,63 @@ class User extends Authenticatable
         return $this->hasMany(UserHobby::class, 'user_id', 'id');
     }
 
-    /**
-     * Convert data response
-     * $user array
-     * @return array
-     */
-    public static function mapUsers($users)
+    public function getJobParsedAttribute()
     {
-
-        $result = array_map(function ($user) {
-
-            $user['birthplace'] = config('masterdata.birthplace.' . $user['birthplace']);
-            $user['housemate'] = config('masterdata.housemate.' . $user['housemate'] . '.' . $user['sex']);
-            $user['aca_background'] = config('masterdata.aca_background.' . $user['aca_background'] . '.' . $user['sex']);
-            $user['holiday'] = config('masterdata.holiday.' . $user['holiday'] . '.' . $user['sex']);
-            $user['matching_expect'] = config('masterdata.matching_expect.' . $user['matching_expect']);
-            $user['anual_income'] = config('masterdata.anual_income.' . $user['anual_income'] . '.' . $user['sex']);
-            $user['figure'] = config('masterdata.figure.' . $user['figure']);
-            $user['height'] = config('masterdata.height.' . $user['height']);
-            $user['alcohol'] = config('masterdata.alcohol.' . $user['alcohol'] . '.' . $user['sex']);
-            $user['tabaco'] = config('masterdata.tabaco.' . $user['tabaco'] . '.' . $user['sex']);
-            $user['job'] = config('masterdata.job.' . $user['job'] . '.' . $user['sex']);
-            return $user;
-        }, $users->toArray());
-
-        return $result;
+        return $this['job'] = config('masterdata.job.' . $this['job'] . '.' . $this['sex']);
+    }
+    public function getTabacoParsedAttribute()
+    {
+        return $this['tabaco'] = config('masterdata.tabaco.' . $this['tabaco'] . '.' . $this['sex']);
+    }
+    public function getAlcoholParsedAttribute()
+    {
+        return $this['alcohol'] = config('masterdata.alcohol.' . $this['alcohol'] . '.' . $this['sex']);
+    }
+    public function getHeightParsedAttribute()
+    {
+        return $this['height'] = config('masterdata.height.' . $this['height']);
+    }
+    public function getFigureParsedAttribute()
+    {
+        return $this['figure'] = config('masterdata.figure.' . $this['figure']);
+    }
+    public function getIncomeParsedAttribute()
+    {
+        return $this['anual_income'] = config('masterdata.anual_income.' . $this['anual_income'] . '.' . $this['sex']);
 
     }
-    public static function mapUser($user)
+    public function getExpectParsedAttribute()
     {
-        $user['birthplace'] = config('masterdata.birthplace.' . $user['birthplace']);
-        $user['housemate'] = config('masterdata.housemate.' . $user['housemate'] . '.' . $user['sex']);
-        $user['aca_background'] = config('masterdata.aca_background.' . $user['aca_background'] . '.' . $user['sex']);
-        $user['holiday'] = config('masterdata.holiday.' . $user['holiday'] . '.' . $user['sex']);
-        $user['matching_expect'] = config('masterdata.matching_expect.' . $user['matching_expect']);
-        $user['anual_income'] = config('masterdata.anual_income.' . $user['anual_income'] . '.' . $user['sex']);
-        $user['figure'] = config('masterdata.figure.' . $user['figure']);
-        $user['height'] = config('masterdata.height.' . $user['height']);
-        $user['alcohol'] = config('masterdata.alcohol.' . $user['alcohol'] . '.' . $user['sex']);
-        $user['tabaco'] = config('masterdata.tabaco.' . $user['tabaco'] . '.' . $user['sex']);
-        $user['job'] = config('masterdata.job.' . $user['job'] . '.' . $user['sex']);
-        return $user;
+        return $this['matching_expect'] = config('masterdata.matching_expect.' . $this['matching_expect']);
+
+    }
+    public function getHolidayParsedAttribute()
+    {
+        return $this['holiday'] = config('masterdata.holiday.' . $this['holiday'] . '.' . $this['sex']);
+
+    }
+    public function getAcaParsedAttribute()
+    {
+        return $this['aca_background'] = config('masterdata.aca_background.' . $this['aca_background'] . '.' . $this['sex']);
+
+    }
+    public function getHousemateParsedAttribute()
+    {
+        return $this['housemate'] = config('masterdata.housemate.' . $this['housemate'] . '.' . $this['sex']);
+
+    }public function getBirthplaceParsedAttribute()
+    {
+        return $this['birthplace'] = config('masterdata.birthplace.' . $this['birthplace']);
+
     }
     public static function getRecommended()
     {
 
         $users = User::withCount(['likes', 'reports'])
-            ->having('likes_count','>=',RECOMMEND_STANDARD_LIKE)
-            ->having('reports_count','<=',RECOMMEND_STANDARD_REPORT)
+            ->having('likes_count', '>=', RECOMMEND_STANDARD_LIKE)
+            ->having('reports_count', '<=', RECOMMEND_STANDARD_REPORT)
             ->get();
-       
+
         return $users;
     }
 }
