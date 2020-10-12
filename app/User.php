@@ -9,6 +9,8 @@ use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
+
+    
     use Notifiable;
     protected $table = 'users';
 
@@ -132,16 +134,12 @@ class User extends Authenticatable
         if ($orderBy == 'age') {
             $orderBy = 'birthday';
         }
-        
 
         $users = User::with(['hobbies'])
-            ->where('pickup_status', config('const.PICKUP_STANDARD.PICKUP_STATUS'))
-            ->where(function ($q) use ($searchName, $searchAge, $searchPhone) {
-                $q->where('name', 'like', '%' . $searchName . '%')
-                    ->whereYear('birthday', 'like', '%' . $searchAge . '%')
-                    ->where('phone', 'like', '%' . $searchPhone . '%')
-                ;
-            })
+            ->where('pickup_status', PICKUP_STATUS)
+            ->where('name', 'like', '%' . $searchName . '%')
+            ->whereYear('birthday', 'like', '%' . $searchAge . '%')
+            ->where('phone', 'like', '%' . $searchPhone . '%')
             ->orderBy($orderBy, $orderDir)
             ->skip($data['start'])->take(config('const.PAGINATION.ROW'))
             ->get();

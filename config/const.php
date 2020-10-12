@@ -1,5 +1,13 @@
 <?php
+if (!defined('PICKUP_STATUS')) {
+    define('PICKUP_STATUS', 1);
+} 
+class constants {
+
+    
+    
+}
 return [
-    'PICKUP_STANDARD' => ['PICKUP_STATUS'=>1],
+    
     'PAGINATION' =>['ROW'=>10]
 ];
