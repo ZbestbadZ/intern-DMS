@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StickerIndexRequest;
 use App\Http\Requests\StickerStoreRequest;
 use App\Http\Requests\StickerUpdateRequest;
 use App\Models\Item;
@@ -29,10 +30,19 @@ class StickerController extends Controller
     {
         return view('sticker.create');
     }
-    public function index()
+    public function index(StickerIndexRequest $request)
     {
-        $items = Item::all();
-        return response()->json(['data' => $items]);
+        $filter = $request->getFilter();
+        $orderParams = $request->getOrderByParameters();
+        $start = $request->input('start', 0);
+
+        $itemsQuery = Item::getAllItems($filter, $orderParams, $start);
+  
+        $items = $itemsQuery['items'];
+        $recordsFiltered = $itemsQuery['recordsFiltered'];
+        $recordsTotal = Item::select('id')->count();
+
+        return response()->json(['data' => $items, 'recordsFiltered' => $recordsFiltered, 'recordsTotal' => $recordsTotal]);
     }
 
     public function get(Request $request, $id)

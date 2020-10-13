@@ -100,6 +100,9 @@
             });
             var table = $('#display').DataTable({
                 "pageLength": 10,
+                "serverSide":true,
+                "processing":true,
+                "bLengthChange": false,
                 "pagingType": "simple_numbers",
                 ajax: {
                     type: 'GET',

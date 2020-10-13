@@ -134,20 +134,36 @@ class User extends Authenticatable
         return $this['birthplace'] = config('masterdata.birthplace.' . $this['birthplace']);
 
     }
-    public static function getRecommended($data)
+    public static function getRecommended($filter, $orderParams, $start)
     {
-        $orderBy = $data['order'][0]['column'];
-        $orderDir = $data['order'][0]['dir'];
-        $start = $data['start'];
-        $sexFilter = !isset($data['columns']['6']['search']['value'])?"":$data['columns']['6']['search']['value'];
+        $orderBy = array_key_first($orderParams);
+        $orderDir = $orderParams[$orderBy];
+        $genderFilter = $filter['sex'];
+        $searchName = $filter['name'];
+        $searchAge = $filter['age'];
+        $searchPhone = $filter['phone'];
 
-
-        $users = User::withCount(['likes', 'reports'])
+        
+        $query = User::withCount(['likes', 'reports'])
             ->having('likes_count', '>=', RECOMMEND_STANDARD_LIKE)
             ->having('reports_count', '<=', RECOMMEND_STANDARD_REPORT)
-            ->where('sex','like','%'.$sexFilter.'%')
-            ->get();
+            ->orderBy($orderBy, $orderDir);
 
-        return $users;
+        if (!is_null($genderFilter)) {
+            $query->where('sex', '=', $genderFilter);
+        }
+        if (!is_null($searchName)) {
+            $query->where('name', '=', $searchName);
+        }
+        if (!is_null($searchPhone)) {
+            $query->where('phone', '=', $searchPhone);
+        }
+        
+        $recordsFiltered = $query;
+        $recordsFiltered = count($recordsFiltered->get());
+        
+        $users = $query->skip($start)->take(PAGINATION)->get();
+       
+        return compact(['users', 'recordsFiltered']);
     }
 }
