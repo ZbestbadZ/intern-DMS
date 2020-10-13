@@ -185,7 +185,6 @@
                 "processing": true,
                 "serverSide": true,
                 "pagingType": "simple_numbers",
-
                 "searching": true,
                 dom: 'Pfrtip',
 

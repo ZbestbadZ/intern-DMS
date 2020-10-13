@@ -10,7 +10,6 @@ use Illuminate\Notifications\Notifiable;
 class User extends Authenticatable
 {
 
-    
     use Notifiable;
     protected $table = 'users';
 
@@ -123,18 +122,29 @@ class User extends Authenticatable
 
     }
 
-    public static function getPickup($filter,$orderByParams,$start)
+    public static function getPickup($filter, $orderByParams, $start)
     {
         $orderBy = array_key_first($orderByParams);
         $orderDir = $orderByParams[$orderBy];
-        $searchName = is_null($filter['name'])?'':$filter['name'];
-        $searchPhone = is_null($filter['phone'])?'':$filter['phone'];
-        $searchAge = is_null($filter['age'])&&is_integer($filter['age'])?'': Carbon::now()->format('yy') - $filter['age'];
+        $searchName = is_null($filter['name']) ? '' : $filter['name'];
+        $searchPhone = is_null($filter['phone']) ? '' : $filter['phone'];
+        $searchAge = is_null($filter['age'])  ? '' : Carbon::now()->format('yy') - $filter['age'];
+
+        $searchBirthDate = empty($searchAge) ? Carbon::now() : Carbon::now()->year($searchAge);
         
+       
+        $recordsFiltered = User::select('id')
+            ->where('pickup_status', PICKUP_STATUS)
+            ->where('name', 'like', '%' . $searchName . '%')
+            ->whereDate('birthday', '<', $searchBirthDate)
+            ->whereYear('birthday', 'like', '%' . $searchAge . '%')
+            ->where('phone', 'like', '%' . $searchPhone . '%')
+            ->count();
+
         $users = User::with(['hobbies'])
             ->where('pickup_status', PICKUP_STATUS)
             ->where('name', 'like', '%' . $searchName . '%')
-            ->where('birthday','<',Carbon::now()->year($searchAge))
+            ->whereDate('birthday', '<', $searchBirthDate)
             ->whereYear('birthday', 'like', '%' . $searchAge . '%')
             ->where('phone', 'like', '%' . $searchPhone . '%')
             ->orderBy($orderBy, $orderDir)
@@ -143,7 +153,7 @@ class User extends Authenticatable
 
         $users = User::mapUsers($users);
 
-        return $users;
+        return compact(['users', 'recordsFiltered']);
     }
 
 }
