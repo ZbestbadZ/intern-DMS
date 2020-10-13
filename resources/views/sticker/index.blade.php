@@ -24,8 +24,8 @@
                 <div class=" text-right text-decoration-none  float-right">
                     <a href="{{ url('/sticker/create') }}">Add a new sticker</a>
                 </div><br>
-                <table id="display" class="table  table-bordered display" style="width:100%">
-                    <thead>
+                <table id="display" class="table table-light" style="width:100%">
+                    <thead class="thead-light">
                         <th>id</th>
                         <th>name</th>
                         <th>price</th>
