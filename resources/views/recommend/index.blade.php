@@ -12,14 +12,14 @@
             <div class="col">
                 <div class="float-left">
                     <label for="genderFilter">Gender</label>
-                    <select name="genderFilter" id="genderFilter">
+                    <select class="form-control" name="genderFilter" id="genderFilter">
                         <option value="">All</option>
                         <option value="1">Male</option>
                         <option value="0">Female</option>
                     </select>
                 </div>
-                <table id="display" class="table table-light">
-                    <thead class="thead-light">
+                <table id="display" class="table table-bordered table-striped table-light">
+                    <thead class="thead-dark">
                         <tr>
                             <th>id</th>
                             <th>name</th>
@@ -35,10 +35,10 @@
                     <tfoot>
                         <tr>
                             <th></th>
-                            <th><input type="text" placeholder="Search name"></th>
-                            <th><input type="text" placeholder="Search age"></th>
-                            <th><input type="text" placeholder="Search phone"></th>
-                            <th></th>
+                            <th><input class="form-control" type="text" placeholder="Search name"></th>
+                            <th><input class="form-control" type="text" placeholder="Search age"></th>
+                            <th><input class="form-control" type="text" placeholder="Search phone"></th>
+                            <th><select class="form-control" name="jobSearch" id=""></select></th>
                             <th></th>
                             <th></th>
                             <th></th>
