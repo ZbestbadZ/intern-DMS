@@ -126,33 +126,28 @@ class User extends Authenticatable
     {
         $orderBy = array_key_first($orderByParams);
         $orderDir = $orderByParams[$orderBy];
-        $searchName = is_null($filter['name']) ? '' : $filter['name'];
-        $searchPhone = is_null($filter['phone']) ? '' : $filter['phone'];
-        $searchAge = is_null($filter['age'])  ? '' : Carbon::now()->format('yy') - $filter['age'];
-
+        $searchName = $filter['name'];
+        $searchPhone = $filter['phone'];
+        $searchAge = is_null($filter['age']) ? '' : Carbon::now()->format('yy') - $filter['age'];
         $searchBirthDate = empty($searchAge) ? Carbon::now() : Carbon::now()->year($searchAge);
-        
-       
-        $recordsFiltered = User::select('id')
+
+        $query = User::with(['hobbies'])
             ->where('pickup_status', PICKUP_STATUS)
-            ->where('name', 'like', '%' . $searchName . '%')
             ->whereDate('birthday', '<', $searchBirthDate)
             ->whereYear('birthday', 'like', '%' . $searchAge . '%')
-            ->where('phone', 'like', '%' . $searchPhone . '%')
-            ->count();
+            ->orderBy($orderBy, $orderDir);
 
-        $users = User::with(['hobbies'])
-            ->where('pickup_status', PICKUP_STATUS)
-            ->where('name', 'like', '%' . $searchName . '%')
-            ->whereDate('birthday', '<', $searchBirthDate)
-            ->whereYear('birthday', 'like', '%' . $searchAge . '%')
-            ->where('phone', 'like', '%' . $searchPhone . '%')
-            ->orderBy($orderBy, $orderDir)
-            ->skip($start)->take(PAGINATION)
-            ->get();
+        if (!is_null($searchName)) {
+            $query->where('name', 'like','%'. $searchName.'%');
+        }
 
-        $users = User::mapUsers($users);
+        if (!is_null($searchPhone)) {
+            $query->where('phone', 'like', '%'. $searchPhone.'%');
+        }
 
+        $recordsFiltered = clone($query);
+        $users = $query->skip($start)->take(PAGINATION)->get();
+        $recordsFiltered = $recordsFiltered->select('id')->count(); 
         return compact(['users', 'recordsFiltered']);
     }
 
