@@ -134,12 +134,18 @@ class User extends Authenticatable
         return $this['birthplace'] = config('masterdata.birthplace.' . $this['birthplace']);
 
     }
-    public static function getRecommended()
+    public static function getRecommended($data)
     {
+        $orderBy = $data['order'][0]['column'];
+        $orderDir = $data['order'][0]['dir'];
+        $start = $data['start'];
+        $sexFilter = !isset($data['columns']['6']['search']['value'])?"":$data['columns']['6']['search']['value'];
+
 
         $users = User::withCount(['likes', 'reports'])
             ->having('likes_count', '>=', RECOMMEND_STANDARD_LIKE)
             ->having('reports_count', '<=', RECOMMEND_STANDARD_REPORT)
+            ->where('sex','like','%'.$sexFilter.'%')
             ->get();
 
         return $users;

@@ -11,9 +11,10 @@ class RecommendController extends Controller
         return view('recommend.index');
     }
     
-    public function index() {
-       
-        $users = User::getRecommended();
+    public function index(Request $request) {
+        $data = $request->only(['columns','order','start','search']);
+        $users = User::getRecommended($data);
+        
         return response()->json(['data'=>$users]);
     }
 

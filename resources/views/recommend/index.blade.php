@@ -4,12 +4,20 @@
 
     <div class="container-fluid">
         <div class="row">
-            <div class="col">
-                <a href=""></a>
-            </div>
+            <div class="col d-flex justify-content-center">
+                <span class="display-4">Recommend User</span>
+            </div> 
         </div>
         <div class="row d-flex justify-content-center">
             <div class="col-8">
+                <div class="float-left">
+                    <label for="genderFilter">Gender</label>
+                    <select name="genderFilter" id="genderFilter">
+                        <option value="">All</option>
+                        <option value="1">Male</option>
+                        <option value="0">Female</option>
+                    </select>
+                </div>
                 <table id="display" class="m-0 p-0  table table-light">
                     <thead class="thead-light">
                         <tr>
@@ -111,15 +119,23 @@
                     "_token": $('meta[name="csrf-token"]').attr('content'),
                 },
             });
+
+            $('select[name="genderFilter"]').change(function(){
+               
+               table.columns([6]).search($(this).val()).draw();
+            });
+
             var table = $('#display').DataTable({
                 "pageLength": 10,
+                "serverSide":true,
+                "processing":true,
                 "pagingType": "simple_numbers",
                 searchPanes: {
                     layout: 'columns-1',
 
                 },
                 "searching": true,
-                dom: 'Pfrtip',
+                dom: 'frtip',
 
                 ajax: {
                     type: 'GET',
@@ -188,20 +204,8 @@
 
                 }, {
                     "searchable": false,
-                    "targets": [0, 5, 6, 7, 8],
-                }, {
-                    searchPanes: {
-                        show: true,
-                        controls: false,
-                        orthogonal: 'sp',
-                        dtOpts: {
-                            searching: false,
-                            dom: "rt",
-                            info: false,
-                        }
-                    },
-                    targets: [6],
-                }],
+                    "targets": [0, 5, 7, 8],
+                }, ],
                 "order": [
                     [1, 'asc']
                 ]
@@ -270,18 +274,6 @@
             });
         });
 
-        function getFormattedDate(input) {
-            var date = new Date(input);
-            var year = date.getFullYear();
-
-            var month = (1 + date.getMonth()).toString();
-            month = month.length > 1 ? month : '0' + month;
-
-            var day = date.getDate().toString();
-            day = day.length > 1 ? day : '0' + day;
-
-            return day + '/' + month + '/' + year;
-        }
-
+     
     </script>
 @endpush
