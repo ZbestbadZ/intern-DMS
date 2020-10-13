@@ -131,7 +131,7 @@ class UserManagementController extends Controller
 
     public function update(EditUserManagementRequest $request, $id) {
         $user = User::find($id);
-        if (empty($user)) {
+        if (!$user) {
             return abort(404);
         }
 
@@ -161,7 +161,7 @@ class UserManagementController extends Controller
         if(empty($userRaw)) {
             return abort(404);
         }
-
+        // ::with(['hobbies'])
         $user = User::mapUser($userRaw);
         $userHobby = new User();
         $hobby = $userHobby->getHobbiesParsed($id);

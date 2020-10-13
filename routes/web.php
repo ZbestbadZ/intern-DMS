@@ -26,6 +26,7 @@ Route::group(['prefix'=>'admin'],function(){
     Route::get('add_user', 'UserManagementController@add');
 
     Route::get('edit_user/{id}', 'UserManagementController@edit')->name('admin.edit_user');
+});
 
 Route::group(['middleware' => 'api'], function () {
     Route::group(['prefix' => 'sticker'], function () {
@@ -34,6 +35,4 @@ Route::group(['middleware' => 'api'], function () {
         Route::get('/create', 'StickerController@getCreate')->name('sticker.create');
 
     });
-
-
 });

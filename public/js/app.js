@@ -52846,7 +52846,6 @@ module.exports = function(module) {
   \*****************************/
 /*! no exports provided */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
-<<<<<<< HEAD
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -52859,8 +52858,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var datatables_net__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! datatables.net */ "./node_modules/datatables.net/js/jquery.dataTables.js");
 /* harmony import */ var datatables_net__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(datatables_net__WEBPACK_IMPORTED_MODULE_3__);
 __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
-=======
->>>>>>> 3937af78fcaa93146e901d79c9b82073df209777
+
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
