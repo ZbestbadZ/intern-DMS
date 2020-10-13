@@ -10,14 +10,17 @@ use App\Http\Requests\EditUserManagementRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Carbon;
 use App\Models\UserHobby;
+use Illuminate\Contracts\Auth\Guard;
 
 class UserManagementController extends Controller
 {
-    protected $userModel;
+    protected $auth;
 
-    public function __construct(User $model) {
-        $this->userModel = $model;
+    public function __construct(Guard $auth)
+    {
+        $this->auth = $auth;
     }
+
 
     public function getIndex(Request $request) {
         $message = $request->input('message');
@@ -132,8 +135,12 @@ class UserManagementController extends Controller
             $user = User::find($id); 
             $data = $request->all();
             $user->update($data);
+            $hobbies = UserHobby::where('user_id', $id)->get();
+            if (UserHobby::exists($hobbies)) {
+                UserHobby::delete($hobbies);
+            }
             $hobby = $request->hobby;
-            if ($request->has('hobby')) {
+            if ($request->has('hobby')) {               
                 foreach ($hobby as $hob) { 
                     UserHobby::create([
                         'user_id' => $user->id,

@@ -145,15 +145,15 @@
                             @endforeach
                         </select>
                         <label for="hobby">Hobby:
-                        <select id="hobby" name="hobby">
-                            @foreach ($user_hobby as $hob)
-                                <option value="{{$hob->hobby}}" style="color:yellow;" >{{ $hobby[($hob->hobby)] }}</option>
-                            @endforeach
+                        
                             @foreach($hobby as  $key => $value)
-                            <input type="checkbox" name="hobby[]" id="hobby"/>
-                                {{$value}}
+                                    <input type="checkbox" name="hobby[]" id="hobby" @foreach ($user_hobby as $hob) 
+                                                        @if ( $hobby[($hob->hobby)] == $value) 
+                                                        checked="checked" @endif @endforeach />
+                                    {{$value}}
+                                
                             @endforeach
-                        </select>
+                        
                         </label>
                     </div>
 

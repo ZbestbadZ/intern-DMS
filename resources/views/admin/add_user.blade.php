@@ -6,7 +6,9 @@
             <div class="col-7">
                 <h2 style="text-align:center; margin-top:10px;">CREATE NEW USER</h2>
                 <form id="form" enctype="multipart/form-data">
-                    @csrf
+                    <!-- hidden -->
+                    <input class="" type="hidden" name="api_token" value="{{ Auth::user()->api_token }}">
+
                     <div class="form-group">
                         
                         <label for="name">Name(*) </label>
@@ -176,10 +178,17 @@
 @push('scripts')
 <script>
     $(document).ready(function() {
+        $.ajaxSetup({
+                headers: {
+                    '_token': $('meta[name="csrf-token"]').attr('content'),
+                }
+            });
+
         $("#form").submit(function(event) {
             event.preventDefault();
             let url = $('[name="create"]').data('url');
             var formData = new FormData($(this)[0]);
+            formData.set("api_token",$('[name="api_token"]').val());
             $.ajax({
                 url: "/api/admin/add_user",
                 type: "POST",

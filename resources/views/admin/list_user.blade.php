@@ -1,6 +1,8 @@
 @extends('layouts.app')
 
 @section('content')
+    <!-- hidden -->
+    <input class="" type="hidden" name="api_token" value="{{ Auth::user()->api_token }}">
 
     <div class="container-fluid">
 
@@ -61,6 +63,25 @@
         </div>
     </div>
 
+    <div class="modal fade" id="messageModal" tabindex="-1" role="dialog" aria-labelledby="messageModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="messageModalLabel"></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div id="messageBody" class="modal-body"></div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">OK</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
     <div class="modal fade" id="detailModal" tabindex="-1" role="dialog" aria-labelledby="detailModalLabel"
         aria-hidden="true">
         <div class="modal-dialog" role="document">
@@ -112,6 +133,12 @@
     <script>
         var callback = null;
         $(document).ready(function() {
+
+            $.ajaxSetup({
+                headers: {
+                    '_token': '<?php echo csrf_token(); ?>',
+                }
+            });
 
             var table = $('#mytable').DataTable({
                 "pageLength": 10,
@@ -207,7 +234,7 @@
                         $('#detailBody > .matching_expect').html(["<b>Matching Expect: </b>" ,spanGen(user['matching_expect'])]);
 
                         $.each(hobby, function(index, value) {
-                            var hobby = "<li>" + value.hobby + "<br>" + "</li>"
+                            var hobby = "<li style='margin-left:60px;'>" + value.hobby + "<br>" + "</li>"
                             $('.hobby').append(hobby);
                         })
                         
@@ -230,7 +257,6 @@
                 var row = table.row($(this).parents('tr'));
                 var data = row.data();
                 $('#deleteModalLabel').html('Warning!');
-                $('#deleteBody').html('User ' + data['name'] + ' will be deleted');
                 $('#deleteModal').modal('show');
 
                 callback = function(result) {
@@ -239,23 +265,28 @@
                         $.ajax({
                             type: 'DELETE',
                             url: '/api/admin/' + data['id'],
-                            data: '_token = <?php echo csrf_token(); ?>',
+                            data: {
+                                "api_token": $('[name="api_token"]').val(),
+                            },
                             success: function(data) {
                                 var re = row
                                     .remove().draw(true);
-                                table.ajax.reload();
 
+                                $('#messageModalLabel').html('Success');
+                                $('#messageBody').html('User is deleted successfully!');
+                                $('#messageModal').modal('show');
                             }
                         });
                     }
                 };
 
-
             });
             $('#deleteModal').on('click', '.btn', function() {
 
-                if ($(this).hasClass("delete-accecpt")) callback(true);
-                else callback(false);
+                if ($(this).hasClass("delete-accecpt")) 
+                    callback(true);
+                else 
+                    callback(false);
             });
 
             setTimeout(function() {
