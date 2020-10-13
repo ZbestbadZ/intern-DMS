@@ -118,8 +118,10 @@ class User extends Authenticatable
         }
         if (!is_null($searchAge)) {
             $searchBirthDate = Carbon::now()->year(Carbon::now()->format('yy') - $searchAge);
-            $query->whereDate('birthday', '<', $searchBirthDate);
-            $query->whereDate('birthday', '>=', $searchBirthDate->startOfYear());
+            $searchBirthYear = Carbon::now()->year(Carbon::now()->format('yy') - $searchAge)->startOfYear();
+           
+            $query->whereBetween('birthday', array($searchBirthYear, $searchBirthDate));
+            
 
         }
 
