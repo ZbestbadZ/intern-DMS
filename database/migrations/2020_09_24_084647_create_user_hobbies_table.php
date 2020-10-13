@@ -18,6 +18,7 @@ class CreateUserHobbiesTable extends Migration
             $table->unsignedBigInteger('user_id');
             $table->tinyInteger('hobby');
             $table->timestamps();
+            $table->unique(['hobby', 'user_id']);
         });
     }
 
