@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class IndexRequest extends FormRequest
+class PickupIndexRequest extends FormRequest
 {
     protected $sortable = [
         '0' => 'id',

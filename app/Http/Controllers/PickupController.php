@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\IndexRequest;
+use App\Http\Requests\PickupIndexRequest;
 use App\User;
 use Illuminate\Http\Request;
 
@@ -12,7 +13,7 @@ class PickupController extends Controller
     {
         return view('pickup.index');
     }
-    public function index(IndexRequest $request)
+    public function index(PickupIndexRequest $request)
     {
         $filter = $request->getFilter();
         $orderByParams = $request->getOrderByParameters();

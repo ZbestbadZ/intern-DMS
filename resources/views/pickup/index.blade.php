@@ -139,7 +139,7 @@
         $(document).ready(function() {
 
             $('#display tfoot th').each(function(index, value) {
-                searchbyTextColIndex = [1,  3];
+                searchbyTextColIndex = [1, 3];
                 if ($.inArray(index, searchbyTextColIndex) != -1) {
                     var title = $(this).text();
 
@@ -148,26 +148,28 @@
 
                 if (index === 4) {
                     let thisTag = $(this);
-                      $.ajax({
-                          url: 'api/masterData/job',
-                          data: {
-                              "api_token": $('input[name="api_token"]').val()
-                          },
-                          success: function(data)  {
-                              $.each(data ,function(index, value) {
-                                 
-                                  let selectTag = "<option value=\""+index+"\">"+value+"</option>" ;
-                                    
-                                      $(thisTag).find("select").append(selectTag);
-                                  });
-                          },
-                      });
-                      
-                  }
+                    $.ajax({
+                        url: 'api/masterData/job',
+                        data: {
+                            "api_token": $('input[name="api_token"]').val()
+                        },
+                        success: function(data) {
+                            $.each(data, function(index, value) {
+
+                                let selectTag = "<option value=\"" + value + "\">" +
+                                    value + "</option>";
+
+                                $(thisTag).find("select").append(selectTag);
+                            });
+                        },
+                    });
+
+                }
             });
 
             var table = $('#display').DataTable({
                 initComplete: function() {
+                   
                     this.api().columns().every(function() {
                         var that = this;
 
@@ -179,7 +181,6 @@
                                     .draw();
                             }
                         });
-                        
                     });
                 },
                 "processing": true,
@@ -263,7 +264,10 @@
                     [1, 'asc']
                 ]
             });
-
+            //select
+            $('select[name="jobSearch"]').change(function() {
+                        table.columns(4).search($(this).val()).draw();
+            });
             $('#display tbody ').on('click', '.edit', function() {
 
                 var data = table.row($(this).parents('tr')).data();
@@ -329,8 +333,6 @@
                 table.draw(false);
             });
         });
-
-       
 
     </script>
 @endpush
