@@ -123,25 +123,22 @@ class User extends Authenticatable
 
     }
 
-    public static function getPickup($data)
+    public static function getPickup($filter,$orderByParams,$start)
     {
-        $orderBy = $data['columns'][$data['order'][0]['column']]['name'];
-        $orderDir = $data['order'][0]['dir'];
-        $searchName = $data['columns']['1']['search']['value'];
-        $searchPhone = $data['columns']['3']['search']['value'];
-        $searchAge = isset($data['columns']['2']['search']['value']) ? Carbon::now()->format('yy') - $data['columns']['2']['search']['value'] : "";
-
-        if ($orderBy == 'age') {
-            $orderBy = 'birthday';
-        }
-
+        $orderBy = array_key_first($orderByParams);
+        $orderDir = $orderByParams[$orderBy];
+        $searchName = is_null($filter['name'])?'':$filter['name'];
+        $searchPhone = is_null($filter['phone'])?'':$filter['phone'];
+        $searchAge = is_null($filter['age'])&&is_integer($filter['age'])?'': Carbon::now()->format('yy') - $filter['age'];
+        
         $users = User::with(['hobbies'])
             ->where('pickup_status', PICKUP_STATUS)
             ->where('name', 'like', '%' . $searchName . '%')
+            ->where('birthday','<',Carbon::now()->year($searchAge))
             ->whereYear('birthday', 'like', '%' . $searchAge . '%')
             ->where('phone', 'like', '%' . $searchPhone . '%')
             ->orderBy($orderBy, $orderDir)
-            ->skip($data['start'])->take(PAGINATION)
+            ->skip($start)->take(PAGINATION)
             ->get();
 
         $users = User::mapUsers($users);

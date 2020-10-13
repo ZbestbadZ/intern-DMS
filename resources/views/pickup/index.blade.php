@@ -157,7 +157,7 @@
                               $.each(data ,function(index, value) {
                                  
                                   let selectTag = "<option value=\""+index+"\">"+value+"</option>" ;
-                                    console.log($(this));
+                                    
                                       $(thisTag).find("select").append(selectTag);
                                   });
                           },
