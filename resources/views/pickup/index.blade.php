@@ -241,7 +241,7 @@
                         "name": "birthday",
                         "mRender": function(data, type, row) {
 
-                            return getFormattedDate(data);
+                            return moment(data).format();
                         }
                     },
                     {
@@ -277,34 +277,8 @@
                     url: '/api/admin/' + data['id'],
                     data: '_token = <?php echo csrf_token(); ?>',
                     success: function(data) {
-                        let user = data['user'];
-                        var spanGen = function(content) {
-                            return '<span>' + content + '</span>';
-                        }
-                        $('#detailBody > .name').html(spanGen(user['name']));
-                        $('#detailBody > .gender').html(spanGen(user['sex']));
-                        $('#detailBody > .address').html(spanGen(user['address']));
-                        $('#detailBody > .phone').html(spanGen(user['phone']));
-                        $('#detailBody > .email').html(spanGen(user['email']));
-                        $('#detailBody > .birthday').html(spanGen(user['birthday']));
-
-                        $('#detailBody > .username').html(spanGen(user['username']));
-                        $('#detailBody > .aca_background').html(spanGen(user[
-                            'aca_background']));
-                        $('#detailBody > .job').html(spanGen(user['job']));
-                        $('#detailBody > .anual_income').html(spanGen(user['anual_income']));
-                        $('#detailBody > .birthplace').html(spanGen(user['birthplace']));
-                        $('#detailBody > .figure').html(spanGen(user['figure']));
-
-                        $('#detailBody > .height').html(spanGen(user['height']));
-                        $('#detailBody > .tabaco').html(spanGen(user['tabaco']));
-                        $('#detailBody > .alcohol').html(spanGen(user['alcohol']));
-                        $('#detailBody > .matching_expect').html(spanGen(user[
-                            'matching_expect']));
-
+                        $('#detailBody').html(data.html);
                         $('#detailModal').modal('show');
-
-
                     }
                 });
 
@@ -356,18 +330,7 @@
             });
         });
 
-        function getFormattedDate(input) {
-            var date = new Date(input);
-            var year = date.getFullYear();
-
-            var month = (1 + date.getMonth()).toString();
-            month = month.length > 1 ? month : '0' + month;
-
-            var day = date.getDate().toString();
-            day = day.length > 1 ? day : '0' + day;
-
-            return day + '/' + month + '/' + year;
-        }
+       
 
     </script>
 @endpush
