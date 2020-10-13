@@ -94,60 +94,38 @@ class User extends Authenticatable
         return Carbon::parse($this->birthday)->diffInYears(Carbon::now());
     }
 
-    /**
-     * Convert data response
-     * $user array
-     * @return array
-     */
-    public static function mapUsers($users)
-    {
-
-        $result = array_map(function ($user) {
-
-            $user['birthplace'] = config('masterdata.birthplace.' . $user['birthplace']);
-            $user['housemate'] = config('masterdata.housemate.' . $user['housemate'] . '.' . $user['sex']);
-            $user['aca_background'] = config('masterdata.aca_background.' . $user['aca_background'] . '.' . $user['sex']);
-            $user['holiday'] = config('masterdata.holiday.' . $user['holiday'] . '.' . $user['sex']);
-            $user['matching_expect'] = config('masterdata.matching_expect.' . $user['matching_expect']);
-            $user['anual_income'] = config('masterdata.anual_income.' . $user['anual_income'] . '.' . $user['sex']);
-            $user['figure'] = config('masterdata.figure.' . $user['figure']);
-            $user['height'] = config('masterdata.height.' . $user['height']);
-            $user['alcohol'] = config('masterdata.alcohol.' . $user['alcohol'] . '.' . $user['sex']);
-            $user['tabaco'] = config('masterdata.tabaco.' . $user['tabaco'] . '.' . $user['sex']);
-            $user['job'] = config('masterdata.job.' . $user['job'] . '.' . $user['sex']);
-            return $user;
-        }, $users->toArray());
-
-        return $result;
-
-    }
-
     public static function getPickup($filter, $orderByParams, $start)
     {
         $orderBy = array_key_first($orderByParams);
         $orderDir = $orderByParams[$orderBy];
         $searchName = $filter['name'];
         $searchPhone = $filter['phone'];
-        $searchAge = is_null($filter['age']) ? '' : Carbon::now()->format('yy') - $filter['age'];
+
+        $searchAge = $filter['age'];
+
         $searchBirthDate = empty($searchAge) ? Carbon::now() : Carbon::now()->year($searchAge);
 
         $query = User::with(['hobbies'])
             ->where('pickup_status', PICKUP_STATUS)
-            ->whereDate('birthday', '<', $searchBirthDate)
-            ->whereYear('birthday', 'like', '%' . $searchAge . '%')
             ->orderBy($orderBy, $orderDir);
 
         if (!is_null($searchName)) {
-            $query->where('name', 'like','%'. $searchName.'%');
+            $query->where('name', 'like', '%' . $searchName . '%');
         }
 
         if (!is_null($searchPhone)) {
-            $query->where('phone', 'like', '%'. $searchPhone.'%');
+            $query->where('phone', 'like', '%' . $searchPhone . '%');
+        }
+        if (!is_null($searchAge)) {
+            $searchBirthDate = Carbon::now()->year(Carbon::now()->format('yy') - $searchAge);
+            $query->whereDate('birthday', '<', $searchBirthDate);
+            $query->whereDate('birthday', '>=', $searchBirthDate->startOfYear());
+
         }
 
-        $recordsFiltered = clone($query);
+        $recordsFiltered = clone ($query);
         $users = $query->skip($start)->take(PAGINATION)->get();
-        $recordsFiltered = $recordsFiltered->select('id')->count(); 
+        $recordsFiltered = $recordsFiltered->select('id')->count();
         return compact(['users', 'recordsFiltered']);
     }
 
