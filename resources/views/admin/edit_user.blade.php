@@ -5,7 +5,7 @@
         <div class="row d-flex justify-content-center">
             <div class="col-7">
                 <h2 style="text-align:center; margin-top:10px;">EDIT USER</h2>
-                <form id="form" enctype="multipart/form-data">
+                <form id="form" method="POST" enctype="multipart/form-data">
                     {{ csrf_field() }}
                     <input type="hidden" name="user_id" id="user_id" value="{{ $user->id }}">
                     <input type="hidden" name="api_token" value="{{ Auth::user()->api_token }}">
@@ -54,7 +54,7 @@
                         <select name="figure">
                             <option value="{{$user->figure}}" >{{ $figure[($user->figure)] }}</option>
                             @foreach($figure  as  $key => $value)
-                                <option>{{$value}}</option>
+                                <option value="{{$key}}">{{$value}}</option>
                             @endforeach
                         </select>
 
@@ -62,7 +62,7 @@
                         <select name="job">
                             <option value="{{$user->job}}" >{{ $job[($user->job)]['1'] }}</option>
                             @foreach($job as $key => $value)
-                                <option>{{$value['1']}}</option>
+                                <option value="{{$key}}">{{$value['1']}}</option>
                             @endforeach
                         </select>
 
@@ -73,7 +73,7 @@
                         <select name="matching_expect">
                             <option value="{{$user->matching_expect}}" >{{ $matching_expect[($user->matching_expect)] }}</option>
                             @foreach($matching_expect  as  $key => $value)
-                                <option>{{$value}}</option>
+                                <option value="{{$key}}">{{$value}}</option>
                             @endforeach
                         </select>
 
@@ -84,7 +84,7 @@
                         <select name="anual_income">
                             <option value="{{$user->anual_income}}" >{{ $anual_income[($user->anual_income)]['1'] }}</option>
                             @foreach($anual_income as  $key => $value)
-                                <option>{{$value['1']}}</option>
+                                <option value="{{$key}}">{{$value['1']}}</option>
                             @endforeach
                         </select>
  
@@ -92,7 +92,7 @@
                         <select name="holiday">
                             <option value="{{$user->holiday}}" >{{ $holiday[($user->holiday)]['1'] }}</option>
                             @foreach($holiday as  $key => $value)
-                                <option>{{$value['1']}}</option>
+                                <option value="{{$key}}">{{$value['1']}}</option>
                             @endforeach
                         </select>
 
@@ -103,7 +103,7 @@
                         <select name="aca_background">
                             <option value="{{$user->aca_background}}" >{{ $aca_background[($user->aca_background)]['1'] }}</option>
                             @foreach($aca_background  as  $key => $value)
-                                <option>{{$value['1']}}</option>
+                                <option value="{{$key}}">{{$value['1']}}</option>
                             @endforeach
                         </select>
 
@@ -111,7 +111,7 @@
                         <select name="alcohol">
                             <option value="{{$user->alcohol}}" >{{ $alcohol[($user->alcohol)]['1'] }}</option>
                             @foreach($alcohol as  $key => $value)
-                                <option>{{$value['1']}}</option>
+                                <option value="{{$key}}">{{$value['1']}}</option>
                             @endforeach
                         </select>
 
@@ -123,7 +123,7 @@
                         <select name="tabaco">
                             <option value="{{$user->tabaco}}" >{{ $tabaco[($user->tabaco)]['1'] }}</option>
                             @foreach($tabaco as  $key => $value)
-                                <option>{{$value['1']}}</option>
+                                <option value="{{$key}}">{{$value['1']}}</option>
                             @endforeach
                         </select>
 
@@ -131,7 +131,7 @@
                         <select name="housemate">
                             <option value="{{$user->housemate}}" >{{ $housemate[($user->housemate)]['1'] }}</option>
                             @foreach($housemate  as  $key => $value)
-                                <option>{{$value['1']}}</option>
+                                <option value="{{$key}}">{{$value['1']}}</option>
                             @endforeach
                         </select>
                     </div>
@@ -141,13 +141,13 @@
                         <select name="birthplace">
                             <option value="{{$user->birthplace}}" >{{ $birthplace[($user->birthplace)] }}</option>
                             @foreach($birthplace as $key => $value)
-                                <option>{{$value}}</option>
+                                <option value="{{$key}}">{{$value}}</option>
                             @endforeach
                         </select>
                         <label for="hobby">Hobby:
                         
                             @foreach($hobby as  $key => $value)
-                                    <input type="checkbox" name="hobby[]" id="hobby" @foreach ($user_hobby as $hob) 
+                                    <input type="checkbox" value="{{$key}}" name="hobby[]" id="hobby" @foreach ($user_hobby as $hob) 
                                                         @if ( $hobby[($hob->hobby)] == $value) 
                                                         checked="checked" @endif @endforeach />
                                     {{$value}}
@@ -223,7 +223,9 @@
                 success: function(response) {
                     window.location.href = url;
                 },
-                
+                error:function(error){
+                    console.log(error);
+                }
             });
             
         });

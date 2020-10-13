@@ -137,13 +137,10 @@ class UserManagementController extends Controller
         }
 
         $data = $request->all();
+        
         $user->update($data);
         try {
-           
-            $hobbies = UserHobby::where('user_id', $id)->get();
-            if (UserHobby::exists($hobbies)) {
-                UserHobby::delete($hobbies);
-            }
+            $hobby = UserHobby::where('user_id', $id)->delete('hobby');
             $hobby = $request->hobby;
             if ($request->has('hobby')) {               
                 foreach ($hobby as $hob) { 
@@ -156,6 +153,7 @@ class UserManagementController extends Controller
         } catch (Exception $e) {
             return abort(500);
         }
+        
         return response()->json(['success' => 'User is updated successfully!']);
     }
 
