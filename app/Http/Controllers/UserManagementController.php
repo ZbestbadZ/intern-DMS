@@ -87,9 +87,9 @@ class UserManagementController extends Controller
     }
 
     public function store(UserManagementRequest $request) {
-        try {
-            $data = $request->all();
-            $user = User::create($data);
+        $data = $request->all();
+        $user = User::create($data);
+        try {          
 
             $hobby = $request->hobby;
             if ($request->has('hobby')) {
@@ -99,8 +99,7 @@ class UserManagementController extends Controller
                         'hobby' => $hob
                     ]);
                 }
-            }
-            
+            }       
         } catch (Exception $e) {
             return abort(500);
         }  
