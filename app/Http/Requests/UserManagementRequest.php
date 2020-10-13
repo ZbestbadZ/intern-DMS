@@ -30,7 +30,7 @@ class UserManagementRequest extends FormRequest
             'password' => 'required|min:3|max:50|required_with:password_confirmation|same:password_confirmation',
             'password_confirmation' => 'min:3|max:50',
             'sex' => 'required',
-            'birthday' => 'required|date',
+            'birthday' => 'required|nullable|date_format:Y-m-d|before:today',
             'about' => 'required|max:100|min:3',
             'about_title' => 'required|max:100|min:3',
             'phone' => 'nullable|numeric',

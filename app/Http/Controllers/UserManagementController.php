@@ -104,7 +104,7 @@ class UserManagementController extends Controller
         } catch (Exception $e) {
             return abort(500);
         }  
-        return response()->json(['message'=>'User is created successfully!']);
+        return response()->json(['success'=>'User is created successfully!']);
     }
 
     public function edit(Request $request, $id) {
@@ -131,10 +131,15 @@ class UserManagementController extends Controller
     }
 
     public function update(EditUserManagementRequest $request, $id) {
+        $user = User::find($id);
+        if (empty($user)) {
+            return abort(404);
+        }
+
+        $data = $request->all();
+        $user->update($data);
         try {
-            $user = User::find($id); 
-            $data = $request->all();
-            $user->update($data);
+           
             $hobbies = UserHobby::where('user_id', $id)->get();
             if (UserHobby::exists($hobbies)) {
                 UserHobby::delete($hobbies);
@@ -148,7 +153,6 @@ class UserManagementController extends Controller
                     ]); 
                 }
             }
-              
         } catch (Exception $e) {
             return abort(500);
         }

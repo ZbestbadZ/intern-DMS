@@ -6,15 +6,15 @@
             <div class="col-7">
                 <h2 style="text-align:center; margin-top:10px;">EDIT USER</h2>
                 <form id="form" enctype="multipart/form-data">
-                    @csrf
-                    @method('PATCH')
-
+                    {{ csrf_field() }}
                     <input type="hidden" name="user_id" id="user_id" value="{{ $user->id }}">
-                    <div class="form-group">
-                        
+                    <input type="hidden" name="api_token" value="{{ Auth::user()->api_token }}">
+
+                    <div class="form-group">                      
                         <label for="name">Name: </label>
                         <input class="form-control" type="text" name="name" id="name" value="{{$user->name}}" autofocus>
                     </div>
+
                     <div class="form-group">
                         <label for="username">Username: </label>
                         <input class="form-control" type="text" name="username" id="username" value="{{$user->username}}">
@@ -190,7 +190,7 @@
                         <input id="password_confirm" type="password" class="form-control" name="password_confirmation" value="{{$user->password}}" required autocomplete="new-password">
                     </div>
                      
-                    <button class="btn btn-primary" data-url="{{ route('admin.list_user')}}" type="submit" name="update">Update</button>
+                    <button class="btn btn-primary" type="submit" name="update" data-url="{{ route('admin.list_user')}}">Update</button>
                 </form>
             </div>
         </div>
@@ -199,11 +199,18 @@
 @push('scripts')
 <script>
    $(document).ready(function() {
+        $.ajaxSetup({
+            headers: {
+                '_token': $('meta[name="csrf-token"]').attr('content'),
+            }
+        });
+
         $("#form").on('submit', function(event) {
             event.preventDefault();
             var user_id = $('#user_id').val();
             let url = $('[name="update"]').data('url');
             var formData = new FormData($(this)[0]);
+            formData.set("api_token",$('[name="api_token"]').val());
             $.ajax({
                 url: "/api/admin/edit_user/" + user_id,
                 type: "POST",
@@ -216,10 +223,9 @@
                 success: function(response) {
                     window.location.href = url;
                 },
-                error:function(error){
-                    console.log(error);
-                }
+                
             });
+            
         });
     });    
 
