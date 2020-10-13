@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Carbon\Carbon;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
@@ -142,21 +143,26 @@ class User extends Authenticatable
         $searchName = $filter['name'];
         $searchAge = $filter['age'];
         $searchPhone = $filter['phone'];
+        $searchAge = is_null($filter['age'])  ? '' : Carbon::now()->format('yy') - $filter['age'];
+        $searchBirthDate = empty($searchAge) ? Carbon::now() : Carbon::now()->year($searchAge);
 
         
         $query = User::withCount(['likes', 'reports'])
             ->having('likes_count', '>=', RECOMMEND_STANDARD_LIKE)
             ->having('reports_count', '<=', RECOMMEND_STANDARD_REPORT)
+            ->whereDate('birthday', '<', $searchBirthDate)
+            ->whereYear('birthday', 'like', '%' . $searchAge . '%')
+
             ->orderBy($orderBy, $orderDir);
 
         if (!is_null($genderFilter)) {
             $query->where('sex', '=', $genderFilter);
         }
         if (!is_null($searchName)) {
-            $query->where('name', '=', $searchName);
+            $query->where('name', 'like','%'. $searchName.'%');
         }
         if (!is_null($searchPhone)) {
-            $query->where('phone', '=', $searchPhone);
+            $query->where('phone', 'like','%'. $searchPhone.'%');
         }
         
         $recordsFiltered = $query;

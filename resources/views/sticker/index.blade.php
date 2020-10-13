@@ -9,7 +9,7 @@
                 <!--Bread Crumbs-->
             </div>
         </div>
-        
+
         <div class="row d-flex justify-content-end">
             @if (session()->has('message'))
                 <div class="alert alert-success">
@@ -29,13 +29,18 @@
                         <th>id</th>
                         <th>name</th>
                         <th>price</th>
-                        <!-- <th>size</th> -->
                         <th>option</th>
                     </thead>
 
                     <tfoot>
-                        
+                        <tr>
+                            <th></th>
+                            <th><input type="text" placeholder="Search name" /></th>
+                            <th><input type="number" placeholder="Search price" /></th>
+                            <th></th>
+                        </tr>
                     </tfoot>
+
 
                 </table>
             </div>
@@ -99,9 +104,25 @@
                 }
             });
             var table = $('#display').DataTable({
+                initComplete: function() {
+                    this.api().columns().every(function() {
+                        var that = this;
+
+                        $('input', this.footer()).on('keyup change clear', function() {
+                            if (that.search() !== this.value) {
+
+                                that
+                                    .search(this.value)
+                                    .draw();
+                            }
+                        });
+
+                    });
+                },
+                dom: 'rtip',
                 "pageLength": 10,
-                "serverSide":true,
-                "processing":true,
+                "serverSide": true,
+                "processing": true,
                 "bLengthChange": false,
                 "pagingType": "simple_numbers",
                 ajax: {

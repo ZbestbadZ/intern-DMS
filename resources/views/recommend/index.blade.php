@@ -6,10 +6,10 @@
         <div class="row">
             <div class="col d-flex justify-content-center">
                 <span class="display-4">Recommend User</span>
-            </div> 
+            </div>
         </div>
-        <div class="row d-flex justify-content-center">
-            <div class="col-8">
+        <div class="row d-flex justify-content-start">
+            <div class="col">
                 <div class="float-left">
                     <label for="genderFilter">Gender</label>
                     <select name="genderFilter" id="genderFilter">
@@ -18,10 +18,9 @@
                         <option value="0">Female</option>
                     </select>
                 </div>
-                <table id="display" class="m-0 p-0  table table-light">
+                <table id="display" class="table table-light">
                     <thead class="thead-light">
                         <tr>
-
                             <th>id</th>
                             <th>name</th>
                             <th>age</th>
@@ -34,7 +33,17 @@
                         </tr>
                     </thead>
                     <tfoot>
-
+                        <tr>
+                            <th></th>
+                            <th><input type="text" placeholder="Search name"></th>
+                            <th><input type="text" placeholder="Search age"></th>
+                            <th><input type="text" placeholder="Search phone"></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                        </tr>
                     </tfoot>
                 </table>
             </div>
@@ -120,22 +129,38 @@
                 },
             });
 
-            $('select[name="genderFilter"]').change(function(){
-               
-               table.columns([6]).search($(this).val()).draw();
+            $('select[name="genderFilter"]').change(function() {
+
+                table.columns([6]).search($(this).val()).draw();
             });
 
+            //datatable
             var table = $('#display').DataTable({
+                initComplete: function() {
+                    this.api().columns().every(function() {
+                        var that = this;
+
+                        $('input', this.footer()).on('keyup change clear', function() {
+                            if (that.search() !== this.value) {
+
+                                that
+                                    .search(this.value)
+                                    .draw();
+                            }
+                        });
+
+                    });
+                },
                 "pageLength": 10,
-                "serverSide":true,
-                "processing":true,
+                "serverSide": true,
+                "processing": true,
                 "pagingType": "simple_numbers",
                 searchPanes: {
                     layout: 'columns-1',
 
                 },
                 "searching": true,
-                dom: 'frtip',
+                dom: 'rtip',
 
                 ajax: {
                     type: 'GET',
@@ -274,6 +299,5 @@
             });
         });
 
-     
     </script>
 @endpush

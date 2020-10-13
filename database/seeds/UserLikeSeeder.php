@@ -13,7 +13,7 @@ class UserLikeSeeder extends Seeder
      */
     public function run()
     {
-        for ($k=10; $k <= 50 ; $k+=10) { 
+        for ($k=10; $k <= 110 ; $k+=10) { 
             for ($i=1; $i < 11; $i++) { 
                 DB::table('user_likes')->insert([
                     'user_id'=> $i+$k,

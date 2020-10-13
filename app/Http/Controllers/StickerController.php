@@ -37,7 +37,6 @@ class StickerController extends Controller
         $start = $request->input('start', 0);
 
         $itemsQuery = Item::getAllItems($filter, $orderParams, $start);
-  
         $items = $itemsQuery['items'];
         $recordsFiltered = $itemsQuery['recordsFiltered'];
         $recordsTotal = Item::select('id')->count();

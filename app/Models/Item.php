@@ -17,15 +17,16 @@ class Item extends Model
         $searchPrice = $filter['price'];
         $orderBy = array_key_first($orderParams);
         $orderDir = $orderParams[$orderBy];
-
-        $recordsFiltered = Item::select('id')->count();
-        $items = Item::skip($start)->take(PAGINATION)->orderBy($orderBy, $orderDir);
+        $query = Item::orderBy($orderBy, $orderDir);
+        $recordsFiltered = clone($query);
+        $recordsFiltered = $recordsFiltered->select('id')->count();
+        $items = $query->skip($start)->take(PAGINATION);
         if (!is_null($searchName)) {
             $items->where('name', 'like', '%' . $searchName . '%');
         }
 
         if (!is_null($searchPrice)) {
-            $items->where('price', 'like', '%' . $searchPrice . '%');
+            $items->where('price', '=', $searchPrice);
         }
 
         $items = $items->get();
