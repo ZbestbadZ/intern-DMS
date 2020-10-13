@@ -241,7 +241,7 @@
                         "name": "birthday",
                         "mRender": function(data, type, row) {
 
-                            return moment(data).format();
+                            return moment(data).format("DD/MM/yyyy");
                         }
                     },
                     {
