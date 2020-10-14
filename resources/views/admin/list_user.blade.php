@@ -1,6 +1,8 @@
 @extends('layouts.app')
 
 @section('content')
+    <!-- hidden -->
+    <input class="" type="hidden" name="api_token" value="{{ Auth::user()->api_token }}">
 
     <div class="container-fluid">
 
@@ -25,7 +27,7 @@
                         <tr>
                             <th>ID</th>
                             <th>Name</th>
-                            <th>Birthday</th>
+                            <th>Age</th>
                             <th>Gender</th>
                             <th>Job</th>
                             <th>Phone</th>
@@ -57,6 +59,25 @@
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
                     <button type="button" data-dismiss="modal" class="delete-accecpt btn btn-danger">Yes</button>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="messageModal" tabindex="-1" role="dialog" aria-labelledby="messageModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="messageModalLabel"></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div id="messageBody" class="modal-body"></div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">OK</button>
+                </div>
+
             </div>
         </div>
     </div>
@@ -95,7 +116,7 @@
                     <div class="alcohol"></div>
                     <div class="holiday"></div>
                     <div class="matching_expect"></div>
-                    <div class="hobby"></div>
+                    <div><b>Hooby:</b> <span class="hobby"></span></div>
                     <!-- /.account -->
                 </div>
                 <div class="modal-footer">
@@ -112,6 +133,12 @@
     <script>
         var callback = null;
         $(document).ready(function() {
+
+            $.ajaxSetup({
+                headers: {
+                    '_token': '<?php echo csrf_token(); ?>',
+                }
+            });
 
             var table = $('#mytable').DataTable({
                 "pageLength": 10,
@@ -136,7 +163,9 @@
                     {
                         "data": "birthday",
                         "mRender": function(data, type, row) {
-                            return getFormattedDate(data);
+                            let birthYear = new Date(data).getFullYear();
+                            age = new Date().getFullYear() - birthYear;
+                            return age;
                         }
                     },
                     {
@@ -150,7 +179,6 @@
                     {
                         "data": "job",
                         
-                    
                     },
                     {
                         "data": "phone"
@@ -178,8 +206,9 @@
                     dataType: 'json',
                     data: '_token = <?php echo csrf_token(); ?>',
                     success: function(data) {
+                        $('.hobby').html('');
                         let user = data['user'];
-                        let userHob = data['userHob'];
+                        let hobby = data['hobby'];
                         var spanGen = function(content) {
                             return '<span style="margin-left: 50px;">' + content + '</span>';
                         }
@@ -203,6 +232,13 @@
                         $('#detailBody > .alcohol').html(["<b>Alcohol: </b>" ,spanGen(user['alcohol'])]);
                         $('#detailBody > .holiday').html(["<b>Holiday: </b>" ,spanGen(user['holiday'])]);
                         $('#detailBody > .matching_expect').html(["<b>Matching Expect: </b>" ,spanGen(user['matching_expect'])]);
+
+                        $.each(hobby, function(index, value) {
+                            var hobby = "<li style='margin-left:60px;'>" + value.hobby + "<br>" + "</li>"
+                            $('.hobby').append(hobby);
+                        })
+                        
+
                         $('#detailModal').modal('show');
 
                         console.log(data);
@@ -214,14 +250,13 @@
             $('#mytable tbody ').on('click', '.edit', function() {
 
                 var data = table.row($(this).parents('tr')).data();
-                window.location.href = "/admin/" + data['id'] + "/edit";
+                window.location.href = "/admin/edit_user/" + data['id'] ;
             });
 
             $('#mytable tbody ').on('click', '.delete', function() {
                 var row = table.row($(this).parents('tr'));
                 var data = row.data();
                 $('#deleteModalLabel').html('Warning!');
-                $('#deleteBody').html('User ' + data['name'] + ' will be deleted');
                 $('#deleteModal').modal('show');
 
                 callback = function(result) {
@@ -230,23 +265,28 @@
                         $.ajax({
                             type: 'DELETE',
                             url: '/api/admin/' + data['id'],
-                            data: '_token = <?php echo csrf_token(); ?>',
+                            data: {
+                                "api_token": $('[name="api_token"]').val(),
+                            },
                             success: function(data) {
                                 var re = row
                                     .remove().draw(true);
-                                table.ajax.reload();
 
+                                $('#messageModalLabel').html('Success');
+                                $('#messageBody').html('User is deleted successfully!');
+                                $('#messageModal').modal('show');
                             }
                         });
                     }
                 };
 
-
             });
             $('#deleteModal').on('click', '.btn', function() {
 
-                if ($(this).hasClass("delete-accecpt")) callback(true);
-                else callback(false);
+                if ($(this).hasClass("delete-accecpt")) 
+                    callback(true);
+                else 
+                    callback(false);
             });
 
             setTimeout(function() {
@@ -254,19 +294,6 @@
             }, 2000);
 
         });
-
-        function getFormattedDate(input) {
-            var date = new Date(input);
-            var year = date.getFullYear();
-
-            var month = (1 + date.getMonth()).toString();
-            month = month.length > 1 ? month : '0' + month;
-
-            var day = date.getDate().toString();
-            day = day.length > 1 ? day : '0' + day;
-
-            return day + '/' + month + '/' + year;
-        }
 
     </script>
 @endpush

@@ -44,6 +44,7 @@ class EditUserManagementRequest extends FormRequest
             'aca_background' => 'nullable',
             'housemate' => 'nullable',
             'birthplace' => 'nullable',
+            'hobby' => 'nullable'
         ];
     }
 

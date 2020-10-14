@@ -32,6 +32,16 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('{id}/edit', 'UserManagementController@edit')->name('admin.edit');
         Route::patch('edit_user/{id}', 'UserManagementController@update');
     });
+});
+Route::group(['prefix'=>'admin'],function(){
+    Route::get('list_user', 'UserManagementController@getIndex')->name('admin.list_user');
+
+    Route::get('add_user', 'UserManagementController@add');
+
+    Route::get('edit_user/{id}', 'UserManagementController@edit')->name('admin.edit_user');
+});
+
+Route::group(['middleware' => 'api'], function () {
     Route::group(['prefix' => 'sticker'], function () {
         Route::get('', 'StickerController@getIndex')->name('sticker.index');
         Route::get('{id}/edit', 'StickerController@edit')->name('sticker.edit');

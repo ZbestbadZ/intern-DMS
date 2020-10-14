@@ -33,17 +33,8 @@ class UserManagementRequest extends FormRequest
             'birthday' => 'required|date',
             'about' => 'required|max:100|min:3',
             'about_title' => 'required|max:100|min:3',
-            'phone' => 'nullable|numeric',
-            'address' => 'nullable|string',
-            'height' => 'nullable|integer',
-            'job' => 'nullable|integer',
-            'figure' => 'nullable|integer',
-            'anual_income' => 'nullable|integer',
-            'matching_expect' => 'nullable|integer',
-            'holiday'=> 'nullable|integer',
-            'aca_background' => 'nullable|integer',
-            'housemate' => 'nullable|integer',
-            'birthplace' => 'nullable|integer',
+            'phone' => 'string',
+            'address' => 'string',
         ];
 
     }
@@ -53,6 +44,7 @@ class UserManagementRequest extends FormRequest
         return [
             'birthday.date' => 'Birthday must be date',
             'password.same' => 'Password must be the same at password confirm',
+            'password.required_with' => 'Password must be the same at password confirm'
         ];
     }
 

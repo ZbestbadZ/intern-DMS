@@ -10,18 +10,63 @@ use App\Http\Requests\EditUserManagementRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Carbon;
 use App\Models\UserHobby;
+use Illuminate\Contracts\Auth\Guard;
 
 class UserManagementController extends Controller
 {
-    protected $userModel;
+    protected $auth;
 
-    public function __construct(User $model) {
-        $this->userModel = $model;
+    public function __construct(Guard $auth)
+    {
+        $this->auth = $auth;
+    }
+
+
+    public function getIndex(Request $request) {
+        $message = $request->input('message');
+        if(empty($message)) {
+            return view('admin.list_user');
+        }
+        return redirect()->route('admin.index')->with('message', $message);
     }
 
     public function index() {
         $users = User::all();
+        if(empty($users)) {
+            return abort(404);
+        }
+
+        $users = User::mapUsers($users);
         return response()->json(['data'=>$users]);
+    }
+
+    public function getMaleOption() {
+        $hobbies = config('masterdata.hobby');
+        $height = config('masterdata.height');
+        $job = config('masterdata.job');
+        $figure = config('masterdata.figure');
+        $matching_expect = config('masterdata.matching_expect');
+        $anual_income = config('masterdata.anual_income');
+        $holiday = config('masterdata.holiday');
+        $aca_background = config('masterdata.aca_background');
+        $alcohol = config('masterdata.alcohol');
+        $tabaco = config('masterdata.tabaco');
+        $housemate = config('masterdata.housemate');
+        $birthplace = config('masterdata.birthplace');
+        
+        return response()->json([
+            'hobbies' => $hobbies,
+            'height' => $height,
+            'job' => $job,
+            'figure' => $figure,
+            'matching_expect' => $matching_expect,
+            'anual_income' => $anual_income,
+            'holiday' => $holiday,
+            'aca_background' => $aca_background,
+            'alcohol' => $alcohol,
+            'tabaco' => $tabaco,
+            'housemate' => $housemate
+        ]);
     }
     
     public function add() {
@@ -42,28 +87,30 @@ class UserManagementController extends Controller
     }
 
     public function store(UserManagementRequest $request) {
-        try {
-            $data = $request->all();
-            $user = User::create($data);
+        $data = $request->all();
+        $user = User::create($data);
+        try {          
+
             $hobby = $request->hobby;
             if ($request->has('hobby')) {
                 foreach ($hobby as $hob) { 
                     UserHobby::create([
                         'user_id' => $user->id,
                         'hobby' => $hob
-                    ]); 
+                    ]);
                 }
-            }
-            
+            }       
         } catch (Exception $e) {
-            $mess = $e->getMessage();
-            return redirect()->back()->withErrors($mess)->withInput();
-        }
-        return redirect()->route('admin.list_user')->with('message', 'User is created successfully!');
+            return abort(500);
+        }  
+        return response()->json(['success'=>'User is created successfully!']);
     }
 
     public function edit(Request $request, $id) {
         $user = User::find($id);
+        if(empty($user)) {
+            return abort(404);
+        }
         $userHobby = UserHobby::where('user_id', $user->id)->first();
         $user_hobby = $user->hobbies;
         $height = config('masterdata.height');
@@ -82,42 +129,19 @@ class UserManagementController extends Controller
         'tabaco', 'alcohol', 'aca_background', 'holiday', 'anual_income', 'matching_expect'));
     }
 
-    public function getMaleOption() {
-        $hobbies = config('masterdata.hobby');
-        $height = config('masterdata.height');
-        $job = config('masterdata.job');
-        $figure = config('masterdata.figure');
-        $matching_expect = config('masterdata.matching_expect');
-        $anual_income = config('masterdata.anual_income');
-        $holiday = config('masterdata.holiday');
-        $aca_background = config('masterdata.aca_background');
-        $alcohol = config('masterdata.alcohol');
-        $tabaco = config('masterdata.tabaco');
-        $housemate = config('masterdata.housemate');
-        
-        $birthplace = config('masterdata.birthplace');
-        return response()->json([
-            'hobbies' => $hobbies,
-            'height' => $height,
-            'job' => $job,
-            'figure' => $figure,
-            'matching_expect' => $matching_expect,
-            'anual_income' => $anual_income,
-            'holiday' => $holiday,
-            'aca_background' => $aca_background,
-            'alcohol' => $alcohol,
-            'tabaco' => $tabaco,
-            'housemate' => $housemate
-        ]);
-    }
-
     public function update(EditUserManagementRequest $request, $id) {
+        $user = User::find($id);
+        if (!$user) {
+            return abort(404);
+        }
+
+        $data = $request->all();
+        
+        $user->update($data);
         try {
-            $user = User::find($id); 
-            $data = $request->all();
-            $user->update($data);
+            $hobby = UserHobby::where('user_id', $id)->delete('hobby');
             $hobby = $request->hobby;
-            if ($request->has('hobby')) {
+            if ($request->has('hobby')) {               
                 foreach ($hobby as $hob) { 
                     UserHobby::create([
                         'user_id' => $user->id,
@@ -125,30 +149,31 @@ class UserManagementController extends Controller
                     ]); 
                 }
             }
-              
         } catch (Exception $e) {
-            $mess = $e->getMessage();
-            return back()->withErrors($mess)->withInput();
+            return abort(500);
         }
-        return redirect()->route('admin.list_user')->with('message', 'User is updated successfully!');
+        
+        return response()->json(['success' => 'User is updated successfully!']);
     }
 
     public function show($id) {
         $userRaw = User::find($id);
-        if($userRaw === null) {
+        if(empty($userRaw)) {
             return abort(404);
         }
-
+        // ::with(['hobbies'])
         $user = User::mapUser($userRaw);
-        
-        return response()->json(['user'=>$user]);
+        $userHobby = new User();
+        $hobby = $userHobby->getHobbiesParsed($id);
+        return response()->json(['user'=>$user, 'hobby'=>$hobby]);
     }
 
     public function destroy($id) {
         $user = User::find($id);
-        if($user === null) return abort(404);
+        if(empty($user)) {
+            return abort(404);
+        } 
         $user->delete();
-        return response()->json(['user'=>$user]);
     }
 
 }
