@@ -36,7 +36,8 @@ class CreateUsersTable extends Migration
             $table->smallInteger('alcohol')->nullable();
             $table->smallInteger('tabaco')->nullable();
             $table->smallInteger('birthplace')->nullable();
-            $table->smallInteger('housemate')->nullable(); 
+            $table->smallInteger('housemate')->nullable();
+            $table->tinyInteger('pickup_status')->default('0');
             $table->string('password',100);
             $table->string('api_token', 80)->unique()->default();
             $table->rememberToken();

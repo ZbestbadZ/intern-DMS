@@ -10,15 +10,15 @@
         </div>
         <div class="row d-flex justify-content-start">
             <div class="col">
-                <div class="float-left">
-                    <label for="genderFilter">Gender</label>
-                    <select class="form-control" name="genderFilter" id="genderFilter">
+                <div class="float-left pb-4">
+                    <label for="genderFilter"><b>Gender:</b></label>
+                    <select class="form-control " name="genderFilter" id="genderFilter">
                         <option value="">All</option>
                         <option value="1">Male</option>
                         <option value="0">Female</option>
                     </select>
                 </div>
-                <table id="display" class="table table-bordered table-striped table-light">
+                <table id="display" class=" table table-bordered table-striped table-light">
                     <thead class="thead-dark">
                         <tr>
                             <th>id</th>
@@ -38,7 +38,7 @@
                             <th><input class="form-control" type="text" placeholder="Search name"></th>
                             <th><input class="form-control" type="text" placeholder="Search age"></th>
                             <th><input class="form-control" type="text" placeholder="Search phone"></th>
-                            <th><select class="form-control" name="jobSearch" id=""></select></th>
+                            <th><select class="form-control" name="jobSearch" id=""><option value="-1">All</option></select></select></th>
                             <th></th>
                             <th></th>
                             <th></th>
@@ -130,9 +130,11 @@
             });
 
             $('select[name="genderFilter"]').change(function() {
-
                 table.columns([6]).search($(this).val()).draw();
             });
+
+
+
 
             //datatable
             var table = $('#display').DataTable({
@@ -234,6 +236,25 @@
                 "order": [
                     [1, 'asc']
                 ]
+            });
+            $.ajax({
+                url: 'api/masterData/job',
+                data: {
+                    "api_token": $('input[name="api_token"]').val()
+                },
+                success: function(data) {
+                    let jobSelectTag = $('select[name="jobSearch"]');
+                    $.each(data, function(index, value) {
+
+                        let optionTag = "<option value=\"" + value + "\">" +
+                            value + "</option>";
+
+                        jobSelectTag.append(optionTag);
+                    });
+                },
+            });
+            $('select[name="jobSearch"]').change(function() {
+                table.columns(4).search($(this).val()).draw();
             });
 
             $('#display tbody ').on('click', '.edit', function() {

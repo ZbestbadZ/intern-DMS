@@ -11,8 +11,8 @@
         </div>
         <div class="row d-flex justify-content-center">
             <div class="col">
-                <table id="display" class="table   table-light">
-                    <thead class="thead-light">
+                <table id="display" class="table table-bordered table-striped table-light">
+                    <thead class="thead-dark">
                         <tr>
                             <th>id</th>
                             <th>name</th>
@@ -29,9 +29,10 @@
                         <tr>
                             <th></th>
                             <th>name</th>
-                            <th><input type="number" placeholder="Search age" /></th>
+                            <th><input class="form-control" type="number" placeholder="Search age" /></th>
                             <th>phone</th>
-                            <th><select name="jobSearch" id=""></select></th>
+                            <th><select class="form-control" name="jobSearch" id="">
+                                <option value="-1">All</option></select></th>
                             <th></th>
                             <th></th>
                             <th></th>
@@ -143,7 +144,7 @@
                 if ($.inArray(index, searchbyTextColIndex) != -1) {
                     var title = $(this).text();
 
-                    $(this).html('<input type="text" placeholder="Search ' + title + '" />');
+                    $(this).html('<input class="form-control" type="text" placeholder="Search ' + title + '" />');
                 }
 
                 if (index === 4) {
@@ -187,7 +188,7 @@
                 "serverSide": true,
                 "pagingType": "simple_numbers",
                 "searching": true,
-                dom: 'Pfrtip',
+                dom: 'frtip',
 
                 ajax: {
                     url: '/api/pickup',
@@ -221,7 +222,7 @@
                         "name": "phone",
                     },
                     {
-                        "data": "job",
+                        "data": "job_parsed",
                         "name": "job",
                     },
                     {

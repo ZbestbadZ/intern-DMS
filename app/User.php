@@ -44,7 +44,7 @@ class User extends Authenticatable
     ];
 
     protected $appends = [
-        'age','job_parsed', 'tabaco_parsed', 'alcohol_parsed', 'height_parsed', 'figure_parsed', 'income_parsed', 'expect_parsed', 'holiday_parsed', 'aca_parsed', 'housemate_parsed', 'birthplace_parsed',
+        'age', 'job_parsed', 'tabaco_parsed', 'alcohol_parsed', 'height_parsed', 'figure_parsed', 'income_parsed', 'expect_parsed', 'holiday_parsed', 'aca_parsed', 'housemate_parsed', 'birthplace_parsed',
     ];
     /**
      * The attributes that should be hidden for arrays.
@@ -66,7 +66,7 @@ class User extends Authenticatable
 
     public function likes()
     {
-        return $this->belongsToMany(User::class, 'user_likes', 'user_id', 'target_id');
+        return $this->belongsToMany(User::class, 'user_likes', 'target_id', 'user_id');
     }
 
     public function reports()
@@ -142,44 +142,85 @@ class User extends Authenticatable
     {
         return Carbon::parse($this->birthday)->diffInYears(Carbon::now());
     }
+
+    public static function filterJob($query, $searchJob)
+    {
+        $allJobs = config('masterdata.job');
+
+        $maleSearchJobIndex = null;
+        $femaleSearchJobIndex = null;
+
+        foreach ($allJobs as $key => $value) {
+            foreach ($value as $gender => $job) {
+                if ($job == $searchJob) {
+                    if ($gender) {
+                        $maleSearchJobIndex = $key;
+                    } else {
+                        $femaleSearchJobIndex = $key;
+                    }
+                }
+
+            }
+
+        }
+        $query->where(function ($q) use ($maleSearchJobIndex, $femaleSearchJobIndex) {
+            if (!is_null($maleSearchJobIndex)) {
+                $q->where(function ($q) use ($maleSearchJobIndex) {
+                    $q->where(['sex' => MALE, 'job' => $maleSearchJobIndex]);
+
+                });
+
+            }
+            if (!is_null($femaleSearchJobIndex)) {
+                $q->orWhere(function ($q) use ($femaleSearchJobIndex) {
+                    $q->where(['sex' => FEMALE, 'job' => $femaleSearchJobIndex]);
+
+                });
+            }
+        });
+    }
+
     public static function getRecommended($filter, $orderParams, $start)
     {
         $orderBy = array_key_first($orderParams);
         $orderDir = $orderParams[$orderBy];
-        $genderFilter = $filter['sex'];
+        $filterGender = $filter['sex'];
         $searchName = $filter['name'];
         $searchAge = $filter['age'];
         $searchPhone = $filter['phone'];
-        $searchAge = is_null($filter['age'])  ? '' : Carbon::now()->format('yy') - $filter['age'];
+        $searchAge = is_null($filter['age']) ? '' : Carbon::now()->format('yy') - $filter['age'];
         $searchBirthDate = empty($searchAge) ? Carbon::now() : Carbon::now()->year($searchAge);
+        $filterJob = $filter['job'];
 
-        
-        $query = User::withCount(['likes', 'reports'])
-            ->having('likes_count', '>=', RECOMMEND_STANDARD_LIKE)
-            ->having('reports_count', '<=', RECOMMEND_STANDARD_REPORT)
+        $query = User::withCount(['likes as likes', 'reports as reports'])
+            ->having('likes', '>=', RECOMMEND_STANDARD_LIKE)
+            ->having('reports', '<=', RECOMMEND_STANDARD_REPORT)
             ->whereDate('birthday', '<', $searchBirthDate)
             ->whereYear('birthday', 'like', '%' . $searchAge . '%')
-
             ->orderBy($orderBy, $orderDir);
 
-        if (!is_null($genderFilter)) {
-            $query->where('sex', '=', $genderFilter);
+        if (!is_null($filterGender)) {
+            $query->where('sex', '=', $filterGender);
         }
+
+        if (!is_null($filterJob) && $filterJob != -1) {
+            self::filterJob($query, $filterJob);
+        }
+
         if (!is_null($searchName)) {
-            $query->where('name', 'like','%'. $searchName.'%');
+            $query->where('name', 'like', '%' . $searchName . '%');
         }
+
         if (!is_null($searchPhone)) {
-            $query->where('phone', 'like','%'. $searchPhone.'%');
+            $query->where('phone', 'like', '%' . $searchPhone . '%');
         }
-        
-        $recordsFiltered = $query;
+
+        $recordsFiltered = clone ($query);
         $recordsFiltered = count($recordsFiltered->get());
-        
         $users = $query->skip($start)->take(PAGINATION)->get();
-       
+
         return compact(['users', 'recordsFiltered']);
     }
-    
 
     public static function getPickup($filter, $orderByParams, $start)
     {
@@ -191,11 +232,13 @@ class User extends Authenticatable
         $searchAge = $filter['age'];
 
         $searchBirthDate = empty($searchAge) ? Carbon::now() : Carbon::now()->year($searchAge);
-
+        $filterJob = $filter['job'];
         $query = User::with(['hobbies'])
             ->where('pickup_status', PICKUP_STATUS)
             ->orderBy($orderBy, $orderDir);
-
+        if (!is_null($filterJob) && $filterJob != -1) {
+            self::filterJob($query, $filterJob);
+        }
         if (!is_null($searchName)) {
             $query->where('name', 'like', '%' . $searchName . '%');
         }
@@ -206,9 +249,8 @@ class User extends Authenticatable
         if (!is_null($searchAge)) {
             $searchBirthDate = Carbon::now()->year(Carbon::now()->format('yy') - $searchAge);
             $searchBirthYear = Carbon::now()->year(Carbon::now()->format('yy') - $searchAge)->startOfYear();
-           
+
             $query->whereBetween('birthday', array($searchBirthYear, $searchBirthDate));
-            
 
         }
 

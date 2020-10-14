@@ -40,6 +40,7 @@ class PickupIndexRequest extends FormRequest
             $filter = $this->input('columns.'.$colIndex.'.search.value',null);
             $filters[$colName] = $filter;
         }
+        
         return $filters;
     }
     /**

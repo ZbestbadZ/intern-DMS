@@ -17,7 +17,6 @@ class RecommendController extends Controller
         $filter = $request->getFilter();
         $orderParams = $request->getOrderByParameters();
         $start = $request->input('start', 0);
-
         $recommendedQuery = User::getRecommended($filter, $orderParams, $start);
         $recommended = $recommendedQuery['users'];
         $recordsTotal = 0;

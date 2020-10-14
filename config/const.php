@@ -11,4 +11,9 @@ if (!defined('PAGINATION')) {
 if (!defined('PICKUP_STATUS')) {
     define('PICKUP_STATUS', 1);
 } 
-
+if (!defined('MALE')) {
+    define('MALE', 1);
+} 
+if (!defined('FEMALE')) {
+    define('FEMALE', 0);
+} 
