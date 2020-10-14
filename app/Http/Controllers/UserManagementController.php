@@ -100,10 +100,10 @@ class UserManagementController extends Controller
         $data = $request->all();
         $user->update($data);
         try {
-            $hobby = UserHobby::where('user_id', $id)->delete('hobby');
-            $hobby = $request->hobby;
-            if ($request->has('hobby')) {               
-                foreach ($hobby as $hob) { 
+            $hobbies = UserHobby::where('user_id', $id)->delete('hobby');
+            $hobbies = $request->hobby;
+            if ($hobbies) {               
+                foreach ($hobbies as $hob) { 
                     UserHobby::create([
                         'user_id' => $user->id,
                         'hobby' => $hob
