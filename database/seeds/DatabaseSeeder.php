@@ -16,9 +16,9 @@ class DatabaseSeeder extends Seeder
             UserSeeder::class,
             UserBlockSeeder::class,
             UserReportSeeder::class,
-            UserHobbiesSeeder::class,
             UserImageSeeder::class,
             UserLikeSeeder::class,
+            UserHobbySeeder::class,
             ItemSeeder::class
         ];
 

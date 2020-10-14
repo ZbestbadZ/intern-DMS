@@ -1,7 +1,5 @@
 <?php
 
-use App\User;
-use Illuminate\Foundation\Auth\User as AuthUser;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -20,10 +18,6 @@ Route::get('/', 'HomeController@index');
 
 Auth::routes(['register' => false]);
 
-
-
-
-
 Route::get('/home', 'HomeController@index')->name('home');
 
 Route::group(['middleware' => 'auth'], function () {
@@ -33,7 +27,10 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/create', 'StickerController@getCreate')->name('sticker.create');
 
     });
-    Route::group(['prefix'=>'recommend'],function() {
-        Route::get('','RecommendController@indexView'); 
+    Route::group(['prefix' => 'recommend'], function () {
+        Route::get('', 'RecommendController@indexView');
+    });
+    Route::group(['prefix' => 'pickup'], function () {
+        Route::get('', 'PickupController@getIndex')->name('pickup.index');
     });
 });

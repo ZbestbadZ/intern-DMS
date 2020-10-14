@@ -39,7 +39,8 @@ $factory->define(User::class, function (Faker $faker) {
         'email' => $faker->unique()->safeEmail,
         'email_verified_at' => now(),
         'password' => bcrypt('123'),
-
-        'remember_token' => Str::random(10)
+        'pickup_status' => rand(0,1),
+        'remember_token' => Str::random(10),
+        'api_token'=>Str::orderedUuid()
     ];
 });

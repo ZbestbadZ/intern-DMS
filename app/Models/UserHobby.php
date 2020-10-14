@@ -13,7 +13,19 @@ class UserHobby extends Model
         'user_id', 'hobby'
     ];
 
+    protected $appends = [
+        'hobby_parsed'
+    ];
+
+
+
     public function users() {
         return $this->belongsToMany(User::class, 'user_id', 'id');
     }
+
+    public function getHobbyParsedAttribute()
+    {
+        return config('masterdata.hobby.'.$this->hobby);
+    } 
+
 }

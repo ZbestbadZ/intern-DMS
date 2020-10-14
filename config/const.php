@@ -8,3 +8,7 @@ if (!defined('RECOMMEND_STANDARD_REPORT')) {
 if (!defined('PAGINATION')) {
     define('PAGINATION', 10);
 }
+if (!defined('PICKUP_STATUS')) {
+    define('PICKUP_STATUS', 1);
+} 
+

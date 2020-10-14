@@ -2,12 +2,14 @@
 
 namespace App;
 
+use App\Models\UserHobby;
 use Carbon\Carbon;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
+
     use Notifiable;
     protected $table = 'users';
 
@@ -38,10 +40,11 @@ class User extends Authenticatable
         'tabaco',
         'birthplace',
         'housemate',
+        'pickup_status',
     ];
 
     protected $appends = [
-        'job_parsed', 'tabaco_parsed', 'alcohol_parsed', 'height_parsed', 'figure_parsed', 'income_parsed', 'expect_parsed', 'holiday_parsed', 'aca_parsed', 'housemate_parsed', 'birthplace_parsed',
+        'age','job_parsed', 'tabaco_parsed', 'alcohol_parsed', 'height_parsed', 'figure_parsed', 'income_parsed', 'expect_parsed', 'holiday_parsed', 'aca_parsed', 'housemate_parsed', 'birthplace_parsed',
     ];
     /**
      * The attributes that should be hidden for arrays.
@@ -49,7 +52,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $hidden = [
-        'password', 'remember_token',
+        'password', 'remember_token', 'api_token',
     ];
 
     /**
@@ -63,7 +66,7 @@ class User extends Authenticatable
 
     public function likes()
     {
-        return $this->belongsToMany(User::class, 'user_likes', 'target_id', 'user_id');
+        return $this->belongsToMany(User::class, 'user_likes', 'user_id', 'target_id');
     }
 
     public function reports()
@@ -135,6 +138,10 @@ class User extends Authenticatable
         return $this['birthplace'] = config('masterdata.birthplace.' . $this['birthplace']);
 
     }
+    public function getAgeAttribute()
+    {
+        return Carbon::parse($this->birthday)->diffInYears(Carbon::now());
+    }
     public static function getRecommended($filter, $orderParams, $start)
     {
         $orderBy = array_key_first($orderParams);
@@ -172,4 +179,43 @@ class User extends Authenticatable
        
         return compact(['users', 'recordsFiltered']);
     }
+    
+
+    public static function getPickup($filter, $orderByParams, $start)
+    {
+        $orderBy = array_key_first($orderByParams);
+        $orderDir = $orderByParams[$orderBy];
+        $searchName = $filter['name'];
+        $searchPhone = $filter['phone'];
+
+        $searchAge = $filter['age'];
+
+        $searchBirthDate = empty($searchAge) ? Carbon::now() : Carbon::now()->year($searchAge);
+
+        $query = User::with(['hobbies'])
+            ->where('pickup_status', PICKUP_STATUS)
+            ->orderBy($orderBy, $orderDir);
+
+        if (!is_null($searchName)) {
+            $query->where('name', 'like', '%' . $searchName . '%');
+        }
+
+        if (!is_null($searchPhone)) {
+            $query->where('phone', 'like', '%' . $searchPhone . '%');
+        }
+        if (!is_null($searchAge)) {
+            $searchBirthDate = Carbon::now()->year(Carbon::now()->format('yy') - $searchAge);
+            $searchBirthYear = Carbon::now()->year(Carbon::now()->format('yy') - $searchAge)->startOfYear();
+           
+            $query->whereBetween('birthday', array($searchBirthYear, $searchBirthDate));
+            
+
+        }
+
+        $recordsFiltered = clone ($query);
+        $users = $query->skip($start)->take(PAGINATION)->get();
+        $recordsFiltered = $recordsFiltered->select('id')->count();
+        return compact(['users', 'recordsFiltered']);
+    }
+
 }
