@@ -3,7 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
-
+use Illuminate\Support\Str;
 class CreateUsersTable extends Migration
 {
     /**
@@ -37,7 +37,9 @@ class CreateUsersTable extends Migration
             $table->tinyInteger('tabaco')->nullable();
             $table->tinyInteger('birthplace')->nullable();
             $table->tinyInteger('housemate')->nullable();
+            $table->tinyInteger('pickup_status')->default('0');
             $table->string('password',100);
+            $table->string('api_token', 80)->unique()->default();
             $table->rememberToken();
             $table->timestamps();
         });

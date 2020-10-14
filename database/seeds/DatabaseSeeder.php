@@ -15,11 +15,12 @@ class DatabaseSeeder extends Seeder
             AdminSeeder::class,
             UserSeeder::class,
             ItemSeeder::class,
-            UserHobbiesSeeder::class,
             UserImageSeeder::class,
             UserLikeSeeder::class,
             UserBlockSeeder::class,
             UserReportSeeder::class,
+            UserSeeder::class,
+            UserHobbySeeder::class
         ];
 
         $this->call($classes); 
