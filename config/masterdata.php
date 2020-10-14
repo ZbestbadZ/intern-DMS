@@ -120,7 +120,7 @@ return [
         '5' => ['1' => '12-15 million', '0' => '12-15 million'],
         '6' => ['1' => '15-18 million', '0' => '15-18 million'],
         '7' => ['1' => '18-30 million', '0' => '18-30 million'],
-        '8' => ['1' => 'More than 30 million', '0' => 'More than 30 million']
+        '8' => ['1' => 'more than 30 million', '0' => 'more than 30 million']
     ],
     'holiday' => [
         '1' => ['1' => 'Not selected', '0' => 'Not selected'],
