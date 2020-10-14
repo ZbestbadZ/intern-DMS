@@ -8,7 +8,6 @@
                 <form id="form" method="POST" enctype="multipart/form-data">
                     {{ csrf_field() }}
                     <input type="hidden" name="user_id" id="user_id" value="{{ $user->id }}">
-                    <input type="hidden" name="api_token" value="{{ Auth::user()->api_token }}">
 
                     <div class="form-group">                      
                         <label for="name">Name: </label>
@@ -147,13 +146,13 @@
                         <label for="hobby">Hobby:
                         
                             @foreach($hobby as  $key => $value)
-                                    <input type="checkbox" value="{{$key}}" name="hobby[]" id="hobby" @foreach ($user_hobby as $hob) 
-                                                        @if ( $hobby[($hob->hobby)] == $value) 
-                                                        checked="checked" @endif @endforeach />
+                                    <input type="checkbox" value="{{$key}}" name="hobby[]" id="hobby"
+                                            @foreach ($userHobby as $hob)
+                                            @if ($hob->hobby == $key) checked="checked" 
+                                            @endif @endforeach />
                                     {{$value}}
                                 
-                            @endforeach
-                        
+                            @endforeach  
                         </label>
                     </div>
 
@@ -210,7 +209,6 @@
             var user_id = $('#user_id').val();
             let url = $('[name="update"]').data('url');
             var formData = new FormData($(this)[0]);
-            formData.set("api_token",$('[name="api_token"]').val());
             $.ajax({
                 url: "/api/admin/edit_user/" + user_id,
                 type: "POST",

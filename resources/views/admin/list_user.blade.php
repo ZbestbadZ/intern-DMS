@@ -116,7 +116,7 @@
                     <div><b>Alcohol:</b> <span class="alcohol"></div>
                     <div><b>Holiday:</b> <span class="holiday"></div>
                     <div><b>Matching Expect:</b> <span class="matching_expect"></div>
-                    <div><b>Hooby:</b> <span class="hobby"></span></div>
+                    <div><b>Hobby:</b> <span class="hobby"></span></div>
                     <!-- /.account -->
                 </div>
                 <div class="modal-footer">
@@ -136,7 +136,7 @@
 
             $.ajaxSetup({
                 headers: {
-                    '_token': '<?php echo csrf_token(); ?>',
+                    "_token": $('meta[name="csrf-token"]').attr('content'),
                 }
             });
 
@@ -146,7 +146,9 @@
                 ajax: {
                     type: 'GET',
                     url: '/api/admin/list_user',
-                    data: '_token = <?php echo csrf_token(); ?>',
+                    data: {
+                        "api_token": $('[name="api_token"]').val(),
+                    },
                     dataSrc: 'data'
                 },
                 "columns": [{
@@ -158,7 +160,6 @@
                             $(nTd).html("<a id=\"detail\" href='#'>" +
                                 oData.name + "</a>");
                         }
-
                     },
                     {
                         "data": "birthday",
@@ -177,8 +178,8 @@
                         }
                     },
                     {
-                        "data": "job",
-                        
+                        "data": 'job_parsed',
+                                  
                     },
                     {
                         "data": "phone"
@@ -204,7 +205,9 @@
                     type: 'GET',
                     url: '/api/admin/' + data['id'],
                     dataType: 'json',
-                    data: '_token = <?php echo csrf_token(); ?>',
+                    data: {
+                        "api_token": $('[name="api_token"]').val(),
+                    },
                     success: function(data) {
                         $('.hobby').html('');
                         let user = data['user'];
@@ -213,7 +216,7 @@
                             return '<span style="margin-left: 50px;">' + content + '</span>';
                         }
                         $('.name').html(spanGen(user['name']));
-                        $('.gender').html(spanGen(user['sex']));
+                        $('.gender').html(spanGen(user['sex_parsed']));
                         $('.address').html(spanGen(user['address']));
                         $('.phone').html(spanGen(user['phone']));
                         $('.email').html(spanGen(user['email']));
@@ -222,22 +225,21 @@
                         $('.about_title').html(spanGen(user['about_title']));
 
                         $('.username').html(spanGen(user['username']));
-                        $('.aca_background').html(spanGen(user['aca_background']));
-                        $('.job').html(spanGen(user['job']));
-                        $('.anual_income').html(spanGen(user['anual_income']));
-                        $('.birthplace').html(spanGen(user['birthplace']));
-                        $('.figure').html(spanGen(user['figure']));
-                        $('.height').html(spanGen(user['height']));
-                        $('.tabaco').html(spanGen(user['tabaco']));
-                        $('.alcohol').html(spanGen(user['alcohol']));
-                        $('.holiday').html(spanGen(user['holiday']));
-                        $('.matching_expect').html(spanGen(user['matching_expect']));
-
-                        $.each(hobby, function(index, value) {
-                            var hobby = "<li style='margin-left:60px;'>" + value.hobby + "<br>" + "</li>"
-                            $('.hobby').append(hobby);
-                        })
+                        $('.aca_background').html(spanGen(user['aca_parsed']));
+                        $('.job').html(spanGen(user['job_parsed']));
+                        $('.anual_income').html(spanGen(user['income_parsed']));
+                        $('.birthplace').html(spanGen(user['birthplace_parsed']));
+                        $('.figure').html(spanGen(user['figure_parsed']));
+                        $('.height').html(spanGen(user['height_parsed']));
+                        $('.tabaco').html(spanGen(user['tabaco_parsed']));
+                        $('.alcohol').html(spanGen(user['alcohol_parsed']));
+                        $('.holiday').html(spanGen(user['holiday_parsed']));
+                        $('.matching_expect').html(spanGen(user['expect_parsed']))
                         
+                        $.each(hobby, function(index, value) {
+                            var hobby = "<li style='margin-left:60px;'>" + value.hobby_parsed + "<br>" + "</li>"
+                            $('.hobby').append(hobby);
+                        })                       
 
                         $('#detailModal').modal('show');
 

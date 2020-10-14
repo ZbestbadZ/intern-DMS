@@ -7,7 +7,6 @@ use Carbon\Carbon;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use App\Models;
-use App\Models\UserHobby;
 
 class User extends Authenticatable
 {
@@ -42,8 +41,9 @@ class User extends Authenticatable
         'alcohol',
         'tabaco',
         'birthplace',
-        'housemate'
+        'housemate',
         'pickup_status',
+        'api_token'
     ];
 
     /**
@@ -66,8 +66,11 @@ class User extends Authenticatable
     ];
 
     protected $appends = [
-        'age',
+        'age', 'job_parsed', 'tabaco_parsed', 'alcohol_parsed', 'height_parsed', 'figure_parsed', 
+        'income_parsed', 'expect_parsed', 'holiday_parsed', 'aca_parsed', 'housemate_parsed', 
+        'birthplace_parsed', 'sex_parsed'
     ];
+
     public function likes()
     {
         return $this->belongsToMany(User::class, 'user_likes', 'user_id', 'target_id');
@@ -93,52 +96,57 @@ class User extends Authenticatable
         return $this->hasMany(UserHobby::class, 'user_id', 'id');
     }
 
-    public static function mapUser($user)
-    {
-        $user['birthplace'] = config('masterdata.birthplace.' .$user['birthplace']);
-        $user['housemate'] = config('masterdata.housemate.'.$user['housemate'].'.'.$user['sex'] );
-        $user['aca_background'] = config('masterdata.aca_background.'.$user['aca_background'].'.'.$user['sex'] );
-        $user['holiday'] = config('masterdata.holiday.'.$user['holiday'].'.'.$user['sex'] );
-        $user['matching_expect'] = config('masterdata.matching_expect.'.$user['matching_expect'] );
-        $user['anual_income'] = config('masterdata.anual_income.'.$user['anual_income'].'.'.$user['sex'] );
-        $user['figure'] = config('masterdata.figure.'.$user['figure'] );
-        $user['height'] = config('masterdata.height.'.$user['height'] );
-        $user['alcohol'] = config('masterdata.alcohol.'.$user['alcohol'].'.'.$user['sex'] );
-        $user['tabaco'] = config('masterdata.tabaco.'.$user['tabaco'].'.'.$user['sex'] );
-        $user['job'] = config('masterdata.job.'.$user['job'].'.'.$user['sex'] );
-        return $user;
+    public function getJobParsedAttribute() {
+        return config('masterdata.job.' . $this['job'] . '.' . $this['sex']);
     }
 
-    public static function mapUsers($users)
-    {
-
-        $result = array_map(function ($user) {
-
-        $user['birthplace'] = config('masterdata.birthplace.' .$user['birthplace']);
-        $user['housemate'] = config('masterdata.housemate.'.$user['housemate'].'.'.$user['sex'] );
-        $user['aca_background'] = config('masterdata.aca_background.'.$user['aca_background'].'.'.$user['sex'] );
-        $user['holiday'] = config('masterdata.holiday.'.$user['holiday'].'.'.$user['sex'] );
-        $user['matching_expect'] = config('masterdata.matching_expect.'.$user['matching_expect'] );
-        $user['anual_income'] = config('masterdata.anual_income.'.$user['anual_income'].'.'.$user['sex'] );
-        $user['figure'] = config('masterdata.figure.'.$user['figure'] );
-        $user['height'] = config('masterdata.height.'.$user['height'] );
-        $user['alcohol'] = config('masterdata.alcohol.'.$user['alcohol'].'.'.$user['sex'] );
-        $user['tabaco'] = config('masterdata.tabaco.'.$user['tabaco'].'.'.$user['sex'] );
-        $user['job'] = config('masterdata.job.'.$user['job'].'.'.$user['sex'] );
-        return $user;
-        }, $users->toArray());
-
-    return $result;
-
+    public function getHeightParsedAttribute() {
+        return config('masterdata.height.' . $this['height']);
     }
 
-    public function getHobbiesParsed($id) {
-        $hobbiesRaw = User::with('hobbies')->find($id);
-        $result = array_map(function($hobby) {
-            $hobby['hobby'] = config('masterdata.hobby.'.$hobby['hobby']);
-            return $hobby;
-        },$hobbiesRaw->hobbies->toArray());
-        return $result;
+    public function getFigureParsedAttribute() {
+        return config('masterdata.figure.' . $this['figure']);
+    }
+
+    public function getIncomeParsedAttribute() {
+        return config('masterdata.anual_income.' . $this['anual_income'] . '.' . $this['sex']);
+    }
+
+    public function getExpectParsedAttribute() {
+        return config('masterdata.matching_expect.' . $this['matching_expect'] );
+    }
+
+    public function getHolidayParsedAttribute() {
+        return config('masterdata.holiday.' . $this['holiday'] . '.' . $this['sex']);
+    }
+
+    public function getAcaParsedAttribute() {
+        return config('masterdata.aca_background.' . $this['aca_background'] . '.' . $this['sex']);
+    }
+
+    public function getAlcoholParsedAttribute() {
+        return config('masterdata.alcohol.' . $this['alcohol'] . '.' . $this['sex']);
+    }
+
+    public function getTabacoParsedAttribute() {
+        return config('masterdata.tabaco.' . $this['tabaco'] . '.' . $this['sex']);
+    }
+
+    public function getBirthplaceParsedAttribute() {
+        return config('masterdata.birthplace.' . $this['birthplace']);
+    }
+
+    public function getHousemateParsedAttribute() {
+        return config('masterdata.housemate.' . $this['housemate'] . '.' . $this['sex']);
+    }
+
+    public function getSexParsedAttribute() {
+        if ($this->sex == 1) {
+            return "Male";
+        }
+        return "Female";
+    }
+
     public function getAgeAttribute()
     {
         return Carbon::parse($this->birthday)->diffInYears(Carbon::now());

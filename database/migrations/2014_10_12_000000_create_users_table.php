@@ -39,7 +39,7 @@ class CreateUsersTable extends Migration
             $table->tinyInteger('housemate')->nullable();
             $table->tinyInteger('pickup_status')->default('0');
             $table->string('password',100);
-            $table->string('api_token', 80)->unique()->default();
+            $table->string('api_token', 80)->unique()->nullable();
             $table->rememberToken();
             $table->timestamps();
         });
