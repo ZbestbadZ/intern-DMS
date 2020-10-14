@@ -21,6 +21,7 @@ class PickupIndexRequest extends FormRequest
         '2' => 'age',
         '3' => 'phone',
         '4' => 'job',
+        '6' => 'sex',
     ];
 
     public function getOrderByParameters()

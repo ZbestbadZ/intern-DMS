@@ -38,7 +38,7 @@
                             <th><input class="form-control" type="text" placeholder="Search name"></th>
                             <th><input class="form-control" type="text" placeholder="Search age"></th>
                             <th><input class="form-control" type="text" placeholder="Search phone"></th>
-                            <th><select class="form-control" name="jobSearch" id=""><option value="-1">All</option></select></select></th>
+                            <th><select class="form-control" name="jobSearch" id=""><option value="-1">All</option></select></th>
                             <th></th>
                             <th></th>
                             <th></th>

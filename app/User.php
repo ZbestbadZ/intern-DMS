@@ -228,7 +228,7 @@ class User extends Authenticatable
         $orderDir = $orderByParams[$orderBy];
         $searchName = $filter['name'];
         $searchPhone = $filter['phone'];
-
+        $filterGender = $filter['sex'];
         $searchAge = $filter['age'];
 
         $searchBirthDate = empty($searchAge) ? Carbon::now() : Carbon::now()->year($searchAge);
@@ -236,6 +236,9 @@ class User extends Authenticatable
         $query = User::with(['hobbies'])
             ->where('pickup_status', PICKUP_STATUS)
             ->orderBy($orderBy, $orderDir);
+        if (!is_null($filterGender)) {
+            $query->where('sex', '=', $filterGender);
+        }
         if (!is_null($filterJob) && $filterJob != -1) {
             self::filterJob($query, $filterJob);
         }

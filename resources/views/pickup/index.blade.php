@@ -34,7 +34,11 @@
                             <th><select class="form-control" name="jobSearch" id="">
                                 <option value="-1">All</option></select></th>
                             <th></th>
-                            <th></th>
+                            <th><select class="form-control " name="genderFilter" id="genderFilter">
+                                <option value="">All</option>
+                                <option value="1">Male</option>
+                                <option value="0">Female</option>
+                            </select></th>
                             <th></th>
                             <th></th>
                         </tr>
@@ -147,6 +151,9 @@
                     $(this).html('<input class="form-control" type="text" placeholder="Search ' + title + '" />');
                 }
 
+                $('select[name="genderFilter"]').change(function() {
+                table.columns([6]).search($(this).val()).draw();
+            });
                 if (index === 4) {
                     let thisTag = $(this);
                     $.ajax({
