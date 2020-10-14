@@ -6,11 +6,8 @@ use App\Models\UserHobby;
 use Carbon\Carbon;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-<<<<<<< HEAD
 use App\Models;
 use App\Models\UserHobby;
-=======
->>>>>>> 117f107d0059ae9b52407e41490162a96f39ce5b
 
 class User extends Authenticatable
 {
