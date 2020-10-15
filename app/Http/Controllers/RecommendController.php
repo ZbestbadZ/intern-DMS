@@ -21,7 +21,8 @@ class RecommendController extends Controller
         $recommended = $recommendedQuery['users'];
         $recordsTotal = $recommendedQuery['recordsTotal'];
         $recordsFiltered = $recommendedQuery['recordsFiltered'];
-        return response()->json(['data' => $recommended, 'recordsTotal' => $recordsTotal, 'recordsFiltered' => $recordsFiltered]);
+        $html = view('modal.message', compact('user'))->render();
+        return response()->json(['data' => $recommended,'html' => $html, 'recordsTotal' => $recordsTotal, 'recordsFiltered' => $recordsFiltered]);
     }
 
 

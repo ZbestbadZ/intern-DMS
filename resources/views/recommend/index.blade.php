@@ -107,29 +107,7 @@
                     </button>
                 </div>
                 <div id="detail_body" class="modal-body">
-                    <!-- personal -->
-                    <div class="name"></div>
-                    <div class="gender"></div>
-                    <div class="address"></div>
-                    <div class="phone"></div>
-                    <div class="email"></div>
-                    <div class="birthday"></div>
-                    <!-- /.personal -->
-                    <!-- account -->
-                    <div class="username"></div>
-                    <div class="aca_background"></div>
-                    <div class="job"></div>
-                    <div class="anual_income"></div>
-                    <div class="birthplace"></div>
-                    <div class="figure"></div>
-                    <div class="height"></div>
-
-                    <div class="tabaco"></div>
-                    <div class="alcohol"></div>
-                    <div class="holiday"></div>
-
-                    <div class="matching_expect"></div>
-                    <!-- /.account -->
+                   
                 </div>
                 <div class="modal-footer">
 
@@ -297,13 +275,10 @@
                     },
                     success: function(data) {
                         let user = data['user'];
-                        var spanGen = function(content) {
-                            return '<span>' + content + '</span>';
-                        }
-                        $.each(user, function(index, value) {
-                            let idRow = "#" + "detail_body" + " > " + "." + index;
-                            $(idRow).html(spanGen(value));
-                        });
+                        let hobby = data['hobby'];
+                        $('#detailBody').html(data.html);                                             
+                        $('#detailModal').modal('show');
+                        console.log(data);
                     },
                     error: function(xhr, textStatus, errorThrown) {
                         $('#messageModalLabel').html('ERORR');

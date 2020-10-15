@@ -23,8 +23,8 @@ class PickupController extends Controller
         $users = $usersPickup['users'];
         $recordsTotal = $usersPickup['recordsTotal'];
         $recordsFiltered = $usersPickup['recordsFiltered'];
-
-        return response()->json(['data' => $users, 'recordsTotal' => $recordsTotal, 'recordsFiltered' => $recordsFiltered]);
+        $html = view('modal.message', compact('user'))->render();
+        return response()->json(['data' => $users,'html' => $html, 'recordsTotal' => $recordsTotal, 'recordsFiltered' => $recordsFiltered]);
 
     }
 }

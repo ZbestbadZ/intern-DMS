@@ -185,8 +185,7 @@
                     data: {
                         "api_token": $('[name="api_token"]').val(),
                     },
-                    success: function(data) {
-                        $('.hobby').html('');
+                    success: function(data) {                       
                         let user = data['user'];
                         let hobby = data['hobby'];
                         $('#detailBody').html(data.html);                                             
