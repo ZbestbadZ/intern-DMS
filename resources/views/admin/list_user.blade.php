@@ -221,7 +221,7 @@
                                     .remove().draw(true);
 
                                 $('#messageModalLabel').html('Success');
-                                $('#messageBody').html('User is deleted successfully!');
+                                $('#messageBody').html('User ' + '<i>' + data['user']['name'] + '</i>' + ' is deleted successfully!');
                                 $('#messageModal').modal('show');
                             }
                         });
