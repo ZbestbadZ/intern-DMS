@@ -213,19 +213,25 @@ class User extends Authenticatable
 
         }
     }
+
     public static function getRecommended($filter, $orderParams, $start)
     {
 
         $query = User::withCount(['likes as likes', 'reports as reports'])
             ->having('likes', '>=', RECOMMEND_STANDARD_LIKE)
             ->having('reports', '<=', RECOMMEND_STANDARD_REPORT);
+
+        $recordsTotal = clone ($query);
+        $recordsTotal = count($recordsTotal->get());
+
         self::setFilterQuery($query, $filter, $orderParams);
+
         $recordsFiltered = clone ($query);
         $recordsFiltered = count($recordsFiltered->get());
 
         $users = $query->skip($start)->take(PAGINATION)->get();
 
-        return compact(['users', 'recordsFiltered']);
+        return compact(['users', 'recordsFiltered', 'recordsTotal']);
     }
 
     public static function getPickup($filter, $orderByParams, $start)
@@ -233,12 +239,17 @@ class User extends Authenticatable
         $query = User::with(['hobbies'])
             ->where('pickup_status', PICKUP_STATUS);
 
+        $recordsTotal = clone ($query);
+        $recordsTotal = $recordsTotal->select('id')->count();
+
         self::setFilterQuery($query, $filter, $orderByParams);
 
         $recordsFiltered = clone ($query);
-        $users = $query->skip($start)->take(PAGINATION)->get();
         $recordsFiltered = $recordsFiltered->select('id')->count();
-        return compact(['users', 'recordsFiltered']);
+
+        $users = $query->skip($start)->take(PAGINATION)->get();
+
+        return compact(['users', 'recordsFiltered','recordsTotal']);
     }
 
 }

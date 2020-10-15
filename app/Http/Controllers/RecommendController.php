@@ -19,7 +19,7 @@ class RecommendController extends Controller
         $start = $request->input('start', 0);
         $recommendedQuery = User::getRecommended($filter, $orderParams, $start);
         $recommended = $recommendedQuery['users'];
-        $recordsTotal = 0;
+        $recordsTotal = $recommendedQuery['recordsTotal'];
         $recordsFiltered = $recommendedQuery['recordsFiltered'];
         return response()->json(['data' => $recommended, 'recordsTotal' => $recordsTotal, 'recordsFiltered' => $recordsFiltered]);
     }

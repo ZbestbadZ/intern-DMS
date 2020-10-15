@@ -21,7 +21,7 @@ class PickupController extends Controller
 
         $usersPickup = User::getPickup($filter,$orderByParams,$start);
         $users = $usersPickup['users'];
-        $recordsTotal = User::select('id','pickup_status')->where('pickup_status', PICKUP_STATUS)->count();
+        $recordsTotal = $usersPickup['recordsTotal'];
         $recordsFiltered = $usersPickup['recordsFiltered'];
 
         return response()->json(['data' => $users, 'recordsTotal' => $recordsTotal, 'recordsFiltered' => $recordsFiltered]);
