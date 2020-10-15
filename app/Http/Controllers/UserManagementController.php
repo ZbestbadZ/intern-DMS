@@ -118,7 +118,9 @@ class UserManagementController extends Controller
 
     public function show($id) {
         $user = User::with('hobbies')->find($id);
-        return response()->json(['user'=>$user]);
+        $html = view('modal.message', compact('user'))->render();
+        
+        return response()->json(['user'=>$user, 'html' => $html]);
     }
 
     public function destroy($id) {
