@@ -273,12 +273,9 @@
                     data: {
                         "api_token": $('[name="api_token"]').val(),
                     },
-                    success: function(data) {
-                        let user = data['user'];
-                        let hobby = data['hobby'];
+                    success: function(data) {             
                         $('#detailBody').html(data.html);                                             
                         $('#detailModal').modal('show');
-                        console.log(data);
                     },
                     error: function(xhr, textStatus, errorThrown) {
                         $('#messageModalLabel').html('ERORR');

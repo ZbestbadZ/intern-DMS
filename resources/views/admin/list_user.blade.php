@@ -190,8 +190,6 @@
                         let hobby = data['hobby'];
                         $('#detailBody').html(data.html);                                             
                         $('#detailModal').modal('show');
-
-                        console.log(data);
                     }
                 });
 

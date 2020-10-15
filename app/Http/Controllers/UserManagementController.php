@@ -96,11 +96,11 @@ class UserManagementController extends Controller
     }
 
     public function update(EditUserManagementRequest $request, $id) {
-        $user = User::find($id);        
-        $data = $request->all();
-        $user->update($data);
+        $user = User::with(['hobbies'])->where('id', $id)->first();
+        $data = $request->all();      
         try {
-            $hobbies = UserHobby::where('user_id', $id)->delete('hobby');
+            $user->update($data);
+            $user->hobbies()->delete();
             $hobbies = $request->hobby;
             if ($hobbies) {               
                 foreach ($hobbies as $hob) { 
