@@ -30,7 +30,7 @@ class EditUserManagementRequest extends FormRequest
             'password' => 'required|min:3|max:100|required_with:password_confirmation|same:password_confirmation',
             'password_confirmation' => 'min:3|max:100',
             'sex' => 'required',
-            'birthday' => 'required|date',
+            'birthday' => 'required|date|before:now|after:-13 years',
             'about' => 'required|max:100|min:3',
             'about_title' => 'required|max:100|min:3',
             'phone' => 'nullable|numeric',
