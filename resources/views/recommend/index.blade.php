@@ -5,13 +5,20 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col d-flex justify-content-center">
-                <span class="display-4">PICK UP USERS</span>
-                <a href=""></a>
+                <span class="display-4">Recommend User</span>
             </div>
         </div>
-        <div class="row d-flex justify-content-center">
+        <div class="row d-flex justify-content-start">
             <div class="col">
-                <table id="display" class="table table-bordered table-striped table-light">
+                <div class="float-left pb-4">
+                    <label for="genderFilter"><b>Gender:</b></label>
+                    <select class="form-control " name="genderFilter" id="genderFilter">
+                        <option value="">All</option>
+                        <option value="1">Male</option>
+                        <option value="0">Female</option>
+                    </select>
+                </div>
+                <table id="display" class=" table table-bordered table-striped table-light">
                     <thead class="thead-dark">
                         <tr>
                             <th>id</th>
@@ -28,17 +35,12 @@
                     <tfoot>
                         <tr>
                             <th></th>
-                            <th>name</th>
-                            <th><input class="form-control" type="number" placeholder="Search age" /></th>
-                            <th>phone</th>
-                            <th><select class="form-control" name="jobSearch" id="">
-                                <option value="-1">All</option></select></th>
+                            <th><input class="form-control" type="text" placeholder="Search name"></th>
+                            <th><input class="form-control" type="text" placeholder="Search age"></th>
+                            <th><input class="form-control" type="text" placeholder="Search phone"></th>
+                            <th><select class="form-control" name="jobSearch" id=""><option value="-1">All</option></select></th>
                             <th></th>
-                            <th><select class="form-control " name="genderFilter" id="genderFilter">
-                                <option value="">All</option>
-                                <option value="1">Male</option>
-                                <option value="0">Female</option>
-                            </select></th>
+                            <th></th>
                             <th></th>
                             <th></th>
                         </tr>
@@ -70,28 +72,6 @@
         </div>
     </div>
 
-    <div class="modal fade" id="messageModal" tabindex="-1" role="dialog" aria-labelledby="messageModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="messageModalLabel"></h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div id="messageBody" class="modal-body">
-
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">OK</button>
-
-                </div>
-            </div>
-        </div>
-    </div>
-
-
     <div class="modal fade" id="detailModal" tabindex="-1" role="dialog" aria-labelledby="detailModalLabel"
         aria-hidden="true">
         <div class="modal-dialog" role="document">
@@ -102,7 +82,7 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <div id="detailBody" class="modal-body">
+                <div id="detail_body" class="modal-body">
                     <!-- personal -->
                     <div class="name"></div>
                     <div class="gender"></div>
@@ -135,49 +115,30 @@
         </div>
     </div>
     <!-- hidden -->
-    <input type="hidden" name="api_token" value="{{ Auth::user()->api_token }}">
+    <input class="" type="hidden" name="api_token" value="{{ Auth::user()->api_token }}">
 @endsection
 
 @push('scripts')
     <script>
         var deleteCallback = null;
+
         $(document).ready(function() {
+            $.ajaxSetup({
+                headers: {
+                    "_token": $('meta[name="csrf-token"]').attr('content'),
+                },
+            });
 
-            $('#display tfoot th').each(function(index, value) {
-                searchbyTextColIndex = [1, 3];
-                if ($.inArray(index, searchbyTextColIndex) != -1) {
-                    var title = $(this).text();
-
-                    $(this).html('<input class="form-control" type="text" placeholder="Search ' + title + '" />');
-                }
-
-                $('select[name="genderFilter"]').change(function() {
+            $('select[name="genderFilter"]').change(function() {
                 table.columns([6]).search($(this).val()).draw();
             });
-                if (index === 4) {
-                    let thisTag = $(this);
-                    $.ajax({
-                        url: 'api/masterData/job',
-                        data: {
-                            "api_token": $('input[name="api_token"]').val()
-                        },
-                        success: function(data) {
-                            $.each(data, function(index, value) {
 
-                                let selectTag = "<option value=\"" + value + "\">" +
-                                    value + "</option>";
 
-                                $(thisTag).find("select").append(selectTag);
-                            });
-                        },
-                    });
 
-                }
-            });
 
+            //datatable
             var table = $('#display').DataTable({
                 initComplete: function() {
-                   
                     this.api().columns().every(function() {
                         var that = this;
 
@@ -189,56 +150,61 @@
                                     .draw();
                             }
                         });
+
                     });
                 },
-                "processing": true,
+                "pageLength": 10,
                 "serverSide": true,
+                "processing": true,
                 "pagingType": "simple_numbers",
+                searchPanes: {
+                    layout: 'columns-1',
+
+                },
                 "searching": true,
                 dom: 'rtip',
 
                 ajax: {
-                    url: '/api/pickup',
+                    type: 'GET',
+                    url: '/api/recommend',
                     data: {
-                        "api_token": $('input[name="api_token"]').val(),
-                    }
+                        "api_token": $('[name="api_token"]').val(),
+                    },
+                    dataSrc: 'data'
                 },
-
                 "columns": [
 
                     {
-                        "data": "id",
-                        "name": "id",
+                        "data": "id"
                     },
 
                     {
                         "data": "name",
-                        "name": "name",
                         "fnCreatedCell": function(nTd, sData, oData, iRow, iCol) {
                             $(nTd).html("<a id=\"detail\" href='#'>" +
                                 oData.name + "</a>");
                         }
                     },
                     {
-                        "data": "age",
-                        "name": "age",
+                        "data": "birthday",
+                        "mRender": function(data, type, row) {
+                            let birthYear = new Date(data).getFullYear();
+                            age = new Date().getFullYear() - birthYear;
+                            return age
 
+                        }
                     },
                     {
-                        "data": "phone",
-                        "name": "phone",
+                        "data": "phone"
                     },
                     {
-                        "data": "job_parsed",
-                        "name": "job",
+                        "data": "job_parsed"
                     },
                     {
-                        "data": "email",
-                        "name": "email"
+                        "data": "email"
                     },
                     {
                         "data": "sex",
-                        "name": "sex",
                         "mRender": function(data, type, row) {
                             if (data == 1) return "Male";
                             else return "Female";
@@ -247,10 +213,9 @@
                     },
                     {
                         "data": "birthday",
-                        "name": "birthday",
                         "mRender": function(data, type, row) {
 
-                            return moment(data).format("DD/MM/yyyy");
+                            return moment(data).format('DD/MM/YYYY');
                         }
                     },
                     {
@@ -267,15 +232,31 @@
                 }, {
                     "searchable": false,
                     "targets": [0, 5, 7, 8],
-                }],
+                }, ],
                 "order": [
                     [1, 'asc']
                 ]
             });
-            //select
-            $('select[name="jobSearch"]').change(function() {
-                        table.columns(4).search($(this).val()).draw();
+            $.ajax({
+                url: 'api/masterData/job',
+                data: {
+                    "api_token": $('input[name="api_token"]').val()
+                },
+                success: function(data) {
+                    let jobSelectTag = $('select[name="jobSearch"]');
+                    $.each(data, function(index, value) {
+
+                        let optionTag = "<option value=\"" + value + "\">" +
+                            value + "</option>";
+
+                        jobSelectTag.append(optionTag);
+                    });
+                },
             });
+            $('select[name="jobSearch"]').change(function() {
+                table.columns(4).search($(this).val()).draw();
+            });
+
             $('#display tbody ').on('click', '.edit', function() {
 
                 var data = table.row($(this).parents('tr')).data();
@@ -286,11 +267,19 @@
                 var data = table.row($(this).parents('tr')).data();
                 $.ajax({
                     type: 'GET',
-                    url: '/api/admin/' + data['id'],
-                    data: '_token = <?php echo csrf_token(); ?>',
+                    url: '/api/recommend/' + data['id'],
+                    data: {
+                        "api_token": $('[name="api_token"]').val(),
+                    },
                     success: function(data) {
-                        $('#detailBody').html(data.html);
-                        $('#detailModal').modal('show');
+                        let user = data['user'];
+                        var spanGen = function(content) {
+                            return '<span>' + content + '</span>';
+                        }
+                        $.each(user, function(index, value) {
+                            let idRow = "#" + "detail_body" + " > " + "." + index;
+                            $(idRow).html(spanGen(value));
+                        });
                     }
                 });
 
@@ -309,22 +298,11 @@
                         $.ajax({
                             type: 'DELETE',
                             url: '/api/admin/' + data['id'],
-                            data: '_token = <?php echo csrf_token(); ?>',
-                            success: function(data) {
-                                var re = row
-                                    .remove().draw(true);
-                                $('#messageModalLabel').html('Success');
-                                $('#messageBody').html('Deleted ' + data['item'][
-                                    'name'
-                                ]);
-                                $('#messageModal').modal('show');
+                            data: {
+                                "api_token": $('[name="api_token"]').val(),
                             },
-                            error: function(xhr, textStatus, errorThrown) {
-                                $('#messageModalLabel').html('ERORR');
-                                $('#messageBody').html(
-                                    'somthing went wrong can\'t  delete ' + itemName
-                                );
-                                $('#messageModal').modal('show');
+                            success: function(data) {
+                                var re = row.remove().draw(false);
                             }
                         });
                     }

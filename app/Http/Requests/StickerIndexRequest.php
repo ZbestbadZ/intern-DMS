@@ -4,24 +4,17 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class PickupIndexRequest extends FormRequest
+class StickerIndexRequest extends FormRequest
 {
+
     protected $sortable = [
         '0' => 'id',
         '1' => 'name',
-        '2' => 'birthday',
-        '3' => 'phone',
-        '4' => 'job',
-        '5' => 'email',
-        '6' => 'sex',
-        '7' => 'birthday',
+        '2' => 'price'
     ];
     protected $searchable = [
         '1' => 'name',
-        '2' => 'age',
-        '3' => 'phone',
-        '4' => 'job',
-        '6' => 'sex',
+        '2' => 'price'
     ];
 
     public function getOrderByParameters()
@@ -34,16 +27,15 @@ class PickupIndexRequest extends FormRequest
         return $sort;
     }
 
-    public function getFilter()
-    {
-        $filters = array();
+    public function getFilter() {
+        $filters = [];
         foreach($this->searchable as $colIndex=>$colName) {
-            $filter = $this->input('columns.'.$colIndex.'.search.value',null);
-            $filters[$colName] = $filter;
+            $search = $this->input('columns.'.$colIndex.'.search.value',null);
+            $filters[$colName] = $search;   
         }
-        
         return $filters;
     }
+
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -62,7 +54,7 @@ class PickupIndexRequest extends FormRequest
     public function rules()
     {
         return [
-
+            //
         ];
     }
 }

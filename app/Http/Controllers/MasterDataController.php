@@ -18,6 +18,7 @@ class MasterDataController extends Controller
                 $allJobs[$index++] = $job[0]; 
             }
         }
+        sort($allJobs);
         return response()->json($allJobs);
     }
 }

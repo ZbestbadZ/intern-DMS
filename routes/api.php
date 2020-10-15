@@ -24,6 +24,10 @@ Route::group(['middleware'=>'auth:api'],function() {
         Route::post('', 'StickerController@store');
         Route::delete('{id}','StickerController@destroy');
     });
+    Route::group(['prefix'=>'recommend'],function() {
+        Route::get('','RecommendController@index');
+        Route::get('/{id}','RecommendController@show');
+    });
     Route::group(['prefix'=>'pickup'],function(){
         Route::get('','PickupController@index');
       
@@ -34,8 +38,3 @@ Route::group(['middleware'=>'auth:api'],function() {
     });
 });
 
-
-
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
-});
