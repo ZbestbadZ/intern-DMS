@@ -41,11 +41,11 @@ class User extends Authenticatable
         'tabaco',
         'birthplace',
         'housemate',
-        'pickup_status',
+        'pickup_status'
     ];
 
     protected $appends = [
-        'age', 'job_parsed', 'tabaco_parsed', 'alcohol_parsed', 'height_parsed', 'figure_parsed', 'income_parsed', 'expect_parsed', 'holiday_parsed', 'aca_parsed', 'housemate_parsed', 'birthplace_parsed',
+        'age', 'job_parsed', 'tabaco_parsed', 'alcohol_parsed', 'height_parsed', 'figure_parsed', 'income_parsed', 'expect_parsed', 'holiday_parsed', 'aca_parsed', 'housemate_parsed', 'birthplace_parsed'
     ];
     /**
      * The attributes that should be hidden for arrays.

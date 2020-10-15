@@ -8,7 +8,7 @@ class Item extends Model
 {
     protected $table = 'items';
     protected $fillable = [
-        'name', 'price', 'path',
+        'name', 'price', 'path'
     ];
 
     public static function getAllItems($filter, $orderParams, $start)
