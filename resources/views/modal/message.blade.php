@@ -6,11 +6,11 @@
     <b>Email: </b><span style="margin-left: 20px;">{{ $user->email }}</span><br>
     <b>About:</b> <span style="margin-left: 20px;">{{ $user->about }}</span><br>
     <b>About Title: </b><span style="margin-left: 20px;">{{ $user->about_title }}</span><br>
-    <b>Birthday:</b> <span style="margin-left: 20px;">{{ $user->birthday }}</span><br>
+    <b>Birthday:</b> <span style="margin-left: 20px;">{{ $user->birthday->format('d/m/Y') }}</span><br>
     <b>Username:</b> <span style="margin-left: 20px;">{{ $user->username }}</span><br>
     <b>Aca Background: </b><span style="margin-left: 20px;">{{ $user->aca_parsed }}</span><br>
     <b>Job: </b><span style="margin-left: 20px;">{{ $user->job_parsed }}</span><br>
-    <b>Anual Income:</b> <span style="margin-left: 20px;">{{ $user->anual_parsed }}</span><br>
+    <b>Anual Income:</b> <span style="margin-left: 20px;">{{ $user->income_parsed }}</span><br>
     <b>Figure: </b><span style="margin-left: 20px;">{{ $user->figure_parsed }}</span><br>
     <b>Height:</b> <span style="margin-left: 20px;">{{ $user->height_parsed }}</span><br>
     <b>Tabaco: </b><span style="margin-left: 20px;">{{ $user->tabaco_parsed }}</span><br>
