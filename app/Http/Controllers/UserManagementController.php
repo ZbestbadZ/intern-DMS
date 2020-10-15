@@ -28,7 +28,7 @@ class UserManagementController extends Controller
         if(empty($message)) {
             return view('admin.list_user');
         }
-        return redirect()->route('admin.index')->with('message', $message);
+        return redirect()->route('admin.list_user')->with('message', $message);
     }
 
     public function index() {

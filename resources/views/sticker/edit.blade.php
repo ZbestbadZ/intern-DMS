@@ -3,51 +3,56 @@
 @section('content')
     <div class="container">
 
-        <div class="row d-flex justify-content-center">
+        <div class="row d-flex align-items-stretch justify-content-center pt-5 pb-5">
             <div class="col-6">
                 <img class="img-fluid" src="{{ url('storage/' . $item->path) }}" alt="">
             </div>
             <div class="col-6">
-                <form id="form" method="POST" enctype="multipart/form-data">
-                    {{ csrf_field() }}
-                    {{ method_field('PATCH') }}
-                    <!-- input -->
-                    <input class="" type="hidden" name="user_id" value="{{ $item->id }}">
-                    <input class="" type="hidden" name="api_token" value="{{ Auth::user()->api_token }}">
-                    <div class="form-group">
-                        <label for="name">Name</label>
-                        <input name="name" type="text" id="name" required placeholder="" value="{{ $item->name }}">
-
-
-                        <div class="text-danger"><strong><span id="error_name"></span></strong></div>
-
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title d-flex align-items-center"><span class=""><b>Edit Item {{$item->id}}</b></span></h5>
                     </div>
-                    <div class="form-group">
-                        <label for="price">Price</label>
-                        <input name="price" required type="number" id="price" value="{{ $item->price }}" placeholder="">
+                    <div class="card-body">
+                   
+                        <form id="form" method="POST" enctype="multipart/form-data">
+                            {{ csrf_field() }}
+                            {{ method_field('PATCH') }}
+                            <!-- input -->
+                            <input class="" type="hidden" name="user_id" value="{{ $item->id }}">
+                            <input class="" type="hidden" name="api_token" value="{{ Auth::user()->api_token }}">
+                            <div class="form-group">
+                                <label for="name">Name: </label>
+                                <input class="form-control" name="name" type="text" id="name" required placeholder="" value="{{ $item->name }}">
+                                <div class="text-danger"><strong><span id="error_name"></span></strong></div>
+        
+                            </div>
+                            <div class="form-group">
+                                <label for="price">Price: </label>
+                                <input class="form-control" name="price" required type="number" id="price" value="{{ $item->price }}" placeholder="">        
+                                <div class="text-danger"><strong><span id="error_price"></span></strong></div>        
+                            </div>
 
+                            
+                            <div class="form-group">
 
-
-                        <div class="text-danger"><strong><span id="error_price"></span></strong></div>
-
-
+                                
+                                <label for="image">Image File</label>
+                                <input name="image" class="form-control-file" type="file" id="image" placeholder="">
+        
+        
+                                <div class="text-danger"><strong><span id="error_image"></span></strong></div>
+        
+        
+                            </div>
+        
+        
+                            <!-- end of input -->
+        
+                            <button type="" class="btn btn-primary btnsave">Save</button>
+                        </form>
                     </div>
-                    <div class="form-group">
-                        <label for="image">Image File</label>
-                        <input name="image" class="form-control-file" type="file" id="image" placeholder="">
-
-
-                        <div class="text-danger"><strong><span id="error_image"></span></strong></div>
-
-
-                    </div>
-
-
-                    <!-- end of input -->
-
-                    <button type="" class="btn btn-primary btnsave">Save</button>
-                </form>
-
+                </div>
+                
             </div>
         </div>
     </div>

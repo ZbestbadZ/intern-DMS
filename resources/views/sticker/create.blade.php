@@ -3,38 +3,47 @@
 @section('content')
     <div class="container">
 
-        <div class="row d-flex justify-content-center">
+        <div class="row d-flex justify-content-center pt-4 pb-5">
             <div class="col-8">
-                <form id="form" enctype="multipart/form-data">
-                    <!-- hidden -->
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title d-flex align-items-center"><span class=""><b>Add new Item</b></span></h5>
+                   
+                    </div>
+                    <div class="card-body">
+                        <form id="form" enctype="multipart/form-data">
+                            <!-- hidden -->
+                        
+                            <input class="" type="hidden" name="api_token" value="{{ Auth::user()->api_token }}">
+                            <!-- input -->
+                            <div class="form-group">
+                                <label for="name">Name</label>
+                                <input class="form-control" name="name" type="text" id="name" required placeholder="">
+        
+                                <div class="text-danger"><strong><span id="error_name"></span></strong></div>
+        
+                            </div>
+                            <div class="form-group">
+                                <label for="price">Price</label>
+                                <input class="form-control" name="price" required type="number" id="price" placeholder="">
+        
+                                <div class="text-danger"><strong><span id="error_price"></span></strong></div>
+        
+                            </div>
+                            <div class="form-group">
+                                <label for="image">Image File</label>
+                                <input name="image" class="form-control-file" type="file" id="image" required placeholder="">
+        
+                                <div class="text-danger"><strong><span id="error_image"></span></strong></div>
+        
+                            </div>
+                            <!-- end of input -->
+        
+                            <button class="btn btn-primary btnsave" type="submit" name="create">Create</button>
+                        </form>
+                    </div>
+                </div>
                 
-                    <input class="" type="hidden" name="api_token" value="{{ Auth::user()->api_token }}">
-                    <!-- input -->
-                    <div class="form-group">
-                        <label for="name">Name</label>
-                        <input name="name" type="text" id="name" required placeholder="">
-
-                        <div class="text-danger"><strong><span id="error_name"></span></strong></div>
-
-                    </div>
-                    <div class="form-group">
-                        <label for="price">Price</label>
-                        <input name="price" required type="number" id="price" placeholder="">
-
-                        <div class="text-danger"><strong><span id="error_price"></span></strong></div>
-
-                    </div>
-                    <div class="form-group">
-                        <label for="image">Image File</label>
-                        <input name="image" class="form-control-file" type="file" id="image" required placeholder="">
-
-                        <div class="text-danger"><strong><span id="error_image"></span></strong></div>
-
-                    </div>
-                    <!-- end of input -->
-
-                    <button class="btn btn-primary btnsave" type="submit" name="create">Create</button>
-                </form>
 
             </div>
         </div>

@@ -197,7 +197,8 @@
                 contentType: false,
                 processData: false,
                 success: function(response) {
-                    window.location.href = url;
+                    window.location.href = url + "?message=" + response['success'] ;
+
                 },
                 error:function(error){
                     console.log(error);
