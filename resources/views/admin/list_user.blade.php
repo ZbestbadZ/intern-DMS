@@ -92,33 +92,10 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <div id="detailBody" class="modal-body">
-                    <!-- personal -->
-                    <div><b>Name:</b> <span class="name"></div>
-                    <div><b>Gender:</b> <span class="gender"></div>
-                    <div><b>Address:</b> <span class="address"></div>
-                    <div><b>Phone:</b> <span class="phone"></div>
-                    <div><b>Email:</b> <span class="email"></div>
-                    <div><b>Birthday:</b> <span class="birthday"></div>
-                    <div><b>About:</b> <span class="about"></div>
-                    <div><b>About Title:</b> <span class="about_title"></div>
-                    <!-- /.personal -->
-                    <!-- account -->
-                    <div><b>Username:</b> <span class="username"></div>
-                    <div><b>Aca Background:</b> <span class="aca_background"></div>
-                    <div><b>Job:</b> <span class="job"></div>
-                    <div><b>Anual Income:</b> <span class="anual_income"></div>
-                    <div ><b>Birthplace:</b> <span class="birthplace"></div>
-                    <div><b>Figure:</b> <span class="figure"></div>
-                    <div><b>Height:</b> <span class="height"></div>
 
-                    <div><b>Tabaco:</b> <span class="tabaco"></div>
-                    <div><b>Alcohol:</b> <span class="alcohol"></div>
-                    <div><b>Holiday:</b> <span class="holiday"></div>
-                    <div><b>Matching Expect:</b> <span class="matching_expect"></div>
-                    <div><b>Hobby:</b> <span class="hobby"></span></div>
-                    <!-- /.account -->
+                <div id="detailBody" class="modal-body">                   
                 </div>
+
                 <div class="modal-footer">
 
                     <button type="button" data-dismiss="modal" class="btn btn-primary">Close</button>
@@ -208,39 +185,10 @@
                     data: {
                         "api_token": $('[name="api_token"]').val(),
                     },
-                    success: function(data) {
-                        $('.hobby').html('');
+                    success: function(data) {                       
                         let user = data['user'];
                         let hobby = data['hobby'];
-                        var spanGen = function(content) {
-                            return '<span style="margin-left: 50px;">' + content + '</span>';
-                        }
-                        $('.name').html(spanGen(user['name']));
-                        $('.gender').html(spanGen(user['sex_parsed']));
-                        $('.address').html(spanGen(user['address']));
-                        $('.phone').html(spanGen(user['phone']));
-                        $('.email').html(spanGen(user['email']));
-                        $('.birthday').html(spanGen(user['birthday']));
-                        $('.about').html(spanGen(user['about']));
-                        $('.about_title').html(spanGen(user['about_title']));
-
-                        $('.username').html(spanGen(user['username']));
-                        $('.aca_background').html(spanGen(user['aca_parsed']));
-                        $('.job').html(spanGen(user['job_parsed']));
-                        $('.anual_income').html(spanGen(user['income_parsed']));
-                        $('.birthplace').html(spanGen(user['birthplace_parsed']));
-                        $('.figure').html(spanGen(user['figure_parsed']));
-                        $('.height').html(spanGen(user['height_parsed']));
-                        $('.tabaco').html(spanGen(user['tabaco_parsed']));
-                        $('.alcohol').html(spanGen(user['alcohol_parsed']));
-                        $('.holiday').html(spanGen(user['holiday_parsed']));
-                        $('.matching_expect').html(spanGen(user['expect_parsed']))
-                        
-                        $.each(user['hobbies'], function(index, value) {
-                            var hobby = "<li style='margin-left:60px;'>" + value.hobby_parsed + "<br>" + "</li>"
-                            $('.hobby').append(hobby);
-                        })                       
-
+                        $('#detailBody').html(data.html);                                             
                         $('#detailModal').modal('show');
 
                         console.log(data);
