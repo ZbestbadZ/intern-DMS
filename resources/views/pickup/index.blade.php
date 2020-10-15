@@ -195,7 +195,7 @@
                 "serverSide": true,
                 "pagingType": "simple_numbers",
                 "searching": true,
-                dom: 'frtip',
+                dom: 'rtip',
 
                 ajax: {
                     url: '/api/pickup',
