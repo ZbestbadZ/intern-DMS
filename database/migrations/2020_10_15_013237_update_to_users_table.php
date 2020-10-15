@@ -13,7 +13,7 @@ class UpdateToUsersTable extends Migration
      */
     public function up()
     {
-        Schema::table('users', function (Blueprint $table) {
+     
             Schema::table('users',function(Blueprint $table){
                 $table->smallInteger('figure')->nullable()->after('height')->change();
                 $table->smallInteger('anual_income')->nullable()->change();
@@ -26,7 +26,7 @@ class UpdateToUsersTable extends Migration
                 $table->smallInteger('housemate')->nullable()->change();
     
             });
-        });
+     
     }
 
     /**
