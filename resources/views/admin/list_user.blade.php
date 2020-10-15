@@ -236,7 +236,7 @@
                         $('.holiday').html(spanGen(user['holiday_parsed']));
                         $('.matching_expect').html(spanGen(user['expect_parsed']))
                         
-                        $.each(hobby, function(index, value) {
+                        $.each(user['hobbies'], function(index, value) {
                             var hobby = "<li style='margin-left:60px;'>" + value.hobby_parsed + "<br>" + "</li>"
                             $('.hobby').append(hobby);
                         })                       
