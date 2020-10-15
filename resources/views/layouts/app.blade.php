@@ -75,6 +75,8 @@
         <main style="background-color:  white;" class="p-0 m-0">
             @yield('content')
         </main>
+       
+        
     </div>
     @stack('scripts')
 </body>

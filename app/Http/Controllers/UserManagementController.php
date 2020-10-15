@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Carbon;
 use App\Models\UserHobby;
 use Illuminate\Contracts\Auth\Guard;
+use DB;
 
 class UserManagementController extends Controller
 {
@@ -27,46 +28,12 @@ class UserManagementController extends Controller
         if(empty($message)) {
             return view('admin.list_user');
         }
-        return redirect()->route('admin.index')->with('message', $message);
+        return redirect()->route('admin.list_user')->with('message', $message);
     }
 
     public function index() {
         $users = User::all();
-        if(empty($users)) {
-            return abort(404);
-        }
-
-        $users = User::mapUsers($users);
         return response()->json(['data'=>$users]);
-    }
-
-    public function getMaleOption() {
-        $hobbies = config('masterdata.hobby');
-        $height = config('masterdata.height');
-        $job = config('masterdata.job');
-        $figure = config('masterdata.figure');
-        $matching_expect = config('masterdata.matching_expect');
-        $anual_income = config('masterdata.anual_income');
-        $holiday = config('masterdata.holiday');
-        $aca_background = config('masterdata.aca_background');
-        $alcohol = config('masterdata.alcohol');
-        $tabaco = config('masterdata.tabaco');
-        $housemate = config('masterdata.housemate');
-        $birthplace = config('masterdata.birthplace');
-        
-        return response()->json([
-            'hobbies' => $hobbies,
-            'height' => $height,
-            'job' => $job,
-            'figure' => $figure,
-            'matching_expect' => $matching_expect,
-            'anual_income' => $anual_income,
-            'holiday' => $holiday,
-            'aca_background' => $aca_background,
-            'alcohol' => $alcohol,
-            'tabaco' => $tabaco,
-            'housemate' => $housemate
-        ]);
     }
     
     public function add() {
@@ -88,31 +55,30 @@ class UserManagementController extends Controller
 
     public function store(UserManagementRequest $request) {
         $data = $request->all();
+        DB::beginTransaction();
         $user = User::create($data);
         try {          
-
-            $hobby = $request->hobby;
-            if ($request->has('hobby')) {
-                foreach ($hobby as $hob) { 
+            $hobbies = $request->hobby;
+            if ($hobbies) {
+                foreach ($hobbies as $hob) { 
                     UserHobby::create([
                         'user_id' => $user->id,
                         'hobby' => $hob
                     ]);
                 }
-            }       
-        } catch (Exception $e) {
-            return abort(500);
+            }   
+            DB::commit();
+            return response()->json(['success'=>'User is created successfully!']);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json(['error'=> $e]);
         }  
-        return response()->json(['success'=>'User is created successfully!']);
+     
     }
 
     public function edit(Request $request, $id) {
         $user = User::find($id);
-        if(empty($user)) {
-            return abort(404);
-        }
-        $userHobby = UserHobby::where('user_id', $user->id)->first();
-        $user_hobby = $user->hobbies;
+        $userHobby = UserHobby::where('user_id', $id)->get();
         $height = config('masterdata.height');
         $job = config('masterdata.job');
         $figure = config('masterdata.figure');
@@ -125,54 +91,38 @@ class UserManagementController extends Controller
         $housemate = config('masterdata.housemate');
         $hobby = config('masterdata.hobby');
         $birthplace = config('masterdata.birthplace');
-        return view('admin.edit_user', compact('user','user_hobby', 'userHobby', 'figure', 'birthplace', 'hobby', 'housemate', 'job', 'height', 
+        return view('admin.edit_user', compact('user', 'userHobby', 'figure', 'birthplace', 'hobby', 'housemate', 'job', 'height', 
         'tabaco', 'alcohol', 'aca_background', 'holiday', 'anual_income', 'matching_expect'));
     }
 
     public function update(EditUserManagementRequest $request, $id) {
-        $user = User::find($id);
-        if (!$user) {
-            return abort(404);
-        }
-
+        $user = User::find($id);        
         $data = $request->all();
-        
         $user->update($data);
         try {
-            $hobby = UserHobby::where('user_id', $id)->delete('hobby');
-            $hobby = $request->hobby;
-            if ($request->has('hobby')) {               
-                foreach ($hobby as $hob) { 
+            $hobbies = UserHobby::where('user_id', $id)->delete('hobby');
+            $hobbies = $request->hobby;
+            if ($hobbies) {               
+                foreach ($hobbies as $hob) { 
                     UserHobby::create([
                         'user_id' => $user->id,
                         'hobby' => $hob
                     ]); 
                 }
             }
-        } catch (Exception $e) {
-            return abort(500);
-        }
-        
-        return response()->json(['success' => 'User is updated successfully!']);
+            return response()->json(['success' => 'User is updated successfully!']);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e]);
+        }      
     }
 
     public function show($id) {
-        $userRaw = User::find($id);
-        if(empty($userRaw)) {
-            return abort(404);
-        }
-        // ::with(['hobbies'])
-        $user = User::mapUser($userRaw);
-        $userHobby = new User();
-        $hobby = $userHobby->getHobbiesParsed($id);
-        return response()->json(['user'=>$user, 'hobby'=>$hobby]);
+        $user = User::with('hobbies')->find($id);
+        return response()->json(['user'=>$user]);
     }
 
     public function destroy($id) {
         $user = User::find($id);
-        if(empty($user)) {
-            return abort(404);
-        } 
         $user->delete();
     }
 

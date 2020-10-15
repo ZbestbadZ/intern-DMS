@@ -4,8 +4,9 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class PickupIndexRequest extends FormRequest
+class RecommendIndexRequest extends FormRequest
 {
+
     protected $sortable = [
         '0' => 'id',
         '1' => 'name',
@@ -14,14 +15,14 @@ class PickupIndexRequest extends FormRequest
         '4' => 'job',
         '5' => 'email',
         '6' => 'sex',
-        '7' => 'birthday',
+        '7' => 'birthday'
     ];
     protected $searchable = [
         '1' => 'name',
         '2' => 'age',
         '3' => 'phone',
         '4' => 'job',
-        '6' => 'sex',
+        '6' => 'sex'
     ];
 
     public function getOrderByParameters()
@@ -41,9 +42,9 @@ class PickupIndexRequest extends FormRequest
             $filter = $this->input('columns.'.$colIndex.'.search.value',null);
             $filters[$colName] = $filter;
         }
-        
         return $filters;
     }
+
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -62,7 +63,7 @@ class PickupIndexRequest extends FormRequest
     public function rules()
     {
         return [
-
+            //
         ];
     }
 }

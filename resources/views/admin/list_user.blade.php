@@ -94,29 +94,29 @@
                 </div>
                 <div id="detailBody" class="modal-body">
                     <!-- personal -->
-                    <div class="name"></div>
-                    <div class="gender"></div>
-                    <div class="address"></div>
-                    <div class="phone"></div>
-                    <div class="email"></div>
-                    <div class="birthday"></div>
-                    <div class="about"></div>
-                    <div class="about_title"></div>
+                    <div><b>Name:</b> <span class="name"></div>
+                    <div><b>Gender:</b> <span class="gender"></div>
+                    <div><b>Address:</b> <span class="address"></div>
+                    <div><b>Phone:</b> <span class="phone"></div>
+                    <div><b>Email:</b> <span class="email"></div>
+                    <div><b>Birthday:</b> <span class="birthday"></div>
+                    <div><b>About:</b> <span class="about"></div>
+                    <div><b>About Title:</b> <span class="about_title"></div>
                     <!-- /.personal -->
                     <!-- account -->
-                    <div class="username"></div>
-                    <div class="aca_background"></div>
-                    <div class="job"></div>
-                    <div class="anual_income"></div>
-                    <div class="birthplace"></div>
-                    <div class="figure"></div>
-                    <div class="height"></div>
+                    <div><b>Username:</b> <span class="username"></div>
+                    <div><b>Aca Background:</b> <span class="aca_background"></div>
+                    <div><b>Job:</b> <span class="job"></div>
+                    <div><b>Anual Income:</b> <span class="anual_income"></div>
+                    <div ><b>Birthplace:</b> <span class="birthplace"></div>
+                    <div><b>Figure:</b> <span class="figure"></div>
+                    <div><b>Height:</b> <span class="height"></div>
 
-                    <div class="tabaco"></div>
-                    <div class="alcohol"></div>
-                    <div class="holiday"></div>
-                    <div class="matching_expect"></div>
-                    <div><b>Hooby:</b> <span class="hobby"></span></div>
+                    <div><b>Tabaco:</b> <span class="tabaco"></div>
+                    <div><b>Alcohol:</b> <span class="alcohol"></div>
+                    <div><b>Holiday:</b> <span class="holiday"></div>
+                    <div><b>Matching Expect:</b> <span class="matching_expect"></div>
+                    <div><b>Hobby:</b> <span class="hobby"></span></div>
                     <!-- /.account -->
                 </div>
                 <div class="modal-footer">
@@ -136,7 +136,7 @@
 
             $.ajaxSetup({
                 headers: {
-                    '_token': '<?php echo csrf_token(); ?>',
+                    "_token": $('meta[name="csrf-token"]').attr('content'),
                 }
             });
 
@@ -146,7 +146,9 @@
                 ajax: {
                     type: 'GET',
                     url: '/api/admin/list_user',
-                    data: '_token = <?php echo csrf_token(); ?>',
+                    data: {
+                        "api_token": $('[name="api_token"]').val(),
+                    },
                     dataSrc: 'data'
                 },
                 "columns": [{
@@ -158,7 +160,6 @@
                             $(nTd).html("<a id=\"detail\" href='#'>" +
                                 oData.name + "</a>");
                         }
-
                     },
                     {
                         "data": "birthday",
@@ -177,8 +178,8 @@
                         }
                     },
                     {
-                        "data": "job",
-                        
+                        "data": 'job_parsed',
+                                  
                     },
                     {
                         "data": "phone"
@@ -204,7 +205,9 @@
                     type: 'GET',
                     url: '/api/admin/' + data['id'],
                     dataType: 'json',
-                    data: '_token = <?php echo csrf_token(); ?>',
+                    data: {
+                        "api_token": $('[name="api_token"]').val(),
+                    },
                     success: function(data) {
                         $('.hobby').html('');
                         let user = data['user'];
@@ -212,32 +215,31 @@
                         var spanGen = function(content) {
                             return '<span style="margin-left: 50px;">' + content + '</span>';
                         }
-                        $('#detailBody > .name').html(["<b>Name:</b>" ,spanGen(user['name'])]);
-                        $('#detailBody > .gender').html(["<b>Gender:</b>" ,spanGen(user['sex'])]);
-                        $('#detailBody > .address').html(["<b>Address: </b>" ,spanGen(user['address'])]);
-                        $('#detailBody > .phone').html(["<b>Phone: </b>" ,spanGen(user['phone'])]);
-                        $('#detailBody > .email').html(["<b>Email: </b>" ,spanGen(user['email'])]);
-                        $('#detailBody > .birthday').html(["<b>Birthday: </b>" ,spanGen(user['birthday'])]);
-                        $('#detailBody > .about').html(["<b>About: </b>" ,spanGen(user['about'])]);
-                        $('#detailBody > .about_title').html(["<b>About Title: </b>" ,spanGen(user['about_title'])]);
+                        $('.name').html(spanGen(user['name']));
+                        $('.gender').html(spanGen(user['sex_parsed']));
+                        $('.address').html(spanGen(user['address']));
+                        $('.phone').html(spanGen(user['phone']));
+                        $('.email').html(spanGen(user['email']));
+                        $('.birthday').html(spanGen(user['birthday']));
+                        $('.about').html(spanGen(user['about']));
+                        $('.about_title').html(spanGen(user['about_title']));
 
-                        $('#detailBody > .username').html(["<b>Username: </b>" ,spanGen(user['username'])]);
-                        $('#detailBody > .aca_background').html(["<b>Aca Background: </b>" ,spanGen(user['aca_background'])]);
-                        $('#detailBody > .job').html(["<b>Job: </b>" ,spanGen(user['job'])]);
-                        $('#detailBody > .anual_income').html(["<b>Anual Income: </b>" ,spanGen(user['anual_income'])]);
-                        $('#detailBody > .birthplace').html(["<b>Birthplace: </b>" ,spanGen(user['birthplace'])]);
-                        $('#detailBody > .figure').html(["<b>Figure: </b>" ,spanGen(user['figure'])]);
-                        $('#detailBody > .height').html(["<b>Height: </b>" ,spanGen(user['height'])]);
-                        $('#detailBody > .tabaco').html(["<b>Tabaco: </b>" ,spanGen(user['tabaco'])]);
-                        $('#detailBody > .alcohol').html(["<b>Alcohol: </b>" ,spanGen(user['alcohol'])]);
-                        $('#detailBody > .holiday').html(["<b>Holiday: </b>" ,spanGen(user['holiday'])]);
-                        $('#detailBody > .matching_expect').html(["<b>Matching Expect: </b>" ,spanGen(user['matching_expect'])]);
-
-                        $.each(hobby, function(index, value) {
-                            var hobby = "<li style='margin-left:60px;'>" + value.hobby + "<br>" + "</li>"
-                            $('.hobby').append(hobby);
-                        })
+                        $('.username').html(spanGen(user['username']));
+                        $('.aca_background').html(spanGen(user['aca_parsed']));
+                        $('.job').html(spanGen(user['job_parsed']));
+                        $('.anual_income').html(spanGen(user['income_parsed']));
+                        $('.birthplace').html(spanGen(user['birthplace_parsed']));
+                        $('.figure').html(spanGen(user['figure_parsed']));
+                        $('.height').html(spanGen(user['height_parsed']));
+                        $('.tabaco').html(spanGen(user['tabaco_parsed']));
+                        $('.alcohol').html(spanGen(user['alcohol_parsed']));
+                        $('.holiday').html(spanGen(user['holiday_parsed']));
+                        $('.matching_expect').html(spanGen(user['expect_parsed']))
                         
+                        $.each(user['hobbies'], function(index, value) {
+                            var hobby = "<li style='margin-left:60px;'>" + value.hobby_parsed + "<br>" + "</li>"
+                            $('.hobby').append(hobby);
+                        })                       
 
                         $('#detailModal').modal('show');
 

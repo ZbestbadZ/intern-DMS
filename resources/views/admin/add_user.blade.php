@@ -7,7 +7,6 @@
                 <h2 style="text-align:center; margin-top:10px;">CREATE NEW USER</h2>
                 <form id="form" enctype="multipart/form-data">
                     <!-- hidden -->
-                    <input class="" type="hidden" name="api_token" value="{{ Auth::user()->api_token }}">
 
                     <div class="form-group">
                         
@@ -49,14 +48,14 @@
 
                         <label for="figure">Figure:</label>
                         <select name="figure">
-                            @foreach($figure  as  $key1 => $value1)
-                                <option value="{{$key1}}">{{$value1}}</option>
+                            @foreach($figure  as  $key => $value)
+                                <option value="{{$key}}">{{$value}}</option>
                             @endforeach
                         </select>
                         <label for="job">Job:</label>
                         <select name="job">
-                            @foreach($job  as  $key3 => $value3)
-                                <option value="{{$key3}}">{{$value3['1']}}</option>
+                            @foreach($job  as  $key => $value)
+                                <option value="{{$key}}">{{$value['1']}}</option>
                             @endforeach
                         </select>
                     </div>
@@ -64,8 +63,8 @@
                     <div class="form-group">
                         <label for="matching_expect">Matching Expect:</label>
                         <select name="matching_expect">
-                            @foreach($matching_expect  as  $key2 => $value2)
-                                <option value="{{$key2}}">{{$value2}}</option>
+                            @foreach($matching_expect  as  $key => $value)
+                                <option value="{{$key}}">{{$value}}</option>
                             @endforeach
                         </select>
                     </div>
@@ -73,14 +72,14 @@
                     <div class="form-group">
                         <label for="anual_income">Anual Income:</label>
                         <select name="anual_income">
-                            @foreach($anual_income as  $key4 => $value4)
-                                <option value="{{$key4}}">{{$value4['1']}}</option>
+                            @foreach($anual_income as  $key => $value)
+                                <option value="{{$key}}">{{$value['1']}}</option>
                             @endforeach
                         </select>
                         <label for="holiday">Holiday:</label>
                         <select name="holiday">
-                            @foreach($holiday as  $key5 => $value5)
-                                <option value="{{$key5}}">{{$value5['1']}}</option>
+                            @foreach($holiday as  $key => $value)
+                                <option value="{{$key}}">{{$value['1']}}</option>
                             @endforeach
                         </select>
                     </div>
@@ -88,14 +87,14 @@
                     <div class="form-group">
                         <label for="aca_background">Aca Background:</label>
                         <select name="aca_background">
-                            @foreach($aca_background  as  $key6 => $value6)
-                                <option value="{{$key6}}">{{$value6['1']}}</option>
+                            @foreach($aca_background  as  $key => $value)
+                                <option value="{{$key}}">{{$value['1']}}</option>
                             @endforeach
                         </select>
                         <label for="alcohol">Alcohol:</label>
                         <select name="alcohol">
-                            @foreach($alcohol as  $key7 => $value7)
-                                <option value="{{$key7}}">{{$value7['1']}}</option>
+                            @foreach($alcohol as  $key => $value)
+                                <option value="{{$key}}">{{$value['1']}}</option>
                             @endforeach
                         </select>
                     </div>
@@ -104,14 +103,14 @@
                         
                         <label for="tabaco">Tabaco:</label>
                         <select name="tabaco">
-                            @foreach($tabaco as  $key8 => $value8)
-                                <option value="{{$key8}}">{{$value8['1']}}</option>
+                            @foreach($tabaco as  $key => $value)
+                                <option value="{{$key}}">{{$value['1']}}</option>
                             @endforeach
                         </select>
                         <label for="housemate">Housemate:</label>
                         <select name="housemate">
-                            @foreach($housemate  as  $key9 => $value9)
-                                <option value="{{$key9}}">{{$value9['1']}}</option>
+                            @foreach($housemate  as  $key => $value)
+                                <option value="{{$key}}">{{$value['1']}}</option>
                             @endforeach
                         </select>
 
@@ -120,16 +119,16 @@
                     <div class="form-group">  
                         <label for="birthplace">Birthplace:</label>
                         <select name="birthplace">
-                            @foreach($birthplace as  $key10 => $value10)
-                                <option value="{{$key10}}">{{$value10}}</option>
+                            @foreach($birthplace as  $key => $value)
+                                <option value="{{$key}}">{{$value}}</option>
                             @endforeach
                         </select>
 
                         <label for="hobby">Hobby:
                         
-                            @foreach($hobby as  $key11 => $value11)
-                            <input type="checkbox" name="hobby[]" id="hobby" value="{{$key11}}"/>
-                                {{$value11}}
+                            @foreach($hobby as  $key => $value)
+                            <input type="checkbox" name="hobby[]" id="hobby" value="{{$key}}"/>
+                                {{$value}}
                             @endforeach
                         
                         </label>
@@ -188,7 +187,6 @@
             event.preventDefault();
             let url = $('[name="create"]').data('url');
             var formData = new FormData($(this)[0]);
-            formData.set("api_token",$('[name="api_token"]').val());
             $.ajax({
                 url: "/api/admin/add_user",
                 type: "POST",
@@ -199,7 +197,8 @@
                 contentType: false,
                 processData: false,
                 success: function(response) {
-                    window.location.href = url;
+                    window.location.href = url + "?message=" + response['success'] ;
+
                 },
                 error:function(error){
                     console.log(error);
