@@ -38,7 +38,9 @@
                             <th><input class="form-control" type="text" placeholder="Search name"></th>
                             <th><input class="form-control" type="text" placeholder="Search age"></th>
                             <th><input class="form-control" type="text" placeholder="Search phone"></th>
-                            <th><select class="form-control" name="jobSearch" id=""><option value="-1">All</option></select></th>
+                            <th><select class="form-control" name="jobSearch" id="">
+                                    <option value="-1">All</option>
+                                </select></th>
                             <th></th>
                             <th></th>
                             <th></th>
@@ -51,6 +53,28 @@
     </div>
 
     <!-- Modal -->
+
+    <div class="modal fade" id="messageModal" tabindex="-1" role="dialog" aria-labelledby="messageModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="messageModalLabel"></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div id="messageBody" class="modal-body">
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">OK</button>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel"
         aria-hidden="true">
         <div class="modal-dialog" role="document">
@@ -260,14 +284,14 @@
             $('#display tbody ').on('click', '.edit', function() {
 
                 var data = table.row($(this).parents('tr')).data();
-                window.location.href = "/admin/" + data['id'] + "/edit";
+                window.location.href = "/admin/edit_user/" + data['id'];
             });
 
             $('#display tbody ').on('click', '#detail', function() {
                 var data = table.row($(this).parents('tr')).data();
                 $.ajax({
                     type: 'GET',
-                    url: '/api/recommend/' + data['id'],
+                    url: '/api/admin/' + data['id'],
                     data: {
                         "api_token": $('[name="api_token"]').val(),
                     },
@@ -280,6 +304,13 @@
                             let idRow = "#" + "detail_body" + " > " + "." + index;
                             $(idRow).html(spanGen(value));
                         });
+                    },
+                    error: function(xhr, textStatus, errorThrown) {
+                        $('#messageModalLabel').html('ERORR');
+                        $('#messageBody').html(
+                            'somthing went wrong can\'t  load ' + data['name']
+                        );
+                        $('#messageModal').modal('show');
                     }
                 });
 
@@ -303,6 +334,18 @@
                             },
                             success: function(data) {
                                 var re = row.remove().draw(false);
+                                $('#messageModalLabel').html('Success');
+                                $('#messageBody').html('Deleted ' + data['item'][
+                                    'name'
+                                ]);
+                                $('#messageModal').modal('show');
+                            },
+                            error: function(xhr, textStatus, errorThrown) {
+                                $('#messageModalLabel').html('ERORR');
+                                $('#messageBody').html(
+                                    'somthing went wrong can\'t  delete ' + data['name']
+                                );
+                                $('#messageModal').modal('show');
                             }
                         });
                     }
