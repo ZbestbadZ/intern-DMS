@@ -24,17 +24,5 @@ class RecommendController extends Controller
         return response()->json(['data' => $recommended, 'recordsTotal' => $recordsTotal, 'recordsFiltered' => $recordsFiltered]);
     }
 
-    public function show($id)
-    {
-        $userRaw = User::find($id);
-
-        if (empty($userRaw)) {
-            return abort(404);
-        }
-
-        $user = User::mapUser($userRaw);
-
-        return response()->json(['user' => $user]);
-    }
 
 }

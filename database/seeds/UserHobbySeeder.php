@@ -21,9 +21,7 @@ class UserHobbySeeder extends Seeder
                     'created_at' => Carbon::now(),
                     'updated_at' => Carbon::now()
                 ]);
-        }
-        for ($i = 24; $i < 51; $i++) {
-            DB::table('user_hobbies')
+                DB::table('user_hobbies')
                 ->insert([
                     'user_id' => $i,
                     'hobby' => 2,
@@ -31,5 +29,6 @@ class UserHobbySeeder extends Seeder
                     'updated_at' => Carbon::now()
                 ]);
         }
+       
     }
 }

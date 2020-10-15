@@ -6,6 +6,7 @@ use App\Models\UserHobby;
 use Carbon\Carbon;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\DB;
 
 class User extends Authenticatable
 {
@@ -179,8 +180,7 @@ class User extends Authenticatable
             }
         });
     }
-
-    public static function getRecommended($filter, $orderParams, $start)
+    public static function setFilterQuery($query, $filter, $orderParams)
     {
         $orderBy = array_key_first($orderParams);
         $orderDir = $orderParams[$orderBy];
@@ -188,60 +188,19 @@ class User extends Authenticatable
         $searchName = $filter['name'];
         $searchAge = $filter['age'];
         $searchPhone = $filter['phone'];
-        $searchAge = is_null($filter['age']) ? '' : Carbon::now()->format('yy') - $filter['age'];
-        $searchBirthDate = empty($searchAge) ? Carbon::now() : Carbon::now()->year($searchAge);
-        $filterJob = $filter['job'];
-
-        $query = User::withCount(['likes as likes', 'reports as reports'])
-            ->having('likes', '>=', RECOMMEND_STANDARD_LIKE)
-            ->having('reports', '<=', RECOMMEND_STANDARD_REPORT)
-            ->whereDate('birthday', '<', $searchBirthDate)
-            ->whereYear('birthday', 'like', '%' . $searchAge . '%')
-            ->orderBy($orderBy, $orderDir);
-
-        if (!is_null($filterGender)) {
-            $query->where('sex', '=', $filterGender);
-        }
-
-        if (!is_null($filterJob) && $filterJob != -1) {
-            self::filterJob($query, $filterJob);
-        }
-
-        if (!is_null($searchName)) {
-            $query->where('name', 'like', '%' . $searchName . '%');
-        }
-
-        if (!is_null($searchPhone)) {
-            $query->where('phone', 'like', '%' . $searchPhone . '%');
-        }
-
-        $recordsFiltered = clone ($query);
-        $recordsFiltered = count($recordsFiltered->get());
-        $users = $query->skip($start)->take(PAGINATION)->get();
-
-        return compact(['users', 'recordsFiltered']);
-    }
-
-    public static function getPickup($filter, $orderByParams, $start)
-    {
-        $orderBy = array_key_first($orderByParams);
-        $orderDir = $orderByParams[$orderBy];
-        $searchName = $filter['name'];
-        $searchPhone = $filter['phone'];
-        $filterGender = $filter['sex'];
         $searchAge = $filter['age'];
-
-        $searchBirthDate = empty($searchAge) ? Carbon::now() : Carbon::now()->year($searchAge);
         $filterJob = $filter['job'];
-        $query = User::with(['hobbies'])
-            ->where('pickup_status', PICKUP_STATUS)
-            ->orderBy($orderBy, $orderDir);
+
+        $query->orderBy($orderBy, $orderDir);
+
         if (!is_null($filterGender)) {
             $query->where('sex', '=', $filterGender);
         }
+
         if (!is_null($filterJob) && $filterJob != -1) {
             self::filterJob($query, $filterJob);
         }
+
         if (!is_null($searchName)) {
             $query->where('name', 'like', '%' . $searchName . '%');
         }
@@ -250,12 +209,31 @@ class User extends Authenticatable
             $query->where('phone', 'like', '%' . $searchPhone . '%');
         }
         if (!is_null($searchAge)) {
-            $searchBirthDate = Carbon::now()->year(Carbon::now()->format('yy') - $searchAge);
-            $searchBirthYear = Carbon::now()->year(Carbon::now()->format('yy') - $searchAge)->startOfYear();
-
-            $query->whereBetween('birthday', array($searchBirthYear, $searchBirthDate));
+            $query->where(DB::raw('TIMESTAMPDIFF(YEAR,birthday,CURDATE())'), $searchAge);
 
         }
+    }
+    public static function getRecommended($filter, $orderParams, $start)
+    {
+
+        $query = User::withCount(['likes as likes', 'reports as reports'])
+            ->having('likes', '>=', RECOMMEND_STANDARD_LIKE)
+            ->having('reports', '<=', RECOMMEND_STANDARD_REPORT);
+        self::setFilterQuery($query, $filter, $orderParams);
+        $recordsFiltered = clone ($query);
+        $recordsFiltered = count($recordsFiltered->get());
+
+        $users = $query->skip($start)->take(PAGINATION)->get();
+
+        return compact(['users', 'recordsFiltered']);
+    }
+
+    public static function getPickup($filter, $orderByParams, $start)
+    {
+        $query = User::with(['hobbies'])
+            ->where('pickup_status', PICKUP_STATUS);
+
+        self::setFilterQuery($query, $filter, $orderByParams);
 
         $recordsFiltered = clone ($query);
         $users = $query->skip($start)->take(PAGINATION)->get();

@@ -49,7 +49,7 @@ class StickerController extends Controller
 
         $item = Item::find($id);
         if (empty($item)) {
-            return abort(404);
+            return response()->json(['error' => ['error_code' => 404, 'error_message' => 'Item not found!']]);
         }
 
         return response()->json(['item' => $item]);
@@ -59,13 +59,13 @@ class StickerController extends Controller
     {
         $item = Item::find($id);
         if (empty($item)) {
-            return abort(404);
+            return response()->json(['error' => ['error_code' => 404, 'error_message' => 'Item not found!']]);
         }
 
         try {
             Storage::disk('public')->delete($item->path);
         } catch (Exception $e) {
-            abort(404);
+            return response()->json(['error' => ['error_code' => 404, 'error_message' => 'Item not found!']]);
         }
         $item->delete();
         return response()->json(['item' => $item]);
@@ -75,7 +75,7 @@ class StickerController extends Controller
     {
         $item = Item::find($id);
         if (empty($item)) {
-            return abort(404);
+            return response()->json(['error' => ['error_code' => 404, 'error_message' => 'Item not found!']]);
         }
 
         return view('sticker.edit', compact('item'));
@@ -86,7 +86,7 @@ class StickerController extends Controller
 
         $item = Item::find($id);
         if (empty($item)) {
-            return abort(404);
+            return response()->json(['error' => ['error_code' => 404, 'error_message' => 'Item not found!']]);
         }
 
         $data = $request->only(['name', 'price', 'image']);
@@ -101,14 +101,16 @@ class StickerController extends Controller
                 $data['path'] = $newPath;
 
             } catch (Exception $e) {
-                return abort(500);
+                return response()->json([
+                    'error' => ['error_code' => 500, 
+                    'error_message' => 'something went wrong on our end']]);
             }
 
         }
         $item->update($data);
 
         return response()->json(['success' => 'Item ' . trim($item['name']) . '
-        updated', ]);
+        updated']);
 
     }
 
@@ -123,13 +125,17 @@ class StickerController extends Controller
 
                 $data['path'] = $newPath;
             } catch (Exception $e) {
-                return abort(500);
+                return response()->json([
+                    'error' => ['error_code' => 500, 
+                    'error_message' => 'something went wrong on our end']]);
             }
             $item = Item::create($data);
             return response()->json(['success' => 'Item ' . $item['name'] . '
-        added', ]);
+        added']);
 
         }
-        return response()->json(['failed' => 'Image file not found!']);
+         return response()->json([
+            'error' => ['error_code' => 404, 
+            'error_message' => 'Uploads image not found!']]);;
     }
 }
