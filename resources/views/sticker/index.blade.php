@@ -4,10 +4,8 @@
 
     <div class="container-fluid">
 
-        <div class="row">
-            <div class="col">
-                <!--Bread Crumbs-->
-            </div>
+        <div class="row d-flex justify-content-center ">
+            <div><span class="display-4" >Stickers</span></div>
         </div>
 
         <div class="row d-flex justify-content-end">
