@@ -106,7 +106,7 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <div id="detail_body" class="modal-body">
+                <div id="detailBody" class="modal-body">
                    
                 </div>
                 <div class="modal-footer">

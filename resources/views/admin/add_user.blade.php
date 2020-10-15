@@ -8,20 +8,21 @@
                 <form id="form" enctype="multipart/form-data">
                     <!-- hidden -->
 
-                    <div class="form-group">
-                        
+                    <div class="form-group">                      
                         <label for="name">Name(*) </label>
                         <input class="form-control" type="text" name="name" id="name" value="" autofocus>
-
+                        <div class="text-danger"><strong><span id="error_name"></span></strong></div>
                     </div>
                     <div class="form-group">
                         <label for="username">Username(*) </label>
                         <input class="form-control" type="text" name="username" id="username" value="">
+                        <div class="text-danger"><strong><span id="error_username"></span></strong></div>
                     </div>
 
                     <div class="form-group">
                         <label for="email">Email(*)</label>
                         <input class="form-control" type="email" name="email" id="email" value="">
+                        <div class="text-danger"><strong><span id="error_email"></span></strong></div>
                     </div>
 
                     <div class="form-group">
@@ -36,6 +37,7 @@
                     <div class="form-group">
                         <label for="birthday">Birthday(*)</label>
                         <input type="date" name="birthday" id="birthday" value="">
+                        <div class="text-danger"><strong><span id="error_birthday"></span></strong></div>
                     </div>
 
                     <div class="form-group">
@@ -137,35 +139,37 @@
                     <div class="form-group">
                         <label for="phone">Phone Number:</label>
                         <input class="form-control" type="number" name="phone" id="phone" value="">
-
+                        <div class="text-danger"><strong><span id="error_phone"></span></strong></div>
                     </div>
 
                     <div class="form-group">
                         <label for="address">Address:</label>
                         <input class="form-control" type="text" name="address" id="address" value="">
-
+                        <div class="text-danger"><strong><span id="error_address"></span></strong></div>                       
                     </div>
 
                     <div class="form-group">
                         <label for="about">About(*)</label>
                         <input class="form-control" type="text" name="about" id="about" value="">
-
+                        <div class="text-danger"><strong><span id="error_about"></span></strong></div>                      
                     </div>
 
                     <div class="form-group">
                         <label for="about_title">About Title(*)</label>
                         <input class="form-control" type="text" name="about_title" id="about_title" value="">
-
+                        <div class="text-danger"><strong><span id="error_about_title"></span></strong></div>                   
                     </div>
 
                     <div class="form-group">
                         <label for="password">Password(*) </label>
                         <input class="form-control"  type="password" name="password" id="password" required autocomplete="new-password">
+                        <div class="text-danger"><strong><span id="error_password"></span></strong></div>
                     </div>
 
                     <div class="form-group">
                         <label for="password-confirm">Password Confirm(*)</label>
                         <input id="password-confirm" type="password" class="form-control" name="password_confirmation" required autocomplete="new-password">
+                        <div class="text-danger"><strong><span id="error_password-confirm"></span></strong></div>
                     </div>
                      
                     <button class="btn btn-primary" type="submit" name="create" data-url="{{ route('admin.list_user')}}">Create</button>
@@ -200,9 +204,24 @@
                     window.location.href = url + "?message=" + response['success'] ;
 
                 },
-                error:function(error){
-                    console.log(error);
-                }
+                error: function(xhr, textStatus, errorThrown) {
+                        switch (xhr.status) {                         
+                            case 422: {
+                                $(".text-danger strong span").html("");
+                                var errors = $.parseJSON(xhr.responseText)['errors'];
+                                $.each(errors, function(index, value) {
+                                    let idErr = "#error_" + index;
+                                    $(idErr).html(value[0]);
+                                });
+                                break;
+                            }
+                            case 500: {
+                                let message = "Some errors on server side please try next time";
+                                console.log(message);
+                                break;
+                            }
+                        }
+                    },
             });
         });
     });    
