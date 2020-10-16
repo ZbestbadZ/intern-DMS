@@ -262,7 +262,7 @@
             $('#display tbody ').on('click', '.edit', function() {
 
                 var data = table.row($(this).parents('tr')).data();
-                window.location.href = "/admin/edit_user/" + data['id'];
+                window.location.href = "/admin/edit_user/" + data['id'] + '?index=recommend.index';
             });
 
             $('#display tbody ').on('click', '#detail', function() {

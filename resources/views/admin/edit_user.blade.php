@@ -8,7 +8,7 @@
                 <form id="form" method="POST" enctype="multipart/form-data">
                     {{ csrf_field() }}
                     <input type="hidden" name="user_id" id="user_id" value="{{ $user->id }}">
-
+                    <!-- <input type="hidden" name="index" value="{{$index}}"> -->
                     <div class="form-group">                      
                         <label for="name">Name: </label>
                         <input class="form-control" type="text" name="name" id="name" value="{{$user->name}}" autofocus>
@@ -193,7 +193,7 @@
                         <div class="text-danger"><strong><span id="error_password-confirm"></span></strong></div>
                     </div>
                      
-                    <button class="btn btn-primary" type="submit" name="update" data-url="{{ route('admin.list_user')}}">Update</button>
+                    <button class="btn btn-primary" type="submit" name="update" data-url="{{ route($index)}}">Update</button>
                 </form>
             </div>
         </div>

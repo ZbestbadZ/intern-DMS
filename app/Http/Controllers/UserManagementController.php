@@ -77,11 +77,11 @@ class UserManagementController extends Controller
     }
 
     public function edit(Request $request, $id) {
-        $user = User::find($id);
-        $userHobby = UserHobby::where('user_id', $id)->get();
-        $height = config('masterdata.height');
-        $job = config('masterdata.job');
-        $figure = config('masterdata.figure');
+        $user       = User::find($id);
+        $userHobby  = UserHobby::where('user_id', $id)->get();
+        $height     = config('masterdata.height');
+        $job        = config('masterdata.job');
+        $figure     = config('masterdata.figure');
         $matching_expect = config('masterdata.matching_expect');
         $anual_income = config('masterdata.anual_income');
         $holiday = config('masterdata.holiday');
@@ -91,8 +91,9 @@ class UserManagementController extends Controller
         $housemate = config('masterdata.housemate');
         $hobby = config('masterdata.hobby');
         $birthplace = config('masterdata.birthplace');
+        $index = $request->index;
         return view('admin.edit_user', compact('user', 'userHobby', 'figure', 'birthplace', 'hobby', 'housemate', 'job', 'height', 
-        'tabaco', 'alcohol', 'aca_background', 'holiday', 'anual_income', 'matching_expect'));
+        'tabaco', 'alcohol', 'aca_background', 'holiday', 'anual_income', 'matching_expect', 'index'));
     }
 
     public function update(EditUserManagementRequest $request, $id) {

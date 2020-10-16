@@ -5,7 +5,11 @@
     <input class="" type="hidden" name="api_token" value="{{ Auth::user()->api_token }}">
 
     <div class="container-fluid">
-
+        <div class="row">
+            <div class="col d-flex justify-content-center">
+                <span class="display-4">List Users</span>
+            </div>
+        </div>
         <div class="row">
             <div class="col-2" style="margin: 10px 0px 10px 0px">
                 <a href="add_user" class="btn btn-primary">Create new User</a>
@@ -21,9 +25,9 @@
         </div>
 
         <div class="row d-flex justify-content-center">
-            <div class="col-8">
-                <table id="mytable" class="table table-hover table-bordered display" style="width:100%">
-                    <thead class="thead-light">
+            <div class="col-10">
+                <table id="mytable" class="table table-hover table-bordered table-striped display" style="width:100%">
+                    <thead class="thead-dark">
                         <tr>
                             <th>ID</th>
                             <th>Name</th>
@@ -198,7 +202,7 @@
             $('#mytable tbody ').on('click', '.edit', function() {
 
                 var data = table.row($(this).parents('tr')).data();
-                window.location.href = "/admin/edit_user/" + data['id'] ;
+                window.location.href = "/admin/edit_user/" + data['id']  + '?index=admin.list_user';
             });
 
             $('#mytable tbody ').on('click', '.delete', function() {

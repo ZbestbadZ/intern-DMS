@@ -30,7 +30,7 @@ Route::get('/home', 'HomeController@index')->name('home');
             Route::get('/create', 'StickerController@getCreate')->name('sticker.create');
         });
         Route::group(['prefix' => 'recommend'], function () {
-            Route::get('', 'RecommendController@indexView');
+            Route::get('', 'RecommendController@indexView')->name('recommend.index');
         });
         Route::group(['prefix' => 'pickup'], function () {
             Route::get('', 'PickupController@getIndex')->name('pickup.index');
