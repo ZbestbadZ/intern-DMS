@@ -37,18 +37,18 @@ class UserManagementController extends Controller
     }
     
     public function add() {
-        $height = config('masterdata.height');
-        $job = config('masterdata.job');
-        $figure = config('masterdata.figure');
+        $height          = config('masterdata.height');
+        $job             = config('masterdata.job');
+        $figure          = config('masterdata.figure');
         $matching_expect = config('masterdata.matching_expect');
-        $anual_income = config('masterdata.anual_income');
-        $holiday = config('masterdata.holiday');
-        $aca_background = config('masterdata.aca_background');
-        $alcohol = config('masterdata.alcohol');
-        $tabaco = config('masterdata.tabaco');
-        $housemate = config('masterdata.housemate');
-        $hobby = config('masterdata.hobby');
-        $birthplace = config('masterdata.birthplace');
+        $anual_income    = config('masterdata.anual_income');
+        $holiday         = config('masterdata.holiday');
+        $aca_background  = config('masterdata.aca_background');
+        $alcohol         = config('masterdata.alcohol');
+        $tabaco          = config('masterdata.tabaco');
+        $housemate       = config('masterdata.housemate');
+        $hobby           = config('masterdata.hobby');
+        $birthplace      = config('masterdata.birthplace');
         return view('admin.add_user', compact('figure', 'birthplace', 'hobby', 'housemate', 'job', 'height', 
                 'tabaco', 'alcohol', 'aca_background', 'holiday', 'anual_income', 'matching_expect'));
     }
@@ -56,8 +56,8 @@ class UserManagementController extends Controller
     public function store(UserManagementRequest $request) {
         $data = $request->all();
         DB::beginTransaction();
-        $user = User::create($data);
-        try {          
+        try {      
+            $user = User::create($data);    
             $hobbies = $request->hobby;
             if ($hobbies) {
                 foreach ($hobbies as $hob) { 
@@ -77,23 +77,23 @@ class UserManagementController extends Controller
     }
 
     public function edit(Request $request, $id) {
-        $user       = User::find($id);
-        $userHobby  = UserHobby::where('user_id', $id)->get();
-        $height     = config('masterdata.height');
-        $job        = config('masterdata.job');
-        $figure     = config('masterdata.figure');
+        $user            = User::find($id);
+        $userHobby       = UserHobby::where('user_id', $id)->get();
+        $height          = config('masterdata.height');
+        $job             = config('masterdata.job');
+        $figure          = config('masterdata.figure');
         $matching_expect = config('masterdata.matching_expect');
-        $anual_income = config('masterdata.anual_income');
-        $holiday = config('masterdata.holiday');
-        $aca_background = config('masterdata.aca_background');
-        $alcohol = config('masterdata.alcohol');
-        $tabaco = config('masterdata.tabaco');
-        $housemate = config('masterdata.housemate');
-        $hobby = config('masterdata.hobby');
-        $birthplace = config('masterdata.birthplace');
-        $index = $request->index;
+        $anual_income    = config('masterdata.anual_income');
+        $holiday         = config('masterdata.holiday');
+        $aca_background  = config('masterdata.aca_background');
+        $alcohol         = config('masterdata.alcohol');
+        $tabaco          = config('masterdata.tabaco');
+        $housemate       = config('masterdata.housemate');
+        $hobby           = config('masterdata.hobby');
+        $birthplace      = config('masterdata.birthplace');
+        $index           = $request->index;
         return view('admin.edit_user', compact('user', 'userHobby', 'figure', 'birthplace', 'hobby', 'housemate', 'job', 'height', 
-        'tabaco', 'alcohol', 'aca_background', 'holiday', 'anual_income', 'matching_expect', 'index'));
+                    'tabaco', 'alcohol', 'aca_background', 'holiday', 'anual_income', 'matching_expect', 'index'));
     }
 
     public function update(EditUserManagementRequest $request, $id) {
@@ -127,7 +127,8 @@ class UserManagementController extends Controller
     public function destroy($id) {
         $user = User::find($id);
         $user->delete();
-        return response()->json(['user' => $user]);
+        
+        return response()->json(['success' => 'User is deleted successfully!']);
     }
 
 }

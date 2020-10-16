@@ -45,7 +45,6 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::prefix('admin')->group(function() {
-    Route::get('maleOP','UserManagementController@getMaleOption');
     Route::get('list_user','UserManagementController@index');
     Route::get('add_user', 'UserManagementController@add');
     Route::post('add_user', 'UserManagementController@store');
