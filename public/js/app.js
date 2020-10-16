@@ -78265,6 +78265,8 @@ __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
 
 window.$ = window.jQuery = jquery__WEBPACK_IMPORTED_MODULE_2___default.a;
 
+
+
 var moment = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js");
 
 window.moment = moment;

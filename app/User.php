@@ -23,6 +23,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'username',
         'address',
         'phone',
         'sex',
@@ -45,7 +46,7 @@ class User extends Authenticatable
     ];
 
     protected $appends = [
-        'age', 'job_parsed', 'tabaco_parsed', 'alcohol_parsed', 'height_parsed', 'figure_parsed', 'income_parsed', 'expect_parsed', 'holiday_parsed', 'aca_parsed', 'housemate_parsed', 'birthplace_parsed'
+        'age', 'job_parsed', 'tabaco_parsed', 'alcohol_parsed', 'height_parsed', 'figure_parsed', 'income_parsed', 'expect_parsed', 'holiday_parsed', 'aca_parsed', 'housemate_parsed', 'birthplace_parsed', 'sex_parsed'
     ];
     /**
      * The attributes that should be hidden for arrays.
@@ -63,6 +64,7 @@ class User extends Authenticatable
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'birthday' => 'datetime:Y-m-d'
     ];
 
     public function likes()
@@ -90,55 +92,54 @@ class User extends Authenticatable
         return $this->hasMany(UserHobby::class, 'user_id', 'id');
     }
 
-    public function getJobParsedAttribute()
-    {
-        return $this['job'] = config('masterdata.job.' . $this['job'] . '.' . $this['sex']);
+    public function getJobParsedAttribute() {
+        return config('masterdata.job.' . $this['job'] . '.' . $this['sex']);
     }
-    public function getTabacoParsedAttribute()
-    {
-        return $this['tabaco'] = config('masterdata.tabaco.' . $this['tabaco'] . '.' . $this['sex']);
-    }
-    public function getAlcoholParsedAttribute()
-    {
-        return $this['alcohol'] = config('masterdata.alcohol.' . $this['alcohol'] . '.' . $this['sex']);
-    }
-    public function getHeightParsedAttribute()
-    {
-        return $this['height'] = config('masterdata.height.' . $this['height']);
-    }
-    public function getFigureParsedAttribute()
-    {
-        return $this['figure'] = config('masterdata.figure.' . $this['figure']);
-    }
-    public function getIncomeParsedAttribute()
-    {
-        return $this['anual_income'] = config('masterdata.anual_income.' . $this['anual_income'] . '.' . $this['sex']);
 
+    public function getHeightParsedAttribute() {
+        return config('masterdata.height.' . $this['height']);
     }
-    public function getExpectParsedAttribute()
-    {
-        return $this['matching_expect'] = config('masterdata.matching_expect.' . $this['matching_expect']);
 
+    public function getFigureParsedAttribute() {
+        return config('masterdata.figure.' . $this['figure']);
     }
-    public function getHolidayParsedAttribute()
-    {
-        return $this['holiday'] = config('masterdata.holiday.' . $this['holiday'] . '.' . $this['sex']);
 
+    public function getIncomeParsedAttribute() {
+        return config('masterdata.anual_income.' . $this['anual_income'] . '.' . $this['sex']);
     }
-    public function getAcaParsedAttribute()
-    {
-        return $this['aca_background'] = config('masterdata.aca_background.' . $this['aca_background'] . '.' . $this['sex']);
 
+    public function getExpectParsedAttribute() {
+        return config('masterdata.matching_expect.' . $this['matching_expect'] );
     }
-    public function getHousemateParsedAttribute()
-    {
-        return $this['housemate'] = config('masterdata.housemate.' . $this['housemate'] . '.' . $this['sex']);
 
-    }public function getBirthplaceParsedAttribute()
-    {
-        return $this['birthplace'] = config('masterdata.birthplace.' . $this['birthplace']);
-
+    public function getHolidayParsedAttribute() {
+        return config('masterdata.holiday.' . $this['holiday'] . '.' . $this['sex']);
     }
+
+    public function getAcaParsedAttribute() {
+        return config('masterdata.aca_background.' . $this['aca_background'] . '.' . $this['sex']);
+    }
+
+    public function getAlcoholParsedAttribute() {
+        return config('masterdata.alcohol.' . $this['alcohol'] . '.' . $this['sex']);
+    }
+
+    public function getTabacoParsedAttribute() {
+        return config('masterdata.tabaco.' . $this['tabaco'] . '.' . $this['sex']);
+    }
+
+    public function getBirthplaceParsedAttribute() {
+        return config('masterdata.birthplace.' . $this['birthplace']);
+    }
+
+    public function getHousemateParsedAttribute() {
+        return config('masterdata.housemate.' . $this['housemate'] . '.' . $this['sex']);
+    }
+
+    public function getSexParsedAttribute() {
+        return $this->sex==MALE?"Male":"Female";
+    }
+
     public function getAgeAttribute()
     {
         return Carbon::parse($this->birthday)->diffInYears(Carbon::now());

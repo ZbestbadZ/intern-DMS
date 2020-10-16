@@ -9,6 +9,14 @@
                 <a href=""></a>
             </div>
         </div>
+        <div class="row d-flex justify-content-end">
+            @if (session()->has('message'))
+                <div class="alert alert-success">
+                    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                    {{ session()->get('message') }}
+                </div>
+            @endif
+        </div>
         <div class="row d-flex justify-content-center">
             <div class="col">
                 <table id="display" class="table table-bordered table-striped table-light">
@@ -32,13 +40,14 @@
                             <th><input class="form-control" type="number" placeholder="Search age" /></th>
                             <th>phone</th>
                             <th><select class="form-control" name="jobSearch" id="">
-                                <option value="-1">All</option></select></th>
+                                    <option value="-1">All</option>
+                                </select></th>
                             <th></th>
                             <th><select class="form-control " name="genderFilter" id="genderFilter">
-                                <option value="">All</option>
-                                <option value="1">Male</option>
-                                <option value="0">Female</option>
-                            </select></th>
+                                    <option value="">All</option>
+                                    <option value="1">Male</option>
+                                    <option value="0">Female</option>
+                                </select></th>
                             <th></th>
                             <th></th>
                         </tr>
@@ -103,29 +112,7 @@
                     </button>
                 </div>
                 <div id="detailBody" class="modal-body">
-                    <!-- personal -->
-                    <div class="name"></div>
-                    <div class="gender"></div>
-                    <div class="address"></div>
-                    <div class="phone"></div>
-                    <div class="email"></div>
-                    <div class="birthday"></div>
-                    <!-- /.personal -->
-                    <!-- account -->
-                    <div class="username"></div>
-                    <div class="aca_background"></div>
-                    <div class="job"></div>
-                    <div class="anual_income"></div>
-                    <div class="birthplace"></div>
-                    <div class="figure"></div>
-                    <div class="height"></div>
-
-                    <div class="tabaco"></div>
-                    <div class="alcohol"></div>
-                    <div class="holiday"></div>
-
-                    <div class="matching_expect"></div>
-                    <!-- /.account -->
+                    
                 </div>
                 <div class="modal-footer">
 
@@ -142,18 +129,23 @@
     <script>
         var deleteCallback = null;
         $(document).ready(function() {
-
+            $.ajaxSetup({
+                headers: {
+                    "_token": $('meta[name="csrf-token"]').attr('content'),
+                },
+            });
             $('#display tfoot th').each(function(index, value) {
                 searchbyTextColIndex = [1, 3];
                 if ($.inArray(index, searchbyTextColIndex) != -1) {
                     var title = $(this).text();
 
-                    $(this).html('<input class="form-control" type="text" placeholder="Search ' + title + '" />');
+                    $(this).html('<input class="form-control" type="text" placeholder="Search ' + title +
+                        '" />');
                 }
 
                 $('select[name="genderFilter"]').change(function() {
-                table.columns([6]).search($(this).val()).draw();
-            });
+                    table.columns([6]).search($(this).val()).draw();
+                });
                 if (index === 4) {
                     let thisTag = $(this);
                     $.ajax({
@@ -177,7 +169,7 @@
 
             var table = $('#display').DataTable({
                 initComplete: function() {
-                   
+
                     this.api().columns().every(function() {
                         var that = this;
 
@@ -274,12 +266,12 @@
             });
             //select
             $('select[name="jobSearch"]').change(function() {
-                        table.columns(4).search($(this).val()).draw();
+                table.columns(4).search($(this).val()).draw();
             });
             $('#display tbody ').on('click', '.edit', function() {
 
                 var data = table.row($(this).parents('tr')).data();
-                window.location.href = "/admin/" + data['id'] + "/edit";
+                window.location.href = "/admin/edit_user/" + data['id'] + '?index=pickup.index';
             });
 
             $('#display tbody ').on('click', '#detail', function() {
@@ -287,10 +279,19 @@
                 $.ajax({
                     type: 'GET',
                     url: '/api/admin/' + data['id'],
-                    data: '_token = <?php echo csrf_token(); ?>',
+                    data: {
+                        "api_token": $('[name="api_token"]').val(),
+                    },
                     success: function(data) {
                         $('#detailBody').html(data.html);
                         $('#detailModal').modal('show');
+                    },
+                    error: function(xhr, textStatus, errorThrown) {
+                        $('#messageModalLabel').html('ERORR');
+                        $('#messageBody').html(
+                            'somthing went wrong can\'t  load ' + data['name']
+                        );
+                        $('#messageModal').modal('show');
                     }
                 });
 
@@ -309,12 +310,14 @@
                         $.ajax({
                             type: 'DELETE',
                             url: '/api/admin/' + data['id'],
-                            data: '_token = <?php echo csrf_token(); ?>',
+                            data: {
+                                "api_token": $('[name="api_token"]').val(),
+                            },
                             success: function(data) {
                                 var re = row
                                     .remove().draw(true);
                                 $('#messageModalLabel').html('Success');
-                                $('#messageBody').html('Deleted ' + data['item'][
+                                $('#messageBody').html('Deleted ' + data['user'][
                                     'name'
                                 ]);
                                 $('#messageModal').modal('show');
@@ -322,7 +325,7 @@
                             error: function(xhr, textStatus, errorThrown) {
                                 $('#messageModalLabel').html('ERORR');
                                 $('#messageBody').html(
-                                    'somthing went wrong can\'t  delete ' + itemName
+                                    'somthing went wrong can\'t  delete ' + data['name']
                                 );
                                 $('#messageModal').modal('show');
                             }
@@ -340,6 +343,9 @@
             $(window).resize(function() {
                 table.draw(false);
             });
+            setTimeout(function() {
+                $("div.alert").remove();
+            }, 2000);
         });
 
     </script>

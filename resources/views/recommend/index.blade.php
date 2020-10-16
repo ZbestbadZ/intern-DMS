@@ -8,6 +8,14 @@
                 <span class="display-4">Recommend User</span>
             </div>
         </div>
+        <div class="row d-flex justify-content-end">
+            @if (session()->has('message'))
+                <div class="alert alert-success">
+                    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                    {{ session()->get('message') }}
+                </div>
+            @endif
+        </div>
         <div class="row d-flex justify-content-start">
             <div class="col">
                 <div class="float-left pb-4">
@@ -38,7 +46,9 @@
                             <th><input class="form-control" type="text" placeholder="Search name"></th>
                             <th><input class="form-control" type="text" placeholder="Search age"></th>
                             <th><input class="form-control" type="text" placeholder="Search phone"></th>
-                            <th><select class="form-control" name="jobSearch" id=""><option value="-1">All</option></select></th>
+                            <th><select class="form-control" name="jobSearch" id="">
+                                    <option value="-1">All</option>
+                                </select></th>
                             <th></th>
                             <th></th>
                             <th></th>
@@ -51,6 +61,28 @@
     </div>
 
     <!-- Modal -->
+
+    <div class="modal fade" id="messageModal" tabindex="-1" role="dialog" aria-labelledby="messageModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="messageModalLabel"></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div id="messageBody" class="modal-body">
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">OK</button>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel"
         aria-hidden="true">
         <div class="modal-dialog" role="document">
@@ -82,30 +114,8 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <div id="detail_body" class="modal-body">
-                    <!-- personal -->
-                    <div class="name"></div>
-                    <div class="gender"></div>
-                    <div class="address"></div>
-                    <div class="phone"></div>
-                    <div class="email"></div>
-                    <div class="birthday"></div>
-                    <!-- /.personal -->
-                    <!-- account -->
-                    <div class="username"></div>
-                    <div class="aca_background"></div>
-                    <div class="job"></div>
-                    <div class="anual_income"></div>
-                    <div class="birthplace"></div>
-                    <div class="figure"></div>
-                    <div class="height"></div>
-
-                    <div class="tabaco"></div>
-                    <div class="alcohol"></div>
-                    <div class="holiday"></div>
-
-                    <div class="matching_expect"></div>
-                    <!-- /.account -->
+                <div id="detailBody" class="modal-body">
+                   
                 </div>
                 <div class="modal-footer">
 
@@ -260,26 +270,27 @@
             $('#display tbody ').on('click', '.edit', function() {
 
                 var data = table.row($(this).parents('tr')).data();
-                window.location.href = "/admin/" + data['id'] + "/edit";
+                window.location.href = "/admin/edit_user/" + data['id'] + '?index=recommend.index';
             });
 
             $('#display tbody ').on('click', '#detail', function() {
                 var data = table.row($(this).parents('tr')).data();
                 $.ajax({
                     type: 'GET',
-                    url: '/api/recommend/' + data['id'],
+                    url: '/api/admin/' + data['id'],
                     data: {
                         "api_token": $('[name="api_token"]').val(),
                     },
-                    success: function(data) {
-                        let user = data['user'];
-                        var spanGen = function(content) {
-                            return '<span>' + content + '</span>';
-                        }
-                        $.each(user, function(index, value) {
-                            let idRow = "#" + "detail_body" + " > " + "." + index;
-                            $(idRow).html(spanGen(value));
-                        });
+                    success: function(data) {             
+                        $('#detailBody').html(data.html);                                             
+                        $('#detailModal').modal('show');
+                    },
+                    error: function(xhr, textStatus, errorThrown) {
+                        $('#messageModalLabel').html('ERORR');
+                        $('#messageBody').html(
+                            'somthing went wrong can\'t  load ' + data['name']
+                        );
+                        $('#messageModal').modal('show');
                     }
                 });
 
@@ -303,6 +314,18 @@
                             },
                             success: function(data) {
                                 var re = row.remove().draw(false);
+                                $('#messageModalLabel').html('Success');
+                                $('#messageBody').html('Deleted ' + data['user'][
+                                    'name'
+                                ]);
+                                $('#messageModal').modal('show');
+                            },
+                            error: function(xhr, textStatus, errorThrown) {
+                                $('#messageModalLabel').html('ERORR');
+                                $('#messageBody').html(
+                                    'somthing went wrong can\'t  delete ' + data['name']
+                                );
+                                $('#messageModal').modal('show');
                             }
                         });
                     }
@@ -318,6 +341,9 @@
             $(window).resize(function() {
                 table.draw(false);
             });
+            setTimeout(function() {
+                $("div.alert").remove();
+            }, 2000);
         });
 
     </script>

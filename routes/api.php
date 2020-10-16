@@ -36,5 +36,21 @@ Route::group(['middleware'=>'auth:api'],function() {
     Route::group(['prefix'=>'masterData'],function(){
         Route::get('job','MasterDataController@job');
     });
+
+    
 });
 
+Route::middleware('auth:api')->get('/user', function (Request $request) {
+    return $request->user();
+});
+
+Route::prefix('admin')->group(function() {
+    Route::get('maleOP','UserManagementController@getMaleOption');
+    Route::get('list_user','UserManagementController@index');
+    Route::get('add_user', 'UserManagementController@add');
+    Route::post('add_user', 'UserManagementController@store');
+    Route::get('edit_user/{id}','UserManagementController@edit');
+    Route::post('edit_user/{id}', 'UserManagementController@update');
+    Route::delete('{id}','UserManagementController@destroy');
+    Route::get('{id}', 'UserManagementController@show');
+});

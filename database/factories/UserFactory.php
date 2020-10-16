@@ -28,6 +28,8 @@ $factory->define(User::class, function (Faker $faker) {
         'job' =>rand(1,47),
         'height' =>rand(130,200),
         'figure' =>rand(1,7),
+        'alcohol' =>rand(1,4),
+        'tabaco' =>rand(1,5),
         'anual_income'=>rand(1,8),
         'matching_expect'=>rand(1,5),
         'holiday'=>rand(1,5),
