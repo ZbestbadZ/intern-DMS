@@ -4,12 +4,19 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\RecommendIndexRequest;
 use App\User;
+use Illuminate\Http\Request;
+
 
 class RecommendController extends Controller
 {
-    public function indexView()
+    public function indexView(Request $request)
     {
-        return view('recommend.index');
+        $message = $request->input('message');
+        if(empty($message)) {
+            return view('recommend.index');
+        }
+        return redirect()->route('recommend.index')->with('message', $message);
+        
     }
 
     public function index(RecommendIndexRequest $request)

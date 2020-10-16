@@ -9,6 +9,14 @@
                 <a href=""></a>
             </div>
         </div>
+        <div class="row d-flex justify-content-end">
+            @if (session()->has('message'))
+                <div class="alert alert-success">
+                    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                    {{ session()->get('message') }}
+                </div>
+            @endif
+        </div>
         <div class="row d-flex justify-content-center">
             <div class="col">
                 <table id="display" class="table table-bordered table-striped table-light">
@@ -335,6 +343,9 @@
             $(window).resize(function() {
                 table.draw(false);
             });
+            setTimeout(function() {
+                $("div.alert").remove();
+            }, 2000);
         });
 
     </script>

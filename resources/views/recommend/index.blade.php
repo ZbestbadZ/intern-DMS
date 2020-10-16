@@ -8,6 +8,14 @@
                 <span class="display-4">Recommend User</span>
             </div>
         </div>
+        <div class="row d-flex justify-content-end">
+            @if (session()->has('message'))
+                <div class="alert alert-success">
+                    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                    {{ session()->get('message') }}
+                </div>
+            @endif
+        </div>
         <div class="row d-flex justify-content-start">
             <div class="col">
                 <div class="float-left pb-4">
@@ -333,6 +341,9 @@
             $(window).resize(function() {
                 table.draw(false);
             });
+            setTimeout(function() {
+                $("div.alert").remove();
+            }, 2000);
         });
 
     </script>
