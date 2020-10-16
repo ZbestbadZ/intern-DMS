@@ -137,10 +137,7 @@ class User extends Authenticatable
     }
 
     public function getSexParsedAttribute() {
-        if ($this->sex == 1) {
-            return "Male";
-        }
-        return "Female";
+        return $this->sex==MALE?"Male":"Female";
     }
 
     public function getAgeAttribute()
