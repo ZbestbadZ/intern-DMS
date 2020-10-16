@@ -309,7 +309,7 @@
                                 var re = row
                                     .remove().draw(true);
                                 $('#messageModalLabel').html('Success');
-                                $('#messageBody').html('Deleted ' + data['item'][
+                                $('#messageBody').html('Deleted ' + data['user'][
                                     'name'
                                 ]);
                                 $('#messageModal').modal('show');
