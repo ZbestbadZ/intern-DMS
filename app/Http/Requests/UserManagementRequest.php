@@ -30,11 +30,21 @@ class UserManagementRequest extends FormRequest
             'password' => 'required|min:3|max:50|required_with:password_confirmation|same:password_confirmation',
             'password_confirmation' => 'min:3|max:50',
             'sex' => 'required',
-            'birthday' => 'required|date|before:now|after:-20 years',
+            'birthday' => 'required|date|before:now|after:-50 years',
             'about' => 'required|max:100|min:3',
             'about_title' => 'required|max:100|min:3',
-            'phone' => 'string',
-            'address' => 'string',
+            'phone' => 'nullable|numeric',
+            'address' => 'nullable|string',
+            'height' => 'nullable',
+            'job' => 'nullable',
+            'figure' => 'nullable',
+            'anual_income' => 'nullable',
+            'matching_expect' => 'nullable',
+            'holiday'=> 'nullable',
+            'aca_background' => 'nullable',
+            'housemate' => 'nullable',
+            'birthplace' => 'nullable',
+            'hobby' => 'nullable'
         ];
 
     }
