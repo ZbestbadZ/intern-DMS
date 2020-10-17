@@ -11,7 +11,6 @@
         <div class="row d-flex justify-content-end">
             @if (session()->has('message'))
                 <div class="alert alert-success">
-                    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
                     {{ session()->get('message') }}
                 </div>
             @endif
@@ -115,7 +114,7 @@
                     </button>
                 </div>
                 <div id="detailBody" class="modal-body">
-                   
+
                 </div>
                 <div class="modal-footer">
 
@@ -281,8 +280,8 @@
                     data: {
                         "api_token": $('[name="api_token"]').val(),
                     },
-                    success: function(data) {             
-                        $('#detailBody').html(data.html);                                             
+                    success: function(data) {
+                        $('#detailBody').html(data.html);
                         $('#detailModal').modal('show');
                     },
                     error: function(xhr, textStatus, errorThrown) {

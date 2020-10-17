@@ -12,7 +12,6 @@
         <div class="row d-flex justify-content-end">
             @if (session()->has('message'))
                 <div class="alert alert-success">
-                    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
                     {{ session()->get('message') }}
                 </div>
             @endif
@@ -112,7 +111,7 @@
                     </button>
                 </div>
                 <div id="detailBody" class="modal-body">
-                    
+
                 </div>
                 <div class="modal-footer">
 

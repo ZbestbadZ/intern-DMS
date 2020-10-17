@@ -92,52 +92,64 @@ class User extends Authenticatable
         return $this->hasMany(UserHobby::class, 'user_id', 'id');
     }
 
-    public function getJobParsedAttribute() {
+    public function getJobParsedAttribute()
+    {
         return config('masterdata.job.' . $this['job'] . '.' . $this['sex']);
     }
 
-    public function getHeightParsedAttribute() {
+    public function getHeightParsedAttribute()
+    {
         return config('masterdata.height.' . $this['height']);
     }
 
-    public function getFigureParsedAttribute() {
+    public function getFigureParsedAttribute()
+    {
         return config('masterdata.figure.' . $this['figure']);
     }
 
-    public function getIncomeParsedAttribute() {
+    public function getIncomeParsedAttribute()
+    {
         return config('masterdata.anual_income.' . $this['anual_income'] . '.' . $this['sex']);
     }
 
-    public function getExpectParsedAttribute() {
-        return config('masterdata.matching_expect.' . $this['matching_expect'] );
+    public function getExpectParsedAttribute()
+    {
+        return config('masterdata.matching_expect.' . $this['matching_expect']);
     }
 
-    public function getHolidayParsedAttribute() {
+    public function getHolidayParsedAttribute()
+    {
         return config('masterdata.holiday.' . $this['holiday'] . '.' . $this['sex']);
     }
 
-    public function getAcaParsedAttribute() {
+    public function getAcaParsedAttribute()
+    {
         return config('masterdata.aca_background.' . $this['aca_background'] . '.' . $this['sex']);
     }
 
-    public function getAlcoholParsedAttribute() {
+    public function getAlcoholParsedAttribute()
+    {
         return config('masterdata.alcohol.' . $this['alcohol'] . '.' . $this['sex']);
     }
 
-    public function getTabacoParsedAttribute() {
+    public function getTabacoParsedAttribute()
+    {
         return config('masterdata.tabaco.' . $this['tabaco'] . '.' . $this['sex']);
     }
 
-    public function getBirthplaceParsedAttribute() {
+    public function getBirthplaceParsedAttribute()
+    {
         return config('masterdata.birthplace.' . $this['birthplace']);
     }
 
-    public function getHousemateParsedAttribute() {
+    public function getHousemateParsedAttribute()
+    {
         return config('masterdata.housemate.' . $this['housemate'] . '.' . $this['sex']);
     }
 
-    public function getSexParsedAttribute() {
-        return $this->sex==MALE?"Male":"Female";
+    public function getSexParsedAttribute()
+    {
+        return $this->sex == MALE ? "Male" : "Female";
     }
 
     public function getAgeAttribute()
@@ -161,22 +173,17 @@ class User extends Authenticatable
                         $femaleSearchJobIndex = $key;
                     }
                 }
-
             }
-
         }
         $query->where(function ($q) use ($maleSearchJobIndex, $femaleSearchJobIndex) {
             if (!is_null($maleSearchJobIndex)) {
                 $q->where(function ($q) use ($maleSearchJobIndex) {
                     $q->where(['sex' => MALE, 'job' => $maleSearchJobIndex]);
-
                 });
-
             }
             if (!is_null($femaleSearchJobIndex)) {
                 $q->orWhere(function ($q) use ($femaleSearchJobIndex) {
                     $q->where(['sex' => FEMALE, 'job' => $femaleSearchJobIndex]);
-
                 });
             }
         });
@@ -211,7 +218,6 @@ class User extends Authenticatable
         }
         if (!is_null($searchAge)) {
             $query->where(DB::raw('TIMESTAMPDIFF(YEAR,birthday,CURDATE())'), $searchAge);
-
         }
     }
 
@@ -250,7 +256,6 @@ class User extends Authenticatable
 
         $users = $query->skip($start)->take(PAGINATION)->get();
 
-        return compact(['users', 'recordsFiltered','recordsTotal']);
+        return compact(['users', 'recordsFiltered', 'recordsTotal']);
     }
-
 }
