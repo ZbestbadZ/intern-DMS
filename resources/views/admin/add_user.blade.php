@@ -133,10 +133,13 @@
 
                         <div class="form-group">
                             <label for="hobby">Hobby:</label>
-                            @foreach($hobby as $key=> $value)
-                            <input type="checkbox" name="hobby[]" id="hobby" value="{{$key}}" />
-                            {{$value}}
-                            @endforeach
+                            <details>
+                                <summary>Choose hobbies</summary>
+                                @foreach($hobby as $key=> $value)
+                                <input type="checkbox" name="hobby[]" id="hobby" value="{{$key}}" />
+                                {{$value}}<br>
+                                @endforeach
+                            </details>
                         </div>
 
                         <div class="form-group">

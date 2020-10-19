@@ -6,7 +6,7 @@
         <div class="col-7">
             <div class="card">
                 <div class="card-header">
-                    <h5 class="card-title d-flex align-items-center"><span class="">EDIT USER
+                    <h5 class="card-title d-flex align-items-center"><span class="">EDIT USER:  
                             <i>{{$user->name}}</i></span></h5>
                 </div>
                 <div class="card-body">
@@ -167,14 +167,15 @@
                         </div>
                         <div class="form-group">
                             <label for="hobby">Hobby:</label>
-
+                            <details>
+                                <summary>Choose hobbies</summary>
                             @foreach($hobby as $key => $value)
                             <input type="checkbox" value="{{$key}}" name="hobby[]" id="hobby" @foreach ($userHobby as
                                 $hob) @if ($hob->hobby == $key) checked="checked"
                             @endif @endforeach />
-                            {{$value}}
-
+                            {{$value}}<br>
                             @endforeach
+                            </details>
                         </div>
 
                         <div class="form-group">
