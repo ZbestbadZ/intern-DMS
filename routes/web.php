@@ -23,23 +23,24 @@ Route::get('/home', 'HomeController@index')->name('home');
 
 
 
-    Route::group(['middleware' => 'auth'], function () {
-        Route::group(['prefix' => 'sticker'], function () {
-            Route::get('', 'StickerController@getIndex')->name('sticker.index');
-            Route::get('{id}/edit', 'StickerController@edit')->name('sticker.edit');
-            Route::get('/create', 'StickerController@getCreate')->name('sticker.create');
-        });
-        Route::group(['prefix' => 'recommend'], function () {
-            Route::get('', 'RecommendController@indexView')->name('recommend.index');
-        });
-        Route::group(['prefix' => 'pickup'], function () {
-            Route::get('', 'PickupController@getIndex')->name('pickup.index');
-        });
-        Route::group(['prefix'=>'admin'],function(){
-            Route::get('list_user', 'UserManagementController@getIndex')->name('admin.list_user');
-            Route::get('add_user', 'UserManagementController@add');
-            Route::get('edit_user/{id}', 'UserManagementController@edit')->name('admin.edit_user');
-        });
+Route::group(['middleware' => 'auth'], function () {
+    Route::group(['prefix' => 'sticker'], function () {
+        Route::get('', 'StickerController@getIndex')->name('sticker.index');
+        Route::get('{id}/edit', 'StickerController@edit')->name('sticker.edit');
+        Route::get('/create', 'StickerController@getCreate')->name('sticker.create');
     });
-    
-
+    Route::group(['prefix' => 'recommend'], function () {
+        Route::get('', 'RecommendController@indexView')->name('recommend.index');
+    });
+    Route::group(['prefix' => 'pickup'], function () {
+        Route::get('', 'PickupController@getIndex')->name('pickup.index');
+    });
+    Route::group(['prefix' => 'admin'], function () {
+        Route::get('list_user', 'UserManagementController@getIndex')->name('admin.list_user');
+        Route::get('add_user', 'UserManagementController@add');
+        Route::get('edit_user/{id}', 'UserManagementController@edit')->name('admin.edit_user');
+    });
+});
+Route::prefix('products')->group(function () {
+    Route::get('list', 'ProductController@index')->name('products.index');
+});
