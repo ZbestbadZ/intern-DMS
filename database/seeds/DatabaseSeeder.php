@@ -12,6 +12,9 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         $classes = [
+            ProductSeeder::class,
+            OrderSeeder::class,
+            OrderDetailSeeder::class,
             AdminSeeder::class,
             UserSeeder::class,
             UserBlockSeeder::class,
@@ -22,6 +25,7 @@ class DatabaseSeeder extends Seeder
             ItemSeeder::class
         ];
 
-        $this->call($classes); 
-    }
+        $this->call($classes);
+
+   }
 }
