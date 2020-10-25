@@ -27,8 +27,8 @@ class CreateUpdateOrderDetailsTable extends Migration
     public function down()
     {
         Schema::table('order_details', function (Blueprint $table) {
-            $table->dropColumn('order_id');
-            $table->dropColumn('product_id');
+            $table->foreign('order_id')->references('id')->on('orders');
+            $table->foreign('product_id')->references('id')->on('products');
         });
     }
 }

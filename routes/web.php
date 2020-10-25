@@ -44,3 +44,6 @@ Route::group(['middleware' => 'auth'], function () {
 Route::prefix('products')->group(function () {
     Route::get('list', 'ProductController@index')->name('products.index');
 });
+// Route::prefix('orders')->group(function () {
+//     Route::get('create', 'OrderController@create')->name('orders.create');
+// });
